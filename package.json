@@ -1,0 +1,43 @@
+{
+  "name": "enapso-sparql-tools",
+  "version": "0.0.1",
+  "description": "Enapso Platform Independent SPARQL Tools",
+  "main": "index.js",
+  "scripts": {
+    "start": "node test/test.js",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/innotrade/enapso-sparql-tools.git"
+  },
+  "keywords": [
+    "enapso",
+    "innotrade",
+    "node",
+    "graphdb",
+    "graphdatabase",
+    "ontology",
+    "knowledgegraph",
+    "sparql",
+    "rdf",
+    "owl",
+    "json",
+    "generator",
+    "tools",
+    "toolbox"
+],
+  "author": "Alexander Schulze <aschulze@innotrade.com>, Osvaldo Aguilar <osvaldo2627@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/innotrade/enapso-sparql-tools/issues"
+  },
+  "homepage": "https://github.com/innotrade/enapso-sparql-tools#readme",
+  "devDependencies": {
+    "enapso-graphdb-client": "^1.1.13",
+    "standard": "^12.0.1"
+  },
+  "dependencies": {
+    "joi": "^14.3.1"
+  }
+}
