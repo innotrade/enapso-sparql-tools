@@ -1,4 +1,4 @@
-# enapso-sparql
+# enapso-sparql-tools
 Generic node package to generate and transform sparql queries.
 
 This package is SPARQL 1.1 compliant. Hence, it is designed to run on all SPARQL 1.1 compliant databases. 
@@ -10,6 +10,6 @@ To discuss questions and suggestions with the Enapso and GraphDB community, we'l
 
 # Installation 
 ```
-npm i enapso-sparql --save
+npm i enapso-sparql-tools --save
 ```
 
