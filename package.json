@@ -1,6 +1,6 @@
 {
   "name": "enapso-sparql-tools",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
@@ -26,15 +26,14 @@
     "generator",
     "tools",
     "toolbox"
-],
+  ],
   "author": "Alexander Schulze <aschulze@innotrade.com>, Osvaldo Aguilar <osvaldo2627@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/innotrade/enapso-sparql-tools/issues"
   },
   "homepage": "https://github.com/innotrade/enapso-sparql-tools#readme",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
     "joi": "^14.3.1",
     "enapso-graphdb-client": "^1.1.13"
