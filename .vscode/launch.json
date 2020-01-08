@@ -15,6 +15,12 @@
             "request": "launch",
             "name": "Read Individuals",
             "program": "${workspaceFolder}/examples/demoGetIndividuals.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Demo",
+            "program": "${workspaceFolder}/demo/demo.js"
         }
     ]
 }
