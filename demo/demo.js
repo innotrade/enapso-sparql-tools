@@ -149,7 +149,7 @@ where {
 		let cls = new EnapsoSPARQLTools.Class(ns, name);
 		for (let propRec of classProps.records) {
 			// todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
-			let prop = new EnapsoSPARQLTools.Property(ns, propRec.property, propRec.type, propRec.range, propRec.domain);
+			let prop = new EnapsoSPARQLTools.Property(ns, propRec.prop, propRec.type, propRec.range, propRec.domain);
 			// add the property to the class
 			cls.addProperty(prop);
 		}
@@ -264,9 +264,9 @@ where {
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
 			cls
-			, prefixClass: false
-			, prefixPredicates: false
-			, prefixFilter: false
+			, prefixClass: true
+			, prefixPredicates: true
+			, prefixFilter: true
 		});
 		out = JSON.stringify(res, null, 2);
 		console.log('Getting all individuals by class:' + out);
@@ -277,9 +277,9 @@ where {
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
 			cls
-			, prefixClass: false
-			, prefixPredicates: false
-			, prefixFilter: false
+			, prefixClass: true
+			, prefixPredicates: true
+			, prefixFilter: true
 			, iris: [iri]
 		});
 		out = JSON.stringify(res, null, 2);
