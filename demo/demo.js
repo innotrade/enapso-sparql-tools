@@ -4,7 +4,7 @@
 // Authors: Alexander Schulze
 
 // require the Enapso GraphDB Client package
-const { EnapsoGraphDBClient } = require('enapso-graphdb-client');
+const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client');
 const uuidv4 = require('uuid/v4');
 const fs = require("fs");
 const _ = require("lodash");
@@ -225,6 +225,7 @@ where {
 		return this.deleteResource(iri);
 	},
 
+
 	// this deletes ALL individuals of a certain class, BE CAREFUL!
 	deleteAllIndividualsByClass: async function (cls) {
 		// todo: check this method! it looks like this deletes also all specs for a class, not only the individuals!
@@ -348,12 +349,14 @@ where {
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
+
 	// returns 
 	mapIndividual(origCls, origIri, newCls, newIri, mapping) {
 		let generated = this.enSPARQL.mapIndividual(origCls, origIri, newCls, newIri, mapping);
 		console.log('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
+
 
 	// returns the IRI for the newly created orderline
 	async addOrderlineForCustomer(customerIRI) {
@@ -371,6 +374,7 @@ where {
 		console.log('Adding orderline to customer: ' + out);
 	},
 
+	
 	// adds a (cloned) product to an existing orderline
 	async addProductToOrderline(orderlineIRI, productIRI, productCount, productPrice) {
 
