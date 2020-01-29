@@ -1,50 +1,51 @@
-// Enapso SPARQL Tools
-// Module Demo
+// Innotrade Enapso SPARQL Tools - Module Demo
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze
 
-// require the Enapso GraphDB Client package
+// requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client');
+
 const uuidv4 = require('uuid/v4');
 const fs = require("fs");
 const _ = require("lodash");
 
 const EnapsoSPARQLTools = {};
-
 _.merge(EnapsoSPARQLTools, require('../lib/properties'), require('../lib/classes'), require('../lib/classCache'),
 	require('../lib/prefixManager'), require('../lib/generator'));
 
-// connection data to the running GraphDB instance
 const
+	// connection data to the running GraphDB instance
 	GRAPHDB_BASE_URL = 'http://localhost:7200',
+	// repository to by queried
 	GRAPHDB_REPOSITORY = 'EnapsoDotNetProDemo'
 	;
 
 const
-	// namespace for Enapso dotnetpro Demo
-	NS_DNP = "http://ont.enapso.com/dotnetpro#",
-	PREFIX_DNP = "dnp"
+	// namespace for the Enapso Demo Ontology (EDO)
+	NS_EDO = "http://ont.enapso.com/dotnetpro#",
+	// prefix for the Enapso Demo Ontology (EDO)
+	PREFIX_EDO = "dnp"
 	;
 
 // the default prefixes for all SPARQL queries
-const DNP_PREFIXES = [
+const EDO_PREFIXES = [
 	EnapsoGraphDBClient.PREFIX_OWL,
 	EnapsoGraphDBClient.PREFIX_RDF,
 	EnapsoGraphDBClient.PREFIX_RDFS,
 	EnapsoGraphDBClient.PREFIX_XSD,
 	{
-		"prefix": PREFIX_DNP,
-		"iri": NS_DNP
+		"prefix": PREFIX_EDO,
+		"iri": NS_EDO
 	}
 ];
 
-const EnapsoDotNetProDemo = {
+const EnapsoSparqlToolsDemo = {
 
 	graphDBEndpoint: null,
 	authentication: null,
 
-	defaultBaseIRI: NS_DNP,
-	defaultPrefix: PREFIX_DNP,
+	defaultBaseIRI: NS_EDO,
+	defaultPrefix: PREFIX_EDO,
 	defaultIRISeparator: '#',
 
 
@@ -171,7 +172,7 @@ where {
 			res = await this.getClassProperties(className);
 
 			// generate an in-memory class of the retrieved properties
-			let cls = this.generateClassFromClassProperties(NS_DNP, className, res);
+			let cls = this.generateClassFromClassProperties(NS_EDO, className, res);
 
 			// add the class to the cache
 			classCache.addClass(cls);
@@ -298,14 +299,14 @@ where {
 		return this.query(`
 select (sum(?totalPrice) as ?sum)
 where {
-	?bill a dnp:Bill ;
-		dnp:has_Bill_Date ?date ;
-		dnp:billHasOrder ?order .
-	?order dnp:orderHasOrderline ?orderline .
-	?orderline dnp:orderlineHasProduct ?product .
-	?product dnp:has_Product_Quantity ?quantity ;
-		dnp:has_Product_Code ?code ;
-		dnp:has_Product_Price ?singlePrice .
+	?bill a EDO:Bill ;
+		EDO:has_Bill_Date ?date ;
+		EDO:billHasOrder ?order .
+	?order EDO:orderHasOrderline ?orderline .
+	?orderline EDO:orderlineHasProduct ?product .
+	?product EDO:has_Product_Quantity ?quantity ;
+		EDO:has_Product_Code ?code ;
+		EDO:has_Product_Price ?singlePrice .
 	bind(?quantity * ?singlePrice as ?totalPrice) .
 	filter(?date >= "2010-08-10T00:00:00Z"^^xsd:dateTime && ?date <= "2010-10-10T00:00:00Z"^^xsd:dateTime) .
 	filter(?code = "${code}") .
@@ -318,10 +319,10 @@ where {
 		return this.query(`
 select ?email ?name ?password ?pw_sha256_hash
 where { 
-	?staff a dnp:Staff ;
-		dnp:has_Staff_Email ?email ;
-			dnp:has_Staff_Name ?name ;
-		dnp:has_Staff_Password ?password .
+	?staff a EDO:Staff ;
+		EDO:has_Staff_Email ?email ;
+			EDO:has_Staff_Name ?name ;
+		EDO:has_Staff_Password ?password .
 	bind( sha256(?password) as ?pw_sha256_hash ) .
 	filter( ?email = "${email}" && ?name = "${name}")
 }
@@ -331,9 +332,9 @@ where {
 	/*
 	select ?name ?password
 	where { 
-	  ?customer a dnp:Customer ;
-				dnp:has_Customer_Name ?name ;
-				dnp:has_Customer_Password ?password .
+	  ?company a EDO:Company ;
+				EDO:has_Company_Name ?name ;
+				EDO:has_Company_Password ?password .
 		filter( regEx(?name, "munna", "i") )
 	}
 	*/
@@ -359,8 +360,8 @@ where {
 
 
 	// returns the IRI for the newly created orderline
-	async addOrderlineForCustomer(customerIRI) {
-		let orderlineClass = this.classCache.getClassByIRI(NS_DNP + "Orderline");
+	async addOrderlineForCompany(companyIRI) {
+		let orderlineClass = this.classCache.getClassByIRI(NS_EDO + "Orderline");
 		res = await this.createIndividualByClass(orderlineClass, {
 			// orderline does not need any fields when created
 		});
@@ -369,16 +370,16 @@ where {
 		out = JSON.stringify(res, null, 2);
 		console.log('Creating orderline by class: ' + out);
 
-		res = await this.createRelation(customerIRI, 'dnp:customerHasOrderline', orderlineIRI);
+		res = await this.createRelation(companyIRI, 'EDO:companyHasOrderline', orderlineIRI);
 		out = JSON.stringify(res, null, 2);
-		console.log('Adding orderline to customer: ' + out);
+		console.log('Adding orderline to company: ' + out);
 	},
 
-	
+
 	// adds a (cloned) product to an existing orderline
 	async addProductToOrderline(orderlineIRI, productIRI, productCount, productPrice) {
 
-		let productClass = this.classCache.getClassByIRI(NS_DNP + "Product");
+		let productClass = this.classCache.getClassByIRI(NS_EDO + "Product");
 		/*
 				// retrieve with the given IRI
 				res = await this.getIndividualsByClass({
@@ -399,10 +400,10 @@ where {
 		out = JSON.stringify(res, null, 2);
 		console.log('Cloning Product: ' + out);
 
-		res = await this.updateIndividualByClass(customerClass, iri, {
-			"has_Customer_Name": "Mustermann, Max",
-			"has_Customer_Password": "G3h31m",
-			"has_Customer_Phone_No": "+49 2407 502313-0",
+		res = await this.updateIndividualByClass(companyClass, iri, {
+			"has_Company_Name": "Mustermann, Max",
+			"has_Company_Password": "G3h31m",
+			"has_Company_Phone_No": "+49 2407 502313-0",
 			// it's possible to also update a relation while updating the individual
 			"hasOrderline": existingOrderline2IRI
 		});
@@ -416,9 +417,9 @@ where {
 				out = JSON.stringify(res, null, 2);
 				console.log('Creating orderline by class: ' + out);
 			    
-				res = await this.createRelation(customerIRI, 'dnp:customerHasOrderline', orderlineIRI);
+				res = await this.createRelation(companyIRI, 'EDO:companyHasOrderline', orderlineIRI);
 				out = JSON.stringify(res, null, 2);
-				console.log('Adding orderline to customer: ' + out);
+				console.log('Adding orderline to company: ' + out);
 		*/
 	},
 
@@ -427,13 +428,95 @@ where {
 	// the demo block
 	// -------------------------------------------------	
 
+	demoGetAllClasses: async function () {
+		// get all classes
+		let res = await this.getAllClasses();
+		out = JSON.stringify(res, null, 2);
+		console.log('Getting all classes:' + out);
+	},
+
+	// read multiple demo
+	demoShowAllIndividualsOfAClass: async function () {
+		await this.showAllIndividuals(this.companyClass);
+		/*
+		await this.showAllIndividuals(orderlineClass);
+		await this.showAllIndividuals(productClass);
+		*/
+	},
+
+	// create demo
+	demoCreateIndividualByClass: async function () {
+		// insert a new individual based on the in-memory class
+		res = await this.createIndividualByClass(this.companyClass, {
+			// optionally use a predefined IRI here
+			// if omitted then an UUID will be generated
+			"iri": this.testCompanyIRI,
+			"companyName": "My Company Ltd.",
+			// "has_Company_Password": "S3cr3t2",
+			// "has_Company_Phone_No": "+49 160 909158432",
+			// it's possible to directly add relations to an individual while creating the individual
+			// "hasOrderline": existingOrderline1IRI
+		});
+		// save the iri for this individual
+		iri = res.params.iri;
+		out = JSON.stringify(res, null, 2);
+		console.log('Creating individual by class:' + out);
+	},
+
+	// read single demo
+	async demoReadIndividualByClass() {
+		// check if new company is really created
+		await this.showIndividual(
+			this.companyClass,
+			this.testCompanyIRI
+		);
+	},
+
+	async demoUpdateIndividualByClass() {
+		// update an existing individual based on the in-memory class and its iri
+		res = await this.updateIndividualByClass(this.companyClass, this.testCompanyIRI, {
+			"companyName": "MyUpdatedCompany Ltd.",
+			// "has_Company_Password": "G3h31m",
+			// "has_Company_Phone_No": "+49 2407 502313-0",
+			// it's possible to also update a relation while updating the individual
+			// "hasOrderline": existingOrderline2IRI
+		});
+		out = JSON.stringify(res, null, 2);
+		console.log('Updating individual by class:' + out);
+
+		// check if new company is really created
+		await this.showIndividual(this.companyClass, this.testCompanyIRI);
+	},
+
+	async demoDeleteIndividualByClass() {
+		// delete individual by using the previously saved iri
+		res = await this.deleteIndividual(this.testCompanyIRI);
+		out = JSON.stringify(res, null, 2);
+		console.log('Deleting individual by iri:' + out);
+
+		// and retrieve all instances by the given in-memory class
+		res = await this.getIndividualsByClass({
+			cls: this.companyClass,
+			iris: [this.testCompanyIRI]
+		});
+		out = JSON.stringify(res, null, 2);
+		console.log('Getting individuals by class:' + out);
+
+		// and retrieve all instances by the given in-memory class
+		res = await this.getIndividualsByClass({
+			cls: this.companyClass
+		});
+		out = JSON.stringify(res, null, 2);
+		console.log('Getting individuals by class:' + out);
+	},
+
 	demo: async function () {
 
 		// instantiate a prefix manager
-		this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(DNP_PREFIXES);
+		this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(EDO_PREFIXES);
 
-		// in case no prefix is given for a certain resource identifier use the dnp: here
-		this.enPrefixManager.setDefaultPrefix(PREFIX_DNP);
+		// in case no prefix is given for a certain resource identifier use the EDO: here
+		this.enPrefixManager.setDefaultPrefix(PREFIX_EDO);
 
 		// create a SPARQL generator using the prefix manager
 		this.enSPARQL = new EnapsoSPARQLTools.Generator({
@@ -447,64 +530,71 @@ where {
 			prefixes: this.enPrefixManager.getPrefixesForConnector()
 		});
 
-		let res, iri, out;
-
-		// define some IRIs to test the above functions
-		let existingCustomerIRI = NS_DNP + 'SABS_CUSTOMER_01';
-		let existingProductIRI = NS_DNP + 'SABS_PRODUCT_01';
-		let newProductIRI = NS_DNP + 'SABS_PRODUCT_03';
-		let testCustomerIRI = NS_DNP + 'Customer_SchulzeAlexander';
-
-		let existingOrderline1IRI = NS_DNP + 'SABS_ORDERLINE_01';
-		let existingOrderline2IRI = NS_DNP + 'SABS_ORDERLINE_02';
-		let testOrderlineIRI = NS_DNP + 'Orderline_Test';
-
-		let customerHasOrderlineIRI = NS_DNP + 'hasOrderline';
-
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 
-		let customerClass = this.classCache.getClassByIRI(NS_DNP + "Customer");
-		// let orderlineClass = this.classCache.getClassByIRI(NS_DNP + "Orderline");
-		// let productClass = this.classCache.getClassByIRI(NS_DNP + "Product");
-		// let orderlineProductClass = this.classCache.getClassByIRI(NS_DNP + "OrderlineProduct");
+		// load some classes from the class cache for later convience
+		this.companyClass = this.classCache.getClassByIRI(NS_EDO + "Company");
+		// let orderlineClass = this.classCache.getClassByIRI(NS_EDO + "Orderline");
+		// let productClass = this.classCache.getClassByIRI(NS_EDO + "Product");
+		// let orderlineProductClass = this.classCache.getClassByIRI(NS_EDO + "OrderlineProduct");
 
-		this.showAllIndividuals(customerClass);
-		/*
-		this.showAllIndividuals(orderlineClass);
-		this.showAllIndividuals(productClass);
-		*/
 
-		// get all classes
-		res = await this.getAllClasses();
-		out = JSON.stringify(res, null, 2);
-		console.log('Getting all classes:' + out);
-		return;
+		// set some variables to be used in the demos methods:
+		this.testCompanyIRI = NS_EDO + 'Company_Demo';
+
+		// now the various demos:
+
+		await this.demoGetAllClasses();
+		await this.demoShowAllIndividualsOfAClass();
 		
+		await this.demoCreateIndividualByClass();
+		await this.demoReadIndividualByClass();
+		await this.demoUpdateIndividualByClass();
+		await this.demoDeleteIndividualByClass();
+
+		return;
+
+
+		let res, iri, out;
+
+		// define some IRIs to test the above functions
+		// let existingCompanyIRI = NS_EDO + 'SABS_CUSTOMER_01';
+		// let existingProductIRI = NS_EDO + 'SABS_PRODUCT_01';
+		// let newProductIRI = NS_EDO + 'SABS_PRODUCT_03';
+
+		// let existingOrderline1IRI = NS_EDO + 'SABS_ORDERLINE_01';
+		// let existingOrderline2IRI = NS_EDO + 'SABS_ORDERLINE_02';
+		// let testOrderlineIRI = NS_EDO + 'Orderline_Test';
+
+		// let companyHasOrderlineIRI = NS_EDO + 'hasOrderline';
+
+		return;
+
 
 		// get all classes
 		res = await this.mapIndividual(
 			productClass, existingProductIRI,
 			orderlineProductClass, newProductIRI, [
 			{
-				"from": "dnp:has_Product_Name",
-				"to": "dnp:has_OrderlineProduct_Name"
+				"from": "EDO:has_Product_Name",
+				"to": "EDO:has_OrderlineProduct_Name"
 			},
 			{
-				"from": "dnp:has_Product_Price",
-				"to": "dnp:has_OrderlineProduct_Price"
+				"from": "EDO:has_Product_Price",
+				"to": "EDO:has_OrderlineProduct_Price"
 			},
 			{
-				"from": "dnp:has_Product_Quantity",
-				"to": "dnp:has_OrderlineProduct_Quantity"
+				"from": "EDO:has_Product_Quantity",
+				"to": "EDO:has_OrderlineProduct_Quantity"
 			},
 			{
-				"from": "dnp:has_Product_Code",
-				"to": "dnp:has_OrderlineProduct_Code"
+				"from": "EDO:has_Product_Code",
+				"to": "EDO:has_OrderlineProduct_Code"
 			},
 			{
-				"from": "dnp:has_Product_Category",
-				"to": "dnp:has_OrderlineProduct_Category"
+				"from": "EDO:has_Product_Category",
+				"to": "EDO:has_OrderlineProduct_Category"
 			}
 		]);
 		out = JSON.stringify(res, null, 2);
@@ -515,11 +605,11 @@ where {
 		// search all individuals of a certain class in the console
 		let name = 'max';
 		res = await this.getIndividualsByClass({
-			cls: customerClass
+			cls: companyClass
 			, filter: [
 			
 				// {
-				// 	has_Customer_Name: {
+				// 	has_Company_Name: {
 				// 		$regExp: {
 				// 			"match": "max",
 				// 			"options": "i"
@@ -528,7 +618,7 @@ where {
 				// },
 				
 				{
-					$sparql: `regEx(?has_Customer_Name, "${name}", "i")`
+					$sparql: `regEx(?has_Company_Name, "${name}", "i")`
 				}
 			]
 			//, prefixClass: false
@@ -565,8 +655,8 @@ where {
 		*/
 
 		/*
-		// create a new (empty) orderline for a customer
-		res = await this.addOrderlineForCustomer(existingCustomerIRI);
+		// create a new (empty) orderline for a company
+		res = await this.addOrderlineForCompany(existingCompanyIRI);
 		return;
 		*/
 
@@ -578,82 +668,32 @@ where {
 		// object property and child class
 		res = await this.getRelatedIndividuals({
 			masterCls: orderlineClass,
-			masterIri: NS_DNP + "SABS_ORDERLINE_01",
-			propertyIri: NS_DNP + "orderlineHasProduct",
+			masterIri: NS_EDO + "SABS_ORDERLINE_01",
+			propertyIri: NS_EDO + "orderlineHasProduct",
 			childCls: productClass
 		});
 		out = JSON.stringify(res, null, 2);
 		console.log('Reading related individual by master IRI, property and child class:' + out);
 
-		// insert a new individual based on the in-memory class
-		res = await this.createIndividualByClass(customerClass, {
-			// optionally use a predefined IRI here
-			// if omitted then an UUID will be generated
-			"iri": testCustomerIRI,
-			"has_Customer_Name": "Schulze, Alexander",
-			"has_Customer_Password": "S3cr3t2",
-			"has_Customer_Phone_No": "+49 160 909158432",
-			// it's possible to directly add relations to an individual while creating the individual
-			"hasOrderline": existingOrderline1IRI
-		});
-		// save the iri for this individual
-		iri = res.params.iri;
-		out = JSON.stringify(res, null, 2);
-		console.log('Creating individual by class:' + out);
 
-		// check if new customer is really created
-		await this.showIndividual(customerClass, testCustomerIRI);
+		// UPDATE!
 
-		// update an existing individual based on the in-memory class and its iri
-		res = await this.updateIndividualByClass(customerClass, iri, {
-			"has_Customer_Name": "Mustermann, Max",
-			"has_Customer_Password": "G3h31m",
-			"has_Customer_Phone_No": "+49 2407 502313-0",
-			// it's possible to also update a relation while updating the individual
-			"hasOrderline": existingOrderline2IRI
-		});
-		out = JSON.stringify(res, null, 2);
-		console.log('Updating individual by class:' + out);
+		// remove the relation between the newly created company and an orderline
+		res = await this.deleteRelation(iri, companyHasOrderlineIRI, existingOrderline2IRI);
 
-		// check if new customer is really created
-		await this.showIndividual(customerClass, testCustomerIRI);
+		// check if new company really has no relation anymore
+		await this.showIndividual(companyClass, testCompanyIRI);
 
-		// remove the relation between the newly created customer and an orderline
-		res = await this.deleteRelation(iri, customerHasOrderlineIRI, existingOrderline2IRI);
+		// add the relation between the newly created company and an orderline
+		res = await this.createRelation(iri, companyHasOrderlineIRI, existingOrderline1IRI);
+		res = await this.createRelation(iri, companyHasOrderlineIRI, existingOrderline2IRI);
 
-		// check if new customer really has no relation anymore
-		await this.showIndividual(customerClass, testCustomerIRI);
+		// check if new company is really created
+		await this.showIndividual(companyClass, testCompanyIRI);
 
-		// add the relation between the newly created customer and an orderline
-		res = await this.createRelation(iri, customerHasOrderlineIRI, existingOrderline1IRI);
-		res = await this.createRelation(iri, customerHasOrderlineIRI, existingOrderline2IRI);
+		// DELETE!
 
-		// check if new customer is really created
-		await this.showIndividual(customerClass, testCustomerIRI);
 
-		// delete individual by using the previously saved iri
-		res = await this.deleteIndividual(iri);
-		out = JSON.stringify(res, null, 2);
-		console.log('Deleting individual by iri:' + out);
-
-		// return;
-
-		// and retrieve all instances by the given in-memory class
-		res = await this.getIndividualsByClass({
-			cls: customerClass,
-			iris: [testCustomerIRI]
-		});
-		out = JSON.stringify(res, null, 2);
-		console.log('Getting individuals by class:' + out);
-
-		return;
-
-		// and retrieve all instances by the given in-memory class
-		res = await this.getIndividualsByClass(cls);
-		out = JSON.stringify(res, null, 2);
-		console.log('Getting individuals by class:' + out);
-
-		return;
 
 
 		/*
@@ -679,8 +719,8 @@ where {
 
 }
 
-console.log("Enapso DotNetPro SPARQL Client Demo");
+console.log("Enapso SPARQL Tools Demo\n(C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany\n");
 
 (async () => {
-	await EnapsoDotNetProDemo.demo();
+	await EnapsoSparqlToolsDemo.demo();
 })();
