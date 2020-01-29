@@ -197,8 +197,8 @@ where {
 	},
 
 	// create a new instance of a certain class in the graph
-	createIndividualByClass: async function (cls, ind) {
-		let generated = this.enSPARQL.createIndividualByClass(cls, ind);
+	createIndividualByClass: async function (cls, ind, options) {
+		let generated = this.enSPARQL.createIndividualByClass(cls, ind, options);
 		console.log('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
@@ -447,15 +447,19 @@ where {
 	// create demo
 	demoCreateIndividualByClass: async function () {
 		// insert a new individual based on the in-memory class
-		res = await this.createIndividualByClass(this.companyClass, {
+		let res = await this.createIndividualByClass(this.companyClass, {
 			// optionally use a predefined IRI here
 			// if omitted then an UUID will be generated
 			"iri": this.testCompanyIRI,
-			"companyName": "My Company Ltd.",
+			"companyName": "My Company Ltd."
 			// "has_Company_Password": "S3cr3t2",
 			// "has_Company_Phone_No": "+49 160 909158432",
 			// it's possible to directly add relations to an individual while creating the individual
 			// "hasOrderline": existingOrderline1IRI
+		}, {
+			prefixClass: true,
+			prefixProperties: true,
+			prefixIndividual: true
 		});
 		// save the iri for this individual
 		iri = res.params.iri;
@@ -547,7 +551,7 @@ where {
 
 		await this.demoGetAllClasses();
 		await this.demoShowAllIndividualsOfAClass();
-		
+
 		await this.demoCreateIndividualByClass();
 		await this.demoReadIndividualByClass();
 		await this.demoUpdateIndividualByClass();
