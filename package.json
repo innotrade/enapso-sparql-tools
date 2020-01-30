@@ -1,6 +1,6 @@
 {
   "name": "@innotrade/enapso-sparql-tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
@@ -23,9 +23,12 @@
     "rdf",
     "owl",
     "json",
+    "model",
     "generator",
     "tools",
-    "toolbox"
+    "toolbox",
+    "mdd",
+    "odsd"
   ],
   "author": "Alexander Schulze <aschulze@innotrade.com>",
   "license": "Apache-2.0",
