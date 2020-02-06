@@ -2,21 +2,14 @@
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze
 
-// requires the Enapso GraphDB Client package
+// requires the Enapso GraphDB Client package and Enapso Logger
 const 
 	{ EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
-	{ EnapsoLogger } = require('@innotrade/enapso-logger');
+	{ EnapsoLogger } = require('@innotrade/enapso-logger'),
+	{ ensptools } = require('../index');
 
 global.enlogger = new EnapsoLogger();
 enlogger.setLevel(EnapsoLogger.ALL);
-
-const uuidv4 = require('uuid/v4');
-const fs = require("fs");
-const _ = require("lodash");
-
-const EnapsoSPARQLTools = {};
-_.merge(EnapsoSPARQLTools, require('../lib/properties'), require('../lib/classes'), require('../lib/classCache'),
-	require('../lib/prefixManager'), require('../lib/generator'));
 
 const
 	// connection data to the running GraphDB instance
@@ -142,7 +135,6 @@ where {
 }`);
 	},
 
-
 	// retrieve all properties from a given class
 	getClassProperties: async function (cls) {
 		let generated = this.enSPARQL.getClassProperties(cls);
@@ -152,10 +144,10 @@ where {
 
 	// generates an in-memory class from a SPARQL result set
 	generateClassFromClassProperties: function (ns, name, classProps) {
-		let cls = new EnapsoSPARQLTools.Class(ns, name);
+		let cls = new ensptools.Class(ns, name);
 		for (let propRec of classProps.records) {
 			// todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
-			let prop = new EnapsoSPARQLTools.Property(ns, propRec.prop, propRec.type, propRec.range, propRec.domain);
+			let prop = new ensptools.Property(ns, propRec.prop, propRec.type, propRec.range, propRec.domain);
 			// add the property to the class
 			cls.addProperty(prop);
 		}
@@ -164,7 +156,7 @@ where {
 
 	// builds the class cache for all or selected classes
 	buildClassCache: async function () {
-		let classCache = new EnapsoSPARQLTools.ClassCache();
+		let classCache = new ensptools.ClassCache();
 
 		// get all classes of the database
 		let classes = await this.getAllClasses();
@@ -185,7 +177,6 @@ where {
 
 		return classCache;
 	},
-
 
 	// get all instances of a certain class from the graph
 	getIndividualsByClass: async function (args) {
@@ -208,14 +199,12 @@ where {
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
-
 	// updates an individual by its class reference and a data object with the values
 	updateIndividualByClass: async function (cls, iri, ind) {
 		let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
 		enlogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
-
 
 	// deletes an arbitray resource via its IRI
 	deleteResource: async function (iri) {
@@ -224,13 +213,11 @@ where {
 		return this.update(generated.sparql);
 	},
 
-
 	// deleting an individual via its IRI is the same like deleting any entity
 	// todo: later we we can add a check here if it is really an individual!
 	deleteIndividual: async function (iri) {
 		return this.deleteResource(iri);
 	},
-
 
 	// this deletes ALL individuals of a certain class, BE CAREFUL!
 	deleteAllIndividualsByClass: async function (cls) {
@@ -245,7 +232,6 @@ where {
 `);
 	},
 
-
 	// add a relation between two individuals 
 	createRelation: async function (master, property, child) {
 		let generated = this.enSPARQL.createRelation(master, property, child);
@@ -253,14 +239,12 @@ where {
 		return this.update(generated.sparql);
 	},
 
-
 	// delete a relation between two individuals 
 	deleteRelation: async function (master, property, child) {
 		let generated = this.enSPARQL.deleteRelation(master, property, child);
 		enlogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
-
 
 	// -------------------------------------------------
 	// some high level test functions
@@ -292,7 +276,6 @@ where {
 		out = JSON.stringify(res, null, 2);
 		enlogger.debug('Get single individual by class and IRI:' + out);
 	},
-
 
 	// -------------------------------------------------
 	// some analytics block
@@ -355,14 +338,12 @@ where {
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
-
 	// returns 
 	mapIndividual(origCls, origIri, newCls, newIri, mapping) {
 		let generated = this.enSPARQL.mapIndividual(origCls, origIri, newCls, newIri, mapping);
 		enlogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
-
 
 	// returns the IRI for the newly created orderline
 	async addOrderlineForCompany(companyIRI) {
@@ -379,7 +360,6 @@ where {
 		out = JSON.stringify(res, null, 2);
 		enlogger.debug('Adding orderline to company: ' + out);
 	},
-
 
 	// adds a (cloned) product to an existing orderline
 	async addProductToOrderline(orderlineIRI, productIRI, productCount, productPrice) {
@@ -427,7 +407,6 @@ where {
 				enlogger.debug('Adding orderline to company: ' + out);
 		*/
 	},
-
 
 	// -------------------------------------------------
 	// the demo block
@@ -522,13 +501,13 @@ where {
 	demo: async function () {
 
 		// instantiate a prefix manager
-		this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(EDO_PREFIXES);
+		this.enPrefixManager = new ensptools.PrefixManager(EDO_PREFIXES);
 
 		// in case no prefix is given for a certain resource identifier use the EDO: here
 		this.enPrefixManager.setDefaultPrefix(PREFIX_EDO);
 
 		// create a SPARQL generator using the prefix manager
-		this.enSPARQL = new EnapsoSPARQLTools.Generator({
+		this.enSPARQL = new ensptools.Generator({
 			prefixManager: this.enPrefixManager
 		});
 
