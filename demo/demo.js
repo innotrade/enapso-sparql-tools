@@ -3,13 +3,13 @@
 // Authors: Alexander Schulze
 
 // requires the Enapso GraphDB Client package and Enapso Logger
-const 
+const
 	{ EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
-	{ EnapsoLogger } = require('@innotrade/enapso-logger'),
+	{ EnapsoLogger, EnapsoLoggerFactory } = require('@innotrade/enapso-logger'),
 	{ ensptools } = require('../index');
 
-global.enlogger = new EnapsoLogger();
-enlogger.setLevel(EnapsoLogger.ALL);
+EnapsoLoggerFactory.createGlobalLogger('enLogger');
+enLogger.setLevel(EnapsoLogger.ALL);
 
 const
 	// connection data to the running GraphDB instance
@@ -94,7 +94,7 @@ const EnapsoSparqlToolsDemo = {
 	// retrieve all classes from the graph
 	getAllClasses: async function () {
 		let generated = this.enSPARQL.getAllClasses();
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.query(generated.sparql);
 	},
 
@@ -138,7 +138,7 @@ where {
 	// retrieve all properties from a given class
 	getClassProperties: async function (cls) {
 		let generated = this.enSPARQL.getClassProperties(cls);
-		// enlogger.debug('SPARQL:\n' + generated.sparql);
+		// enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.query(generated.sparql);
 	},
 
@@ -181,35 +181,35 @@ where {
 	// get all instances of a certain class from the graph
 	getIndividualsByClass: async function (args) {
 		let generated = this.enSPARQL.getIndividualsByClass(args);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.query(generated.sparql);
 	},
 
 	// get all related individuals from a certain individual via a certain property
 	getRelatedIndividuals: async function (args) {
 		let generated = this.enSPARQL.getRelatedIndividuals(args);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.query(generated.sparql);
 	},
 
 	// create a new instance of a certain class in the graph
 	createIndividualByClass: async function (cls, ind, options) {
 		let generated = this.enSPARQL.createIndividualByClass(cls, ind, options);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
 	// updates an individual by its class reference and a data object with the values
 	updateIndividualByClass: async function (cls, iri, ind) {
 		let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
 
 	// deletes an arbitray resource via its IRI
 	deleteResource: async function (iri) {
 		let generated = this.enSPARQL.deleteResource(iri);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
 
@@ -235,14 +235,14 @@ where {
 	// add a relation between two individuals 
 	createRelation: async function (master, property, child) {
 		let generated = this.enSPARQL.createRelation(master, property, child);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
 
 	// delete a relation between two individuals 
 	deleteRelation: async function (master, property, child) {
 		let generated = this.enSPARQL.deleteRelation(master, property, child);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql);
 	},
 
@@ -260,7 +260,7 @@ where {
 			, prefixFilter: true
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting all individuals by class:' + out);
+		enLogger.debug('Getting all individuals by class:' + out);
 	},
 
 	// show all individuals of a certain class in the console
@@ -274,7 +274,7 @@ where {
 			, iris: [iri]
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Get single individual by class and IRI:' + out);
+		enLogger.debug('Get single individual by class and IRI:' + out);
 	},
 
 	// -------------------------------------------------
@@ -334,14 +334,14 @@ where {
 	// returns the IRI for the newly created individual (as clone of an exsiting individual)
 	cloneIndividual(productClass, productIRI) {
 		let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
 	// returns 
 	mapIndividual(origCls, origIri, newCls, newIri, mapping) {
 		let generated = this.enSPARQL.mapIndividual(origCls, origIri, newCls, newIri, mapping);
-		enlogger.debug('SPARQL:\n' + generated.sparql);
+		enLogger.debug('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
 
@@ -354,11 +354,11 @@ where {
 		// save the iri for this individual
 		let orderlineIRI = res.params.iri;
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Creating orderline by class: ' + out);
+		enLogger.debug('Creating orderline by class: ' + out);
 
 		res = await this.createRelation(companyIRI, 'EDO:companyHasOrderline', orderlineIRI);
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Adding orderline to company: ' + out);
+		enLogger.debug('Adding orderline to company: ' + out);
 	},
 
 	// adds a (cloned) product to an existing orderline
@@ -371,19 +371,19 @@ where {
 					cls: productClass, iris: [productIRI]
 				});
 				out = JSON.stringify(res, null, 2);
-				enlogger.debug('Get existing product by IRI:' + out);
+				enLogger.debug('Get existing product by IRI:' + out);
 		
 				let origProduct;
 				if (res.success && res.records && res.records.length > 0) {
 					origProduct = res.records[0];
 				} else {
-					enlogger.debug('Product with IRI ' + productIRI + ' not found');
+					enLogger.debug('Product with IRI ' + productIRI + ' not found');
 					return;
 				}
 		*/
 		res = await this.cloneIndividual(productClass, productIRI);
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Cloning Product: ' + out);
+		enLogger.debug('Cloning Product: ' + out);
 
 		res = await this.updateIndividualByClass(companyClass, iri, {
 			"has_Company_Name": "Mustermann, Max",
@@ -400,11 +400,11 @@ where {
 				// save the iri for this individual
 				let orderlineIRI = res.params.iri;
 				out = JSON.stringify(res, null, 2);
-				enlogger.debug('Creating orderline by class: ' + out);
+				enLogger.debug('Creating orderline by class: ' + out);
 			    
 				res = await this.createRelation(companyIRI, 'EDO:companyHasOrderline', orderlineIRI);
 				out = JSON.stringify(res, null, 2);
-				enlogger.debug('Adding orderline to company: ' + out);
+				enLogger.debug('Adding orderline to company: ' + out);
 		*/
 	},
 
@@ -416,7 +416,7 @@ where {
 		// get all classes
 		let res = await this.getAllClasses();
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting all classes:' + out);
+		enLogger.debug('Getting all classes:' + out);
 	},
 
 	// read multiple demo
@@ -448,7 +448,7 @@ where {
 		// save the iri for this individual
 		iri = res.params.iri;
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Creating individual by class:' + out);
+		enLogger.debug('Creating individual by class:' + out);
 	},
 
 	// read single demo
@@ -470,7 +470,7 @@ where {
 			// "hasOrderline": existingOrderline2IRI
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Updating individual by class:' + out);
+		enLogger.debug('Updating individual by class:' + out);
 
 		// check if new company is really created
 		await this.showIndividual(this.companyClass, this.testCompanyIRI);
@@ -480,7 +480,7 @@ where {
 		// delete individual by using the previously saved iri
 		res = await this.deleteIndividual(this.testCompanyIRI);
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Deleting individual by iri:' + out);
+		enLogger.debug('Deleting individual by iri:' + out);
 
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
@@ -488,14 +488,14 @@ where {
 			iris: [this.testCompanyIRI]
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting individuals by class:' + out);
+		enLogger.debug('Getting individuals by class:' + out);
 
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
 			cls: this.companyClass
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting individuals by class:' + out);
+		enLogger.debug('Getting individuals by class:' + out);
 	},
 
 	demo: async function () {
@@ -586,7 +586,7 @@ where {
 			}
 		]);
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting all classes:' + out);
+		enLogger.debug('Getting all classes:' + out);
 		return;
 
 		/*
@@ -614,7 +614,7 @@ where {
 			//, prefixFilter: false
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Getting all individuals by class:' + out);
+		enLogger.debug('Getting all individuals by class:' + out);
 		return;
 		*/
 
@@ -622,7 +622,7 @@ where {
 		// clone a product
 		res = await this.cloneIndividual(productClass, "SABS_PRODUCT_01");
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Cloning Product: ' + out);
+		enLogger.debug('Cloning Product: ' + out);
 		return;
 		*/
 
@@ -630,7 +630,7 @@ where {
 		// get sales of a certain product
 		res = await this.getSales("654RED");
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Calculating Sales: ' + out);
+		enLogger.debug('Calculating Sales: ' + out);
 		return;
 		*/
 
@@ -638,7 +638,7 @@ where {
 		// read all child individuals of a given master individual based on the master IRI, object property and child class
 		res = await this.getStaffInfo("YASIR762923@GMAIL.COM", "ASHESH");
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Get Staff Info: ' + out);
+		enLogger.debug('Get Staff Info: ' + out);
 		return;
 		*/
 
@@ -661,7 +661,7 @@ where {
 			childCls: productClass
 		});
 		out = JSON.stringify(res, null, 2);
-		enlogger.debug('Reading related individual by master IRI, property and child class:' + out);
+		enLogger.debug('Reading related individual by master IRI, property and child class:' + out);
 
 
 		// UPDATE!
@@ -686,19 +686,19 @@ where {
 
 		/*
 		out = JSON.stringify(await this.getProperties(), null, 2);
-		enlogger.debug('Getting data and object properties: ' + out);
+		enLogger.debug('Getting data and object properties: ' + out);
 		return;
 		*/
 
 		/*
 		out = JSON.stringify(await this.getDataProperties(), null, 2);
-		enlogger.debug('Getting data properties: ' + out);
+		enLogger.debug('Getting data properties: ' + out);
 		return;
 		*/
 
 		/*
 		out = JSON.stringify(await this.getObjectProperties(), null, 2);
-		enlogger.debug('Getting object properties: ' + out);
+		enLogger.debug('Getting object properties: ' + out);
 		return;
 		*/
 
@@ -707,7 +707,7 @@ where {
 
 }
 
-enlogger.debug("Enapso SPARQL Tools Demo\n(C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany\n");
+enLogger.debug("Enapso SPARQL Tools Demo\n(C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany\n");
 
 (async () => {
 	await EnapsoSparqlToolsDemo.demo();
