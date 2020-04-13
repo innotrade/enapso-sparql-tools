@@ -1,6 +1,6 @@
 {
   "name": "@innotrade/enapso-sparql-tools",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
   "devDependencies": {},
   "dependencies": {
     "@innotrade/enapso-args": "^1.0.1",
-    "@innotrade/enapso-graphdb-client": "^1.7.0",
+    "@innotrade/enapso-graphdb-client": "^1.7.1",
     "@innotrade/enapso-logger": "^1.1.0"
   }
 }
