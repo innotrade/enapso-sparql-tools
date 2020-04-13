@@ -4,6 +4,7 @@
 
 const
 	{ ClassCache } = require('./lib/classCache'),
+	{ Entity } = require('./lib/entity'),
 	{ Class } = require('./lib/classes'),
 	{ Generator } = require('./lib/generator'),
 	{ Property } = require('./lib/properties'),
@@ -11,14 +12,16 @@ const
 	;
 
 const ensptools = {
-	ClassCache, Class,
+	ClassCache, 
+	Entity, Class,
 	Generator, Property,
 	Prefix, PrefixManager
 }
 
 module.exports = {
 	ensptools,
-	ClassCache, Class,
+	ClassCache, 
+	Entity, Class,
 	Generator, Property,
 	Prefix, PrefixManager
 }
