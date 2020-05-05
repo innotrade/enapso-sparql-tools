@@ -276,13 +276,21 @@ filter(?s = <${cls.getIRI()}>) .
 		// load some classes from the class cache for later convience
 		this.companyClass = this.classCache.getClassByIRI(NS_DNP + "User");
 		this.population= this.classCache.getClassByIRI(NS_DNP + "Role");
-		const  population1= {
+		this.Activity= this.classCache.getClassByIRI(NS_DNP + "Activity");
+		const  population1= [{
 			cls2: this.population,
 			relation: "hasRole"
-		};
+		},
+		{
+			cls2: this.Activity,
+			relation: "hasActivity"
+		}];
 
 let res=await this.showAllIndividuals(this.companyClass,population1);
-  //console.log(res.records);
+
+
+
+  
 }
 }
 enlogger.log("DNP/Enapso SPARQL Client Demo");
