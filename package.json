@@ -39,7 +39,7 @@
   "devDependencies": {},
   "dependencies": {
     "@innotrade/enapso-args": "^0.1.1",
-    "@innotrade/enapso-graphdb-client": "^1.6.0",
+    "@innotrade/enapso-graphdb-client": "^1.7.1",
     "@innotrade/enapso-logger": "0.0.5",
     "joi": "^14.3.1",
     "lodash": "^4.17.15"

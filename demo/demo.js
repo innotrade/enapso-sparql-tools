@@ -19,8 +19,8 @@ _.merge(EnapsoSPARQLTools, require('../lib/properties'), require('../lib/classes
 	;
 
 const
-    NS_DNP = "http://ont.enapso.com/dotnetpro#",
-	PREFIX_DNP = "dnp"
+    NS_DNP = "http://ont.enapso.com/auth#",
+	PREFIX_DNP = "enauth"
 	;
 
 // the default prefixes for all SPARQL queries
@@ -172,23 +172,27 @@ where {
 	// get all instances of a certain class from the graph
 	getIndividualsByClass: async function (args) {
 		let generated = this.enSPARQL.getIndividualsByClass(args);
-	//	enlogger.log('SPARQL:\n' + generated.sparql);
+		enlogger.log('SPARQL:\n' + generated.sparql);
 		return this.query(generated.sparql);
 	},
 
 
 	// show all individuals of a certain class in the enlogger
-	showAllIndividuals: async function (cls) {
+	showAllIndividuals: async function (cls,populations) {
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
-			cls
+			cls,"filter": [{
+				"key": "$sparql",
+				"value": "regEx(?email, \"yasir@gmail.com\", \"i\")"
+			}],populations
+
 			, prefixClass: true
 			, prefixPredicates: true
 			, prefixFilter: true
+			,prefixPopulations:true
 		});
 	
-		out = JSON.stringify(res, null, 2);
-		enlogger.log('Getting all individuals by class:' + out);
+		return res;
 	},
 
 	// show all individuals of a certain class in the enlogger
@@ -270,57 +274,15 @@ filter(?s = <${cls.getIRI()}>) .
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 		// load some classes from the class cache for later convience
-		this.companyClass = this.classCache.getClassByIRI(NS_DNP + "Company");
+		this.companyClass = this.classCache.getClassByIRI(NS_DNP + "User");
+		this.population= this.classCache.getClassByIRI(NS_DNP + "Role");
+		const  population1= {
+			cls2: this.population,
+			relation: "hasRole"
+		};
 
-		this.testCompanyIRI = NS_DNP + 'Company_Demo';
-
-this.test=NS_DNP+"Company_6a7379f7_61ca_49c1_b37a_dabd64edd39d";
-	//Insert new Individual of company class
-	let res = await this.createIndividualByClass(this.companyClass, {
-		// optionally use a predefined IRI here
-		// if omitted then an UUID will be generated
-		"iri": this.testCompanyIRI,
-		"companyName": "not Company Ltd."
-	}, {
-		prefixClass: true,
-		prefixProperties: true,
-		prefixIndividual: true
-	});
-	// save the iri for this individual
-	iri = res.params.iri;
-	let se=iri.slice(4)
-	out = JSON.stringify(res, null, 2);
-	enlogger.log('Creating individual by class:' + out);
-	//Update Individual of an company class
-/*	res = await this.updateIndividualByClass(this.companyClass, iri, {
-		"companyName": "yasir, Safi",		
-	});
-	out = JSON.stringify(res, null, 2);
-	enlogger.log('Creating individual by class:' + out);
-	await this.showIndividual(this.companyClass,this.test);  
-	//delete an individual
-	res = await this.deleteIndividual(iri);
-		out = JSON.stringify(res, null, 2);
-		enlogger.log('Deleting individual by iri:' + out); 
-		await this.showAllIndividuals(this.companyClass); 
-	*/
-	//Clone of an existing individual of company class
-		res = await this.cloneIndividual(this.companyClass, se);
-		enlogger.log("Cloned Products Details")
-		enlogger.log(res.params.iri)
-		let updates=res.params.iri;
-		//Show all individual of company class
-		let check=NS_DNP+se;
-		//display both individuals
-		enlogger.log("Display both Cloned product")
-		await this.showIndividual(this.companyClass,check); 
-		await this.showIndividual(this.companyClass,updates); 
-	//await this.showAllIndividuals(this.companyClass); 
-	//Delete duplicate Individaual
-	res = await this.deleteIndividual(updates);
-	//After deletion show individuals
-	enlogger.log("Display product after deletion clone product")
-		await this.showIndividual(this.companyClass,check); 
+let res=await this.showAllIndividuals(this.companyClass,population1);
+  //console.log(res.records);
 }
 }
 enlogger.log("DNP/Enapso SPARQL Client Demo");

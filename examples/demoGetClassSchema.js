@@ -2,7 +2,7 @@
 // (C) Copyright 2019 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze, Osvaldo Aguilar Lauzurique
 
-const EnapsoGraphDBClient = require('enapso-graphdb-client')
+const EnapsoGraphDBClient = require('@innotrade/enapso-graphdb-client')
 const config = require('./examples.config')
 
 const { getClassSchemaMeta, buildSelectQuery } = require('../index')
