@@ -19,28 +19,28 @@ _.merge(EnapsoSPARQLTools, require('../lib/properties'), require('../lib/classes
 	;
 
 const
-    NS_DNP = "http://ont.enapso.com/auth#",
-	PREFIX_DNP = "enauth"
+    NS_AUTH = "http://ont.enapso.com/auth#",
+	PREFIX_AUTH = "enauth"
 	;
 
 // the default prefixes for all SPARQL queries
-const DNP_PREFIXES = [
+const AUTH_PREFIXES = [
 	EnapsoGraphDBClient.PREFIX_OWL,
 	EnapsoGraphDBClient.PREFIX_RDF,
 	EnapsoGraphDBClient.PREFIX_RDFS,
 	EnapsoGraphDBClient.PREFIX_XSD,
 	{
-		"prefix": PREFIX_DNP,
-		"iri": NS_DNP
+		"prefix": PREFIX_AUTH,
+		"iri": NS_AUTH
 	}
 ];
 
-const DNP = {
+const AUTH = {
 
 	graphDBEndpoint: null,
 	authentication: null,
-	defaultBaseIRI: NS_DNP,
-	defaultPrefix: PREFIX_DNP,
+	defaultBaseIRI: NS_AUTH,
+	defaultPrefix: PREFIX_AUTH,
 	defaultIRISeparator: '#',
 	query: async function (sparql) {
 		let query = await this.graphDBEndpoint.query(sparql);
@@ -159,7 +159,7 @@ where {
 			res = await this.getClassProperties(className);
 
 			// generate an in-memory class of the retrieved properties
-			let cls = this.generateClassFromClassProperties(NS_DNP, className, res);
+			let cls = this.generateClassFromClassProperties(NS_AUTH, className, res);
 
 			// add the class to the cache
 			classCache.addClass(cls);
@@ -254,10 +254,10 @@ filter(?s = <${cls.getIRI()}>) .
 	demo: async function () {
 		// instantiate a prefix manager
 		enlogger.setLevel(EnapsoLogger.ALL);
-		this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(DNP_PREFIXES);
+		this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(AUTH_PREFIXES);
 
 		// in case no prefix is given for a certain resource identifier use the EDO: here
-		this.enPrefixManager.setDefaultPrefix(PREFIX_DNP);
+		this.enPrefixManager.setDefaultPrefix(PREFIX_AUTH);
 
 		// create a SPARQL generator using the prefix manager
 		this.enSPARQL = new EnapsoSPARQLTools.Generator({
@@ -274,27 +274,24 @@ filter(?s = <${cls.getIRI()}>) .
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 		// load some classes from the class cache for later convience
-		this.companyClass = this.classCache.getClassByIRI(NS_DNP + "User");
-		this.population= this.classCache.getClassByIRI(NS_DNP + "Role");
-		this.Activity= this.classCache.getClassByIRI(NS_DNP + "Activity");
-		const  population1= [{
-			cls2: this.population,
+		this.User = this.classCache.getClassByIRI(NS_AUTH + "User");
+		this.Role= this.classCache.getClassByIRI(NS_AUTH + "Role");
+		this.Activity= this.classCache.getClassByIRI(NS_AUTH + "Activity");
+		const  population= [{
+			cls2: this.Role,
 			relation: "hasRole"
 		},
 		{
 			cls2: this.Activity,
 			relation: "hasActivity"
-		}];
+		}
+	];
 
-let res=await this.showAllIndividuals(this.companyClass,population1);
-
-
-
-  
+let res=await this.showAllIndividuals(this.User,population);  
 }
 }
-enlogger.log("DNP/Enapso SPARQL Client Demo");
+enlogger.log("AUTH/Enapso SPARQL Client Demo");
 
 (async () => {
-	await DNP.demo();
+	await AUTH.demo();
 })();
