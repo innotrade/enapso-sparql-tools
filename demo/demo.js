@@ -187,6 +187,7 @@ where {
     // and retrieve all instances by the given in-memory class
     res = await this.getIndividualsByClass({
       cls,
+      populations,
       filter: [
         {
           key: "$sparql",
