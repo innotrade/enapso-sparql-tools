@@ -288,11 +288,11 @@ filter(?s = <${cls.getIRI()}>) .
     this.Activity = this.classCache.getClassByIRI(NS_AUTH + "Activity");
     const population = [
       {
-        cls2: this.Role,
+        cls: this.Role,
         relation: "hasRole",
       },
       {
-        cls2: this.Activity,
+        cls: this.Activity,
         relation: "hasActivity",
       },
     ];
