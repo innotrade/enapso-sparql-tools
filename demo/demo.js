@@ -146,7 +146,7 @@ where {
         propRec.range,
         propRec.domain
       );
-      // add the property to the class
+      // add the property to the classs
       cls.addProperty(prop);
     }
     return cls;
