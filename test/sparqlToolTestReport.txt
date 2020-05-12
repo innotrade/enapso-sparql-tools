@@ -1,0 +1,128 @@
+
+> @innotrade/enapso-sparql-tools@0.0.5 test E:\enapso-sparql-tools
+> mocha
+
+
+
+  Query test
+SPARQL:
+delete {?s ?p ?o}
+where 
+{
+	 bind(enrepo:Graph_0ea87735_977d_461b_88c5_749d1a5bf909 as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    }
+	 filter(!isBlank(?o))
+}
+Success: true
+    √ A flat object without no joins delete an individual of Graph (301ms)
+SPARQL:
+delete {?s ?p ?o}
+where 
+{
+	 bind(enrepo:Host_01141633_0716_4ae3_b38b_aa12b2197c4a as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
+  union 
+   {
+      ?master  enrepo:hasDatabaseSystem ?Host.
+	bind(?Host as ?s)
+    ?s ?p ?o
+   }
+  union 
+   {
+      ?master  enrepo:hasEnvironment ?Host.
+	bind(?Host as ?s)
+    ?s ?p ?o
+   }
+	 filter(!isBlank(?o))
+}
+Success: true
+    √ A object with only one joins delete an individual of Host has master2childRelation (207ms)
+SPARQL:
+delete {?s ?p ?o}
+where 
+{
+	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
+  union 
+   {
+      ?Repository enrepo:hasDatabaseInstance  ?master.
+	bind(?Repository as ?s)
+	?s ?p ?o
+   } 
+    
+  union 
+   {
+        ?Graph enrepo:hasRepository  ?Repository.
+	bind(?Graph as ?s)
+        ?s ?p ?o
+   }
+	 filter(!isBlank(?o))
+}
+Success: true
+    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (377ms)
+SPARQL:
+delete {?s ?p ?o}
+where 
+{
+	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
+  union 
+   {
+      ?Environment enrepo:hasTenant  ?master.
+	bind(?Environment as ?s)
+	?s ?p ?o
+   } 
+    
+  union 
+   {
+        ?Graph enrepo:hasRepository  ?Repository.
+	bind(?Graph as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?Host enrepo:hasEnvironment  ?Environment.
+	bind(?Host as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?DatabaseInstance enrepo:hasHost  ?Host.
+	bind(?DatabaseInstance as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?Repository enrepo:hasDatabaseInstance  ?DatabaseInstance.
+	bind(?Repository as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?Graph enrepo:hasRepository  ?Repository.
+	bind(?Graph as ?s)
+        ?s ?p ?o
+   }
+	 filter(!isBlank(?o))
+}
+Success: true
+    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (1044ms)
+
+
+  4 passing (2s)
+

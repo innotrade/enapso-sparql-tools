@@ -231,8 +231,8 @@ where {
 		return this.update(generated.sparql);
 	},
 	// deletes an arbitray resource via its IRI
-	deleteResource: async function (joins, iri) {
-		let generated = this.enSPARQL.deleteResource({ joins, iri });
+	deleteIndividual: async function (args) {
+		let generated = this.enSPARQL.deleteResource(args);
 		enlogger.log("SPARQL:\n" + generated.sparql);
 		return this.update(generated.sparql);
 	},
@@ -250,11 +250,6 @@ filter(?s = <${cls.getIRI()}>) .
 		);
 	},
 
-	// deleting an individual via its IRI is the same like deleting any entity
-	// todo: later we we can add a check here if it is really an individual!
-	deleteIndividual: async function (iri) {
-		return this.deleteResource(iri);
-	},
 	cloneIndividual(productClass, productIRI) {
 		let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
 		//enlogger.log('SPARQL:\n' + generated.sparql);
@@ -315,7 +310,7 @@ filter(?s = <${cls.getIRI()}>) .
 			},
 		];
 		let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
-		let res = await this.deleteResource(joins, iri);
+		let res = await this.deleteIndividual({iri:iri});
 		out = JSON.stringify(res, null, 2);
 		enlogger.log("Delete individuals" + out);
 	},

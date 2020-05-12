@@ -4,8 +4,7 @@
   "description": "Enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
-    "start": "node test/test.js",
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -42,6 +41,10 @@
     "@innotrade/enapso-graphdb-client": "^1.7.1",
     "@innotrade/enapso-logger": "0.0.5",
     "joi": "^14.3.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "cross-env": "^7.0.2",
+    "mocha": "^7.1.1"
   }
 }
