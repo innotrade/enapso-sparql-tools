@@ -8,7 +8,7 @@ const should = require("chai").should;
 const expect = require("chai").expect;
 chai.use(chaiHttp);
 const testconfig = require("./config");
-describe("Query test", () => {
+describe("Delete Individual Query test", () => {
   it("A flat object without no joins delete an individual of Graph", (done) => {
     let iri = "enrepo:Graph_0ea87735_977d_461b_88c5_749d1a5bf909";
     testconfig.AUTH.deleteIndividual({ iri: iri }).then((result) => {
