@@ -1,17 +1,7 @@
 // Innotrade Enapso GraphDB Client - Automated Test Suite
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Author: Alexander Schulze and Muhammad Yasir
-const _ = require("lodash");
 
-const EnapsoSPARQLTools = {};
-_.merge(
-  EnapsoSPARQLTools,
-  require("../lib/properties"),
-  require("../lib/classes"),
-  require("../lib/classCache"),
-  require("../lib/prefixManager"),
-  require("../lib/generator")
-);
 const chai = require("chai"),
   chaiHttp = require("chai-http");
 const should = require("chai").should;

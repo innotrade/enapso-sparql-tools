@@ -17,7 +17,7 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A flat object without no joins delete an individual of Graph (301ms)
+    √ A flat object without no joins delete an individual of Graph (643ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -43,7 +43,7 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with only one joins delete an individual of Host has master2childRelation (207ms)
+    √ A object with only one joins delete an individual of Host has master2childRelation (502ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -70,7 +70,7 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (377ms)
+    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (458ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -121,7 +121,7 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (1044ms)
+    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (616ms)
 
 
   4 passing (2s)
