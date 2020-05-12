@@ -1,6 +1,6 @@
 // Innotrade Enapso SPARQL Tools - Module Demo
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
-// Authors: Alexander Schulze
+// Authors: Alexander Schulze and Muhammad Yasir
 
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = require("@innotrade/enapso-graphdb-client"),
@@ -20,8 +20,8 @@ _.merge(
 
 const GRAPHDB_BASE_URL = "http://localhost:7200",
 	GRAPHDB_REPOSITORY = "Test";
-const NS_AUTH = "http://ont.enapso.com/auth#",
-	PREFIX_AUTH = "enauth";
+const NS_AUTH = "http://ont.enapso.com/repo#",
+	PREFIX_AUTH = "enrepo";
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
 	EnapsoGraphDBClient.PREFIX_OWL,
@@ -231,9 +231,9 @@ where {
 		return this.update(generated.sparql);
 	},
 	// deletes an arbitray resource via its IRI
-	deleteResource: async function (iri) {
-		let generated = this.enSPARQL.deleteResource(iri);
-		//enlogger.log('SPARQL:\n' + generated.sparql);
+	deleteResource: async function (joins, iri) {
+		let generated = this.enSPARQL.deleteResource({ joins, iri });
+		enlogger.log("SPARQL:\n" + generated.sparql);
 		return this.update(generated.sparql);
 	},
 	// this deletes ALL individuals of a certain class, BE CAREFUL!
@@ -283,22 +283,41 @@ filter(?s = <${cls.getIRI()}>) .
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 		// load some classes from the class cache for later convience
-		this.User = this.classCache.getClassByIRI(NS_AUTH + "User");
-		this.Role = this.classCache.getClassByIRI(NS_AUTH + "Role");
-		this.Activity = this.classCache.getClassByIRI(NS_AUTH + "Activity");
-		const population = [
+		let joins = [
+			// first join (for tenants) on level 1
 			{
-				cls: this.Role,
-				relation: "hasRole",
-			},
-			{
-				cls: this.Activity,
-				relation: "hasActivity",
+				cls: "Environment",
+				child2MasterRelation: "hasTenant",
+				joins: [
+					{
+						cls: "Host",
+						child2MasterRelation: "hasEnvironment",
+						joins: [
+							{
+								cls: "DatabaseInstance",
+								child2MasterRelation: "hasHost",
+								joins: [
+									{
+										cls: "Repository",
+										child2MasterRelation: "hasDatabaseInstance",
+										joins: [
+											{
+												cls: "Graph",
+												child2MasterRelation: "hasRepository",
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				],
 			},
 		];
-
-		let res = await this.showAllIndividuals(this.User, population);
-		console.log(res.records);
+		let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
+		let res = await this.deleteResource(joins, iri);
+		out = JSON.stringify(res, null, 2);
+		enlogger.log("Delete individuals" + out);
 	},
 };
 enlogger.log("AUTH/Enapso SPARQL Client Demo");
