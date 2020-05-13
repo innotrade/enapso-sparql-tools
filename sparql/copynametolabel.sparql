@@ -1,0 +1,11 @@
+PREFIX enrepo: <http://ont.enapso.com/repo#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+#SPARQL query to copy the given data property name to the label of each individual
+insert {
+    #iri of individual whose name want to copy into a label
+    enrepo:Environment_833a44cc_ec58_4202_b44d_27460ae94e2d rdfs:label ?name.
+	  }
+where
+     { 
+    enrepo:Environment_833a44cc_ec58_4202_b44d_27460ae94e2d enrepo:name ?name.
+     }
