@@ -4,125 +4,55 @@
 
 
 
-  Query test
+  Delete Individual Query test
 SPARQL:
-delete {?s ?p ?o}
-where 
-{
-	 bind(enrepo:Graph_0ea87735_977d_461b_88c5_749d1a5bf909 as ?master).
+insert
+  {
+    ?Environment rdfs:label ?label.
+  }
+where
+  {
+     ?Environment a enrepo:Environment.
+     ?Environment enrepo:name ?name.
+     bind(strlang(?name,"en") as ?label)
+  }
+Success: true
+    √ Copy Data Property to label of each individual of a Class (1543ms)
+SPARQL:
+delete where
+	{
+	   ?Environment a enrepo:Environment.
+           ?Environment enrepo:name ?Environmentname.
+        }
+Success: true
+    √ Delete given Data Property of each individual of given Class (1163ms)
+SPARQL:
+insert
+  {
+      ?Environment enrepo:name ?label.
+  }
+where
+  {
+      ?Environment a enrepo:Environment.
+      ?Environment rdfs:label ?label.
+      filter(lang(?label)="en")
+  }
+Success: true
+    √ Copy label of given language to given Data Property of each individual of a given Class (1035ms)
+SPARQL:
+delete
     {
-	bind(?master as ?s)
-	?s ?p ?o        
+	?Environment rdfs:label ?label.
     }
-	 filter(!isBlank(?o))
-}
-Success: true
-    √ A flat object without no joins delete an individual of Graph (643ms)
-SPARQL:
-delete {?s ?p ?o}
-where 
-{
-	 bind(enrepo:Host_01141633_0716_4ae3_b38b_aa12b2197c4a as ?master).
+where
     {
-	bind(?master as ?s)
-	?s ?p ?o        
-    } 
-  
-  union 
-   {
-      ?master  enrepo:hasDatabaseSystem ?Host.
-	bind(?Host as ?s)
-    ?s ?p ?o
-   }
-  union 
-   {
-      ?master  enrepo:hasEnvironment ?Host.
-	bind(?Host as ?s)
-    ?s ?p ?o
-   }
-	 filter(!isBlank(?o))
-}
+	?Environment a enrepo:Environment.
+	?Environment rdfs:label ?label.
+	filter(lang(?label) = "" ||lang(?label)="en")
+    }
 Success: true
-    √ A object with only one joins delete an individual of Host has master2childRelation (502ms)
-SPARQL:
-delete {?s ?p ?o}
-where 
-{
-	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
-    {
-	bind(?master as ?s)
-	?s ?p ?o        
-    } 
-  
-  union 
-   {
-      ?Repository enrepo:hasDatabaseInstance  ?master.
-	bind(?Repository as ?s)
-	?s ?p ?o
-   } 
-    
-  union 
-   {
-        ?Graph enrepo:hasRepository  ?Repository.
-	bind(?Graph as ?s)
-        ?s ?p ?o
-   }
-	 filter(!isBlank(?o))
-}
-Success: true
-    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (458ms)
-SPARQL:
-delete {?s ?p ?o}
-where 
-{
-	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
-    {
-	bind(?master as ?s)
-	?s ?p ?o        
-    } 
-  
-  union 
-   {
-      ?Environment enrepo:hasTenant  ?master.
-	bind(?Environment as ?s)
-	?s ?p ?o
-   } 
-    
-  union 
-   {
-        ?Graph enrepo:hasRepository  ?Repository.
-	bind(?Graph as ?s)
-        ?s ?p ?o
-   }
-  union 
-   {
-        ?Host enrepo:hasEnvironment  ?Environment.
-	bind(?Host as ?s)
-        ?s ?p ?o
-   }
-  union 
-   {
-        ?DatabaseInstance enrepo:hasHost  ?Host.
-	bind(?DatabaseInstance as ?s)
-        ?s ?p ?o
-   }
-  union 
-   {
-        ?Repository enrepo:hasDatabaseInstance  ?DatabaseInstance.
-	bind(?Repository as ?s)
-        ?s ?p ?o
-   }
-  union 
-   {
-        ?Graph enrepo:hasRepository  ?Repository.
-	bind(?Graph as ?s)
-        ?s ?p ?o
-   }
-	 filter(!isBlank(?o))
-}
-Success: true
-    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (616ms)
+    √ Delete label of given language of each individual of given Class  (674ms)
 
 
-  4 passing (2s)
+  4 passing (4s)
 

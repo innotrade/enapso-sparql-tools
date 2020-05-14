@@ -255,6 +255,26 @@ filter(?s = <${cls.getIRI()}>) .
 		//enlogger.log('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
+	deletePropertyOfClass(args) {
+		let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	deleteLabelOfEachClassIndividual(args) {
+		let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	copyLabelToDataPropertyOfEachIndividual(args) {
+		let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	copyDataPropertyToLabelOfEachIndividual(args) {
+		let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
 	demo: async function () {
 		// instantiate a prefix manager
 		enlogger.setLevel(EnapsoLogger.ALL);
@@ -274,45 +294,8 @@ filter(?s = <${cls.getIRI()}>) .
 			repository: GRAPHDB_REPOSITORY,
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
-
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
-		// load some classes from the class cache for later convience
-		let joins = [
-			// first join (for tenants) on level 1
-			{
-				cls: "Environment",
-				child2MasterRelation: "hasTenant",
-				joins: [
-					{
-						cls: "Host",
-						child2MasterRelation: "hasEnvironment",
-						joins: [
-							{
-								cls: "DatabaseInstance",
-								child2MasterRelation: "hasHost",
-								joins: [
-									{
-										cls: "Repository",
-										child2MasterRelation: "hasDatabaseInstance",
-										joins: [
-											{
-												cls: "Graph",
-												child2MasterRelation: "hasRepository",
-											},
-										],
-									},
-								],
-							},
-						],
-					},
-				],
-			},
-		];
-		let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
-		let res = await this.deleteIndividual({iri:iri});
-		out = JSON.stringify(res, null, 2);
-		enlogger.log("Delete individuals" + out);
 	},
 };
 enlogger.log("AUTH/Enapso SPARQL Client Demo");
