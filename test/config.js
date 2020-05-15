@@ -1,6 +1,6 @@
-// Innotrade Enapso SPARQL Tools - Module Demo
+// Innotrade Enapso SPARQL Tools 
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
-// Authors: Alexander Schulze
+// Authors: Alexander Schulze and Muhammad Yasir
 
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = require("@innotrade/enapso-graphdb-client"),
@@ -186,6 +186,7 @@ where {
 	showAllIndividuals: async function (args) {
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass(args);
+
 		return res;
 	},
 
@@ -216,9 +217,9 @@ where {
 		return this.update(generated.sparql);
 	},
 	// deletes an arbitray resource via its IRI
-	deleteResource: async function (iri) {
-		let generated = this.enSPARQL.deleteResource(iri);
-		//enlogger.log('SPARQL:\n' + generated.sparql);
+	deleteIndividual: async function (args) {
+		let generated = this.enSPARQL.deleteResource(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
 		return this.update(generated.sparql);
 	},
 	// this deletes ALL individuals of a certain class, BE CAREFUL!
@@ -234,16 +235,30 @@ filter(?s = <${cls.getIRI()}>) .
 `
 		);
 	},
-
-	// deleting an individual via its IRI is the same like deleting any entity
-	// todo: later we we can add a check here if it is really an individual!
-	deleteIndividual: async function (iri) {
-		return this.deleteResource(iri);
-	},
 	cloneIndividual(productClass, productIRI) {
 		let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
 		//enlogger.log('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
+	},
+	deletePropertyOfClass(args) {
+		let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	deleteLabelOfEachClassIndividual(args) {
+		let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	copyLabelToDataPropertyOfEachIndividual(args) {
+		let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
+	},
+	copyDataPropertyToLabelOfEachIndividual(args) {
+		let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
+		enlogger.log("SPARQL:\n" + generated.sparql);
+		return this.update(generated.sparql);
 	},
 	demo: async function () {
 		// instantiate a prefix manager
@@ -264,39 +279,13 @@ filter(?s = <${cls.getIRI()}>) .
 			repository: GRAPHDB_REPOSITORY,
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
+		classCache = await this.buildClassCache();
 
-		// import all classes into memory
-		this.classCache = await this.buildClassCache();
-		// load some classes from the class cache for later convience
-		this.Host = this.classCache.getClassByIRI(NS_AUTH + "Host");
-		this.Environment = this.classCache.getClassByIRI(NS_AUTH + "Environment");
-		this.DatabaseSystem = this.classCache.getClassByIRI(NS_AUTH + "DatabaseSystem");
-
-		let joins = [
-			// first join (for tenants) on level 1
-			{
-				cls: this.DatabaseSystem,
-				master2childRelation: "hasDatabaseSystem",
-			},
-			{
-				cls: this.Environment,
-				master2childRelation: "hasEnvironment",
-			},
-		];
-		let res = await this.showAllIndividuals({
-			cls: this.Host,
-			joins: joins,
-			filter: [
-				{
-					key: "$sparql",
-					value: 'regEx(?name, "Innotrade GmbH", "i")',
-				},
-			]
-		});
 	},
 };
-enlogger.log("AUTH/Enapso SPARQL Client Demo");
-
 (async () => {
 	await AUTH.demo();
 })();
+module.exports = {
+	AUTH
+};

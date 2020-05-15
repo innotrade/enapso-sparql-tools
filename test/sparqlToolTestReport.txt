@@ -1,0 +1,184 @@
+
+> @innotrade/enapso-sparql-tools@0.0.5 test E:\enapso-sparql-tools
+> mocha
+
+
+
+  Delete Individual Query test
+SPARQL:
+select ?Tenantiri ?Tenantname
+
+where 
+  {
+	    
+        ?ind rdf:type + enrepo:Tenant .	
+	optional {?ind enrepo:name ?name }.
+  {
+	{
+		
+	bind(str(?ind) as ?Tenantiri) .
+	bind (?name as ?Tenantname ).
+	bind ("Tenant" as ?contentkey ).
+	}	    
+   }
+}
+Success: [object Object]
+    √ Get Individual of a class without join (246ms)
+[ '?Environmentiri ?Environmentname' ]
+SPARQL:
+select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname
+
+where 
+  {
+	    
+        ?ind rdf:type + enrepo:Tenant .	
+	optional {?ind enrepo:name ?name }.
+  {
+	{
+		
+	bind(str(?ind) as ?Tenantiri) .
+	bind (?name as ?Tenantname ).
+	bind ("Tenant" as ?contentkey ).
+	}
+				
+    union 
+	  {
+		
+	?Environment enrepo:hasTenant  ?ind.
+	bind(?Environment as ?Environmentiri)
+	 optional{?Environment  enrepo:name ?Environmentname.}
+	bind( "?Environment" as ?contentKey)
+	   }	    
+   }
+}
+Success: [object Object]
+    √ Get Individual of a class with single join have master2childRelation (171ms)
+[
+  '?DatabaseSystemiri ?DatabaseSystemversion',
+  '?Environmentiri ?EnvironmenthasTenant ?Environmentname'
+]
+SPARQL:
+select ?Hostiri ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseSystemiri ?DatabaseSystemversion ?Environmentiri ?EnvironmenthasTenant ?Environmentname
+
+where 
+  {
+	    
+        ?ind rdf:type + enrepo:Host .	
+	optional {?ind enrepo:hasOperatingSystem ?hasOperatingSystem }.
+	optional {?ind enrepo:dbVersion ?dbVersion }.
+	optional {?ind enrepo:name ?name }.
+	optional {?ind enrepo:osVersion ?osVersion }.
+  {
+	{
+		
+	bind(str(?ind) as ?Hostiri) .
+	bind (?hasOperatingSystem as ?HosthasOperatingSystem ).
+	bind (?dbVersion as ?HostdbVersion ).
+	bind (?name as ?Hostname ).
+	bind (?osVersion as ?HostosVersion ).
+	bind ("Host" as ?contentkey ).
+	}
+				
+    union 
+	  {
+		
+		
+                     
+	?ind enrepo:hasDatabaseSystem  ?DatabaseSystem 
+        bind(?DatabaseSystem as ?DatabaseSystemiri)
+        optional{?DatabaseSystem  enrepo:version ?DatabaseSystemversion.}
+        bind( "?DatabaseSystem" as ?contentKey)
+	   }
+    union 
+	  {
+		
+		
+                     
+                     
+	?ind enrepo:hasEnvironment  ?Environment 
+        bind(?Environment as ?Environmentiri)
+        optional{?Environment  enrepo:hasTenant ?EnvironmenthasTenant.}
+        optional{?Environment  enrepo:name ?Environmentname.}
+        bind( "?Environment" as ?contentKey)
+	   }	    
+   }
+}
+Success: [object Object]
+    √ Get Individual of a class with join using master to child relation (277ms)
+[ '?Environmentiri ?Environmentname' ]
+SPARQL:
+select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname ?Hostiri ?HosthasDatabaseSystem ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseInstanceiri ?DatabaseInstancename ?DatabaseInstanceversion ?Repositoryiri ?Repositoryid ?Repositoryname ?Graphiri ?Graphgraph ?Graphname
+
+where 
+  {
+	    
+        ?ind rdf:type + enrepo:Tenant .	
+	optional {?ind enrepo:name ?name }.
+  {
+	{
+		
+	bind(str(?ind) as ?Tenantiri) .
+	bind (?name as ?Tenantname ).
+	bind ("Tenant" as ?contentkey ).
+	}
+				
+    union 
+	  {
+		
+	?Environment enrepo:hasTenant  ?ind.
+	bind(?Environment as ?Environmentiri)
+	 optional{?Environment  enrepo:name ?Environmentname.}
+	bind( "?Environment" as ?contentKey)
+	   }
+		
+  union 
+	  {
+		  
+			
+	?Host enrepo:hasEnvironment+  ?Environment.
+	bind(?Host as ?Hostiri)
+        optional{?Host  enrepo:hasDatabaseSystem ?HosthasDatabaseSystem.}
+        optional{?Host  enrepo:hasOperatingSystem ?HosthasOperatingSystem.}
+        optional{?Host  enrepo:dbVersion ?HostdbVersion.}
+        optional{?Host  enrepo:name ?Hostname.}
+        optional{?Host  enrepo:osVersion ?HostosVersion.}
+        bind( "?Host" as ?contentKey)
+	  }
+  union 
+	  {
+		  
+			
+	?DatabaseInstance enrepo:hasHost+  ?Host.
+	bind(?DatabaseInstance as ?DatabaseInstanceiri)
+        optional{?DatabaseInstance  enrepo:name ?DatabaseInstancename.}
+        optional{?DatabaseInstance  enrepo:version ?DatabaseInstanceversion.}
+        bind( "?DatabaseInstance" as ?contentKey)
+	  }
+  union 
+	  {
+		  
+			
+	?Repository enrepo:hasDatabaseInstance+  ?DatabaseInstance.
+	bind(?Repository as ?Repositoryiri)
+        optional{?Repository  enrepo:id ?Repositoryid.}
+        optional{?Repository  enrepo:name ?Repositoryname.}
+        bind( "?Repository" as ?contentKey)
+	  }
+  union 
+	  {
+		  
+			
+	?Graph enrepo:hasRepository+  ?Repository.
+	bind(?Graph as ?Graphiri)
+        optional{?Graph  enrepo:graph ?Graphgraph.}
+        optional{?Graph  enrepo:name ?Graphname.}
+        bind( "?Graph" as ?contentKey)
+	  }	    
+   }
+}
+Success: [object Object]
+    √ Get Individual of a class with nested joins have master2childRelation (161ms)
+
+
+  4 passing (865ms)
+
