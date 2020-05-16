@@ -268,23 +268,45 @@ filter(?s = <${cls.getIRI()}>) .
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 		// load some classes from the class cache for later convience
-		this.Host = this.classCache.getClassByIRI(NS_AUTH + "Host");
+		this.Tenant = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
 		this.Environment = this.classCache.getClassByIRI(NS_AUTH + "Environment");
-		this.DatabaseSystem = this.classCache.getClassByIRI(NS_AUTH + "DatabaseSystem");
-
+		this.Host = this.classCache.getClassByIRI(NS_AUTH + "Host");
+		this.DatabaseInstance = this.classCache.getClassByIRI(NS_AUTH + "DatabaseInstance");
+		this.Repository = this.classCache.getClassByIRI(NS_AUTH + "Repository");
+		this.Graph = this.classCache.getClassByIRI(NS_AUTH + "Graph");
 		let joins = [
 			// first join (for tenants) on level 1
 			{
-				cls: this.DatabaseSystem,
-				master2childRelation: "hasDatabaseSystem",
-			},
-			{
 				cls: this.Environment,
-				master2childRelation: "hasEnvironment",
+				child2MasterRelation: "hasTenant",
+				joins: [
+					{
+						cls: this.Host,
+						child2MasterRelation: "hasEnvironment",
+						joins: [
+							{
+								cls: this.DatabaseInstance,
+								child2MasterRelation: "hasHost",
+								joins: [
+									{
+										cls: this.Repository,
+										child2MasterRelation: "hasDatabaseInstance",
+										joins: [
+											{
+												cls: this.Graph,
+												child2MasterRelation: "hasRepository",
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				],
 			},
 		];
 		let res = await this.showAllIndividuals({
-			cls: this.Host,
+			cls: this.Tenant,
 			joins: joins,
 			filter: [
 				{

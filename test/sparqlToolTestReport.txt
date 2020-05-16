@@ -23,8 +23,7 @@ where
    }
 }
 Success: [object Object]
-    √ Get Individual of a class without join (246ms)
-[ '?Environmentiri ?Environmentname' ]
+    √ Get Individual of a class without join (367ms)
 SPARQL:
 select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname
 
@@ -52,11 +51,7 @@ where
    }
 }
 Success: [object Object]
-    √ Get Individual of a class with single join have master2childRelation (171ms)
-[
-  '?DatabaseSystemiri ?DatabaseSystemversion',
-  '?Environmentiri ?EnvironmenthasTenant ?Environmentname'
-]
+    √ Get Individual of a class with single join have master2childRelation (291ms)
 SPARQL:
 select ?Hostiri ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseSystemiri ?DatabaseSystemversion ?Environmentiri ?EnvironmenthasTenant ?Environmentname
 
@@ -104,8 +99,7 @@ where
    }
 }
 Success: [object Object]
-    √ Get Individual of a class with join using master to child relation (277ms)
-[ '?Environmentiri ?Environmentname' ]
+    √ Get Individual of a class with join using master to child relation (193ms)
 SPARQL:
 select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname ?Hostiri ?HosthasDatabaseSystem ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseInstanceiri ?DatabaseInstancename ?DatabaseInstanceversion ?Repositoryiri ?Repositoryid ?Repositoryname ?Graphiri ?Graphgraph ?Graphname
 
@@ -177,8 +171,8 @@ where
    }
 }
 Success: [object Object]
-    √ Get Individual of a class with nested joins have master2childRelation (161ms)
+    √ Get Individual of a class with nested joins have master2childRelation (264ms)
 
 
-  4 passing (865ms)
+  4 passing (1s)
 
