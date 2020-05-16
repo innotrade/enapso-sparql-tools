@@ -4,7 +4,7 @@
 
 
 
-  Query test
+  Delete Individual Query test
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -17,7 +17,7 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A flat object without no joins delete an individual of Graph (643ms)
+    √ A flat object without no joins delete an individual of Graph (306ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -30,20 +30,20 @@ where
   
   union 
    {
-      ?master  enrepo:hasDatabaseSystem ?Host.
-	bind(?Host as ?s)
+      ?master  enrepo:hasDatabaseSystem ?DatabaseSystem.
+	bind(?DatabaseSystem as ?s)
     ?s ?p ?o
    }
   union 
    {
-      ?master  enrepo:hasEnvironment ?Host.
-	bind(?Host as ?s)
+      ?master  enrepo:hasEnvironment ?Environment.
+	bind(?Environment as ?s)
     ?s ?p ?o
    }
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with only one joins delete an individual of Host has master2childRelation (502ms)
+    √ A object with only one joins delete an individual of Host has master2childRelation (169ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
@@ -70,12 +70,12 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (458ms)
+    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (197ms)
 SPARQL:
 delete {?s ?p ?o}
 where 
 {
-	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
+	 bind(enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4 as ?master).
     {
 	bind(?master as ?s)
 	?s ?p ?o        
@@ -88,12 +88,6 @@ where
 	?s ?p ?o
    } 
     
-  union 
-   {
-        ?Graph enrepo:hasRepository  ?Repository.
-	bind(?Graph as ?s)
-        ?s ?p ?o
-   }
   union 
    {
         ?Host enrepo:hasEnvironment  ?Environment.
@@ -121,8 +115,8 @@ where
 	 filter(!isBlank(?o))
 }
 Success: true
-    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (616ms)
+    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (161ms)
 
 
-  4 passing (2s)
+  4 passing (840ms)
 

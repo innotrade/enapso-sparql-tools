@@ -310,7 +310,7 @@ filter(?s = <${cls.getIRI()}>) .
 			},
 		];
 		let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
-		let res = await this.deleteIndividual({iri:iri});
+		let res = await this.deleteIndividual({ iri: iri });
 		out = JSON.stringify(res, null, 2);
 		enlogger.log("Delete individuals" + out);
 	},

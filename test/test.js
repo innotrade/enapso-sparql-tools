@@ -22,11 +22,11 @@ describe("Delete Individual Query test", () => {
     let joins = [
       // first join (for tenants) on level 1
       {
-        cls: "Host",
+        cls: "DatabaseSystem",
         master2childRelation: "hasDatabaseSystem",
       },
       {
-        cls: "Host",
+        cls: "Environment",
         master2childRelation: "hasEnvironment",
       },
     ];
@@ -61,7 +61,7 @@ describe("Delete Individual Query test", () => {
     );
   });
   it("A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation", (done) => {
-    let iri = "enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f";
+    let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
     let joins = [
       // first join (for tenants) on level 1
       {
