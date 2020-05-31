@@ -1,0 +1,11 @@
+PREFIX enrepo: <http://ont.enapso.com/repo#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+#SPARQL Query to Copy the label of given language and paste in name property of all individual of a given class
+insert {
+            ?environment  enrepo:name ?label.
+	   }
+where { 
+           ?environment a enrepo:Environment.
+           ?environment rdfs:label ?label.
+           filter(lang(?label)="en").
+      }

@@ -1,4 +1,4 @@
-// Innotrade Enapso SPARQL Tools - Module Demo
+// Innotrade Enapso SPARQL Tools 
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze and Muhammad Yasir
 
@@ -249,7 +249,6 @@ filter(?s = <${cls.getIRI()}>) .
 `
 		);
 	},
-
 	cloneIndividual(productClass, productIRI) {
 		let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
 		//enlogger.log('SPARQL:\n' + generated.sparql);
@@ -294,12 +293,14 @@ filter(?s = <${cls.getIRI()}>) .
 			repository: GRAPHDB_REPOSITORY,
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
+
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
 	},
 };
-enlogger.log("AUTH/Enapso SPARQL Client Demo");
-
 (async () => {
 	await AUTH.demo();
 })();
+module.exports = {
+	AUTH,
+};

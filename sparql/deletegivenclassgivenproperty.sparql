@@ -1,0 +1,8 @@
+PREFIX enrepo: <http://ont.enapso.com/repo#>
+#SPARQL query to delete a given property of a given class
+delete where 
+    {
+        #name of class and its data property want to delete
+        ?environment a enrepo:Environment.
+        ?environment enrepo:name ?environmentName.
+     }

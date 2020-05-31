@@ -1,0 +1,58 @@
+
+> @innotrade/enapso-sparql-tools@0.0.5 test E:\enapso-sparql-tools
+> mocha
+
+
+
+  Delete Individual Query test
+SPARQL:
+insert
+  {
+    ?Environment rdfs:label ?label.
+  }
+where
+  {
+     ?Environment a enrepo:Environment.
+     ?Environment enrepo:name ?name.
+     bind(strlang(?name,"en") as ?label)
+  }
+Success: true
+    √ Copy Data Property to label of each individual of a Class (1543ms)
+SPARQL:
+delete where
+	{
+	   ?Environment a enrepo:Environment.
+           ?Environment enrepo:name ?Environmentname.
+        }
+Success: true
+    √ Delete given Data Property of each individual of given Class (1163ms)
+SPARQL:
+insert
+  {
+      ?Environment enrepo:name ?label.
+  }
+where
+  {
+      ?Environment a enrepo:Environment.
+      ?Environment rdfs:label ?label.
+      filter(lang(?label)="en")
+  }
+Success: true
+    √ Copy label of given language to given Data Property of each individual of a given Class (1035ms)
+SPARQL:
+delete
+    {
+	?Environment rdfs:label ?label.
+    }
+where
+    {
+	?Environment a enrepo:Environment.
+	?Environment rdfs:label ?label.
+	filter(lang(?label) = "" ||lang(?label)="en")
+    }
+Success: true
+    √ Delete label of given language of each individual of given Class  (674ms)
+
+
+  4 passing (4s)
+
