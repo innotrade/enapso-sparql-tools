@@ -183,6 +183,7 @@ where {
 	},
 
 	// show all individuals of a certain class in the enlogger
+<<<<<<< HEAD
 	showAllIndividuals: async function (cls, populations) {
 		// and retrieve all instances by the given in-memory class
 		res = await this.getIndividualsByClass({
@@ -200,6 +201,11 @@ where {
 			prefixFilter: true,
 			prefixPopulations: true,
 		});
+=======
+	showAllIndividuals: async function (args) {
+		// and retrieve all instances by the given in-memory class
+		res = await this.getIndividualsByClass(args);
+>>>>>>> ef-task-40
 
 		return res;
 	},
@@ -293,14 +299,23 @@ filter(?s = <${cls.getIRI()}>) .
 			repository: GRAPHDB_REPOSITORY,
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
+<<<<<<< HEAD
 
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
+=======
+		classCache = await this.buildClassCache();
+
+>>>>>>> ef-task-40
 	},
 };
 (async () => {
 	await AUTH.demo();
 })();
 module.exports = {
+<<<<<<< HEAD
 	AUTH,
+=======
+	AUTH
+>>>>>>> ef-task-40
 };

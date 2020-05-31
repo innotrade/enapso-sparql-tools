@@ -183,24 +183,9 @@ where {
 	},
 
 	// show all individuals of a certain class in the enlogger
-	showAllIndividuals: async function (cls, populations) {
+	showAllIndividuals: async function (args) {
 		// and retrieve all instances by the given in-memory class
-		res = await this.getIndividualsByClass({
-			cls,
-			populations,
-			filter: [
-				{
-					key: "$sparql",
-					value: 'regEx(?email, "yasir@gmail.com", "i")',
-				},
-			],
-
-			prefixClass: true,
-			prefixPredicates: true,
-			prefixFilter: true,
-			prefixPopulations: true,
-		});
-
+		res = await this.getIndividualsByClass(args);
 		return res;
 	},
 
@@ -296,6 +281,57 @@ filter(?s = <${cls.getIRI()}>) .
 		});
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
+<<<<<<< HEAD
+=======
+		// load some classes from the class cache for later convience
+		this.Tenant = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
+		this.Environment = this.classCache.getClassByIRI(NS_AUTH + "Environment");
+		this.Host = this.classCache.getClassByIRI(NS_AUTH + "Host");
+		this.DatabaseInstance = this.classCache.getClassByIRI(NS_AUTH + "DatabaseInstance");
+		this.Repository = this.classCache.getClassByIRI(NS_AUTH + "Repository");
+		this.Graph = this.classCache.getClassByIRI(NS_AUTH + "Graph");
+		let joins = [
+			// first join (for tenants) on level 1
+			{
+				cls: this.Environment,
+				child2MasterRelation: "hasTenant",
+				joins: [
+					{
+						cls: this.Host,
+						child2MasterRelation: "hasEnvironment",
+						joins: [
+							{
+								cls: this.DatabaseInstance,
+								child2MasterRelation: "hasHost",
+								joins: [
+									{
+										cls: this.Repository,
+										child2MasterRelation: "hasDatabaseInstance",
+										joins: [
+											{
+												cls: this.Graph,
+												child2MasterRelation: "hasRepository",
+											},
+										],
+									},
+								],
+							},
+						],
+					},
+				],
+			},
+		];
+		let res = await this.showAllIndividuals({
+			cls: this.Tenant,
+			joins: joins,
+			filter: [
+				{
+					key: "$sparql",
+					value: 'regEx(?name, "Innotrade GmbH", "i")',
+				},
+			]
+		});
+>>>>>>> ef-task-40
 	},
 };
 enlogger.log("AUTH/Enapso SPARQL Client Demo");
