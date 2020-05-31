@@ -1,7 +1,7 @@
 {
   "name": "@innotrade/enapso-sparql-tools",
-  "version": "0.0.5",
-  "description": "Enapso Platform Independent SPARQL Tools",
+  "version": "1.1.0",
+  "description": "enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
@@ -37,14 +37,14 @@
   "homepage": "https://github.com/innotrade/enapso-sparql-tools#readme",
   "devDependencies": {},
   "dependencies": {
-    "@innotrade/enapso-args": "^0.1.1",
-    "@innotrade/enapso-graphdb-client": "^1.7.1",
-    "@innotrade/enapso-logger": "0.0.5",
+    "@innotrade/enapso-args": "^1.0.1",
+    "@innotrade/enapso-graphdb-client": "^1.8.0",
+    "@innotrade/enapso-logger": "1.1.0",
     "joi": "^14.3.1",
     "lodash": "^4.17.15",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "cross-env": "^7.0.2",
-    "mocha": "^7.1.1"
+    "mocha": "^7.2.0"
   }
 }
