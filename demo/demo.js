@@ -183,9 +183,24 @@ where {
 	},
 
 	// show all individuals of a certain class in the enlogger
-	showAllIndividuals: async function (args) {
+	showAllIndividuals: async function (cls, populations) {
 		// and retrieve all instances by the given in-memory class
-		res = await this.getIndividualsByClass(args);
+		res = await this.getIndividualsByClass({
+			cls,
+			populations,
+			filter: [
+				{
+					key: "$sparql",
+					value: 'regEx(?email, "yasir@gmail.com", "i")',
+				},
+			],
+
+			prefixClass: true,
+			prefixPredicates: true,
+			prefixFilter: true,
+			prefixPopulations: true,
+		});
+
 		return res;
 	},
 
@@ -240,26 +255,6 @@ filter(?s = <${cls.getIRI()}>) .
 		//enlogger.log('SPARQL:\n' + generated.sparql);
 		return this.update(generated.sparql, { iri: generated.iri });
 	},
-	deletePropertyOfClass(args) {
-		let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
-		enlogger.log("SPARQL:\n" + generated.sparql);
-		return this.update(generated.sparql);
-	},
-	deleteLabelOfEachClassIndividual(args) {
-		let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
-		enlogger.log("SPARQL:\n" + generated.sparql);
-		return this.update(generated.sparql);
-	},
-	copyLabelToDataPropertyOfEachIndividual(args) {
-		let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
-		enlogger.log("SPARQL:\n" + generated.sparql);
-		return this.update(generated.sparql);
-	},
-	copyDataPropertyToLabelOfEachIndividual(args) {
-		let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
-		enlogger.log("SPARQL:\n" + generated.sparql);
-		return this.update(generated.sparql);
-	},
 	demo: async function () {
 		// instantiate a prefix manager
 		enlogger.setLevel(EnapsoLogger.ALL);
@@ -279,37 +274,30 @@ filter(?s = <${cls.getIRI()}>) .
 			repository: GRAPHDB_REPOSITORY,
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
+
 		// import all classes into memory
 		this.classCache = await this.buildClassCache();
-<<<<<<< HEAD
-=======
 		// load some classes from the class cache for later convience
-		this.Tenant = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
-		this.Environment = this.classCache.getClassByIRI(NS_AUTH + "Environment");
-		this.Host = this.classCache.getClassByIRI(NS_AUTH + "Host");
-		this.DatabaseInstance = this.classCache.getClassByIRI(NS_AUTH + "DatabaseInstance");
-		this.Repository = this.classCache.getClassByIRI(NS_AUTH + "Repository");
-		this.Graph = this.classCache.getClassByIRI(NS_AUTH + "Graph");
 		let joins = [
 			// first join (for tenants) on level 1
 			{
-				cls: this.Environment,
+				cls: "Environment",
 				child2MasterRelation: "hasTenant",
 				joins: [
 					{
-						cls: this.Host,
+						cls: "Host",
 						child2MasterRelation: "hasEnvironment",
 						joins: [
 							{
-								cls: this.DatabaseInstance,
+								cls: "DatabaseInstance",
 								child2MasterRelation: "hasHost",
 								joins: [
 									{
-										cls: this.Repository,
+										cls: "Repository",
 										child2MasterRelation: "hasDatabaseInstance",
 										joins: [
 											{
-												cls: this.Graph,
+												cls: "Graph",
 												child2MasterRelation: "hasRepository",
 											},
 										],
@@ -321,17 +309,10 @@ filter(?s = <${cls.getIRI()}>) .
 				],
 			},
 		];
-		let res = await this.showAllIndividuals({
-			cls: this.Tenant,
-			joins: joins,
-			filter: [
-				{
-					key: "$sparql",
-					value: 'regEx(?name, "Innotrade GmbH", "i")',
-				},
-			]
-		});
->>>>>>> ef-task-40
+		let iri = "enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4";
+		let res = await this.deleteIndividual({ iri: iri });
+		out = JSON.stringify(res, null, 2);
+		enlogger.log("Delete individuals" + out);
 	},
 };
 enlogger.log("AUTH/Enapso SPARQL Client Demo");

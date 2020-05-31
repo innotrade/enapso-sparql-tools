@@ -6,225 +6,117 @@
 
   Delete Individual Query test
 SPARQL:
-<<<<<<< HEAD
-insert
-  {
-    ?Environment rdfs:label ?label.
-  }
-where
-  {
-     ?Environment a enrepo:Environment.
-     ?Environment enrepo:name ?name.
-     bind(strlang(?name,"en") as ?label)
-  }
-Success: true
-    √ Copy Data Property to label of each individual of a Class (1543ms)
-SPARQL:
-delete where
-	{
-	   ?Environment a enrepo:Environment.
-           ?Environment enrepo:name ?Environmentname.
-        }
-Success: true
-    √ Delete given Data Property of each individual of given Class (1163ms)
-SPARQL:
-insert
-  {
-      ?Environment enrepo:name ?label.
-  }
-where
-  {
-      ?Environment a enrepo:Environment.
-      ?Environment rdfs:label ?label.
-      filter(lang(?label)="en")
-  }
-Success: true
-    √ Copy label of given language to given Data Property of each individual of a given Class (1035ms)
-SPARQL:
-delete
+delete {?s ?p ?o}
+where 
+{
+	 bind(enrepo:Graph_0ea87735_977d_461b_88c5_749d1a5bf909 as ?master).
     {
-	?Environment rdfs:label ?label.
+	bind(?master as ?s)
+	?s ?p ?o        
     }
-where
-    {
-	?Environment a enrepo:Environment.
-	?Environment rdfs:label ?label.
-	filter(lang(?label) = "" ||lang(?label)="en")
-    }
+	 filter(!isBlank(?o))
+}
 Success: true
-    √ Delete label of given language of each individual of given Class  (674ms)
-
-
-  4 passing (4s)
-=======
-select ?Tenantiri ?Tenantname
-
-where 
-  {
-	    
-        ?ind rdf:type + enrepo:Tenant .	
-	optional {?ind enrepo:name ?name }.
-  {
-	{
-		
-	bind(str(?ind) as ?Tenantiri) .
-	bind (?name as ?Tenantname ).
-	bind ("Tenant" as ?contentkey ).
-	}	    
-   }
-}
-Success: [object Object]
-    √ Get Individual of a class without join (367ms)
+    √ A flat object without no joins delete an individual of Graph (306ms)
 SPARQL:
-select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname
-
+delete {?s ?p ?o}
 where 
-  {
-	    
-        ?ind rdf:type + enrepo:Tenant .	
-	optional {?ind enrepo:name ?name }.
-  {
-	{
-		
-	bind(str(?ind) as ?Tenantiri) .
-	bind (?name as ?Tenantname ).
-	bind ("Tenant" as ?contentkey ).
-	}
-				
-    union 
-	  {
-		
-	?Environment enrepo:hasTenant  ?ind.
-	bind(?Environment as ?Environmentiri)
-	 optional{?Environment  enrepo:name ?Environmentname.}
-	bind( "?Environment" as ?contentKey)
-	   }	    
+{
+	 bind(enrepo:Host_01141633_0716_4ae3_b38b_aa12b2197c4a as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
+  union 
+   {
+      ?master  enrepo:hasDatabaseSystem ?DatabaseSystem.
+	bind(?DatabaseSystem as ?s)
+    ?s ?p ?o
    }
+  union 
+   {
+      ?master  enrepo:hasEnvironment ?Environment.
+	bind(?Environment as ?s)
+    ?s ?p ?o
+   }
+	 filter(!isBlank(?o))
 }
-Success: [object Object]
-    √ Get Individual of a class with single join have master2childRelation (291ms)
+Success: true
+    √ A object with only one joins delete an individual of Host has master2childRelation (169ms)
 SPARQL:
-select ?Hostiri ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseSystemiri ?DatabaseSystemversion ?Environmentiri ?EnvironmenthasTenant ?Environmentname
-
+delete {?s ?p ?o}
 where 
-  {
-	    
-        ?ind rdf:type + enrepo:Host .	
-	optional {?ind enrepo:hasOperatingSystem ?hasOperatingSystem }.
-	optional {?ind enrepo:dbVersion ?dbVersion }.
-	optional {?ind enrepo:name ?name }.
-	optional {?ind enrepo:osVersion ?osVersion }.
-  {
-	{
-		
-	bind(str(?ind) as ?Hostiri) .
-	bind (?hasOperatingSystem as ?HosthasOperatingSystem ).
-	bind (?dbVersion as ?HostdbVersion ).
-	bind (?name as ?Hostname ).
-	bind (?osVersion as ?HostosVersion ).
-	bind ("Host" as ?contentkey ).
-	}
-				
-    union 
-	  {
-		
-		
-                     
-	?ind enrepo:hasDatabaseSystem  ?DatabaseSystem 
-        bind(?DatabaseSystem as ?DatabaseSystemiri)
-        optional{?DatabaseSystem  enrepo:version ?DatabaseSystemversion.}
-        bind( "?DatabaseSystem" as ?contentKey)
-	   }
-    union 
-	  {
-		
-		
-                     
-                     
-	?ind enrepo:hasEnvironment  ?Environment 
-        bind(?Environment as ?Environmentiri)
-        optional{?Environment  enrepo:hasTenant ?EnvironmenthasTenant.}
-        optional{?Environment  enrepo:name ?Environmentname.}
-        bind( "?Environment" as ?contentKey)
-	   }	    
+{
+	 bind(enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
+  union 
+   {
+      ?Repository enrepo:hasDatabaseInstance  ?master.
+	bind(?Repository as ?s)
+	?s ?p ?o
+   } 
+    
+  union 
+   {
+        ?Graph enrepo:hasRepository  ?Repository.
+	bind(?Graph as ?s)
+        ?s ?p ?o
    }
+	 filter(!isBlank(?o))
 }
-Success: [object Object]
-    √ Get Individual of a class with join using master to child relation (193ms)
+Success: true
+    √ A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation (197ms)
 SPARQL:
-select ?Tenantiri ?Tenantname ?Environmentiri ?Environmentname ?Hostiri ?HosthasDatabaseSystem ?HosthasOperatingSystem ?HostdbVersion ?Hostname ?HostosVersion ?DatabaseInstanceiri ?DatabaseInstancename ?DatabaseInstanceversion ?Repositoryiri ?Repositoryid ?Repositoryname ?Graphiri ?Graphgraph ?Graphname
-
+delete {?s ?p ?o}
 where 
-  {
-	    
-        ?ind rdf:type + enrepo:Tenant .	
-	optional {?ind enrepo:name ?name }.
-  {
-	{
-		
-	bind(str(?ind) as ?Tenantiri) .
-	bind (?name as ?Tenantname ).
-	bind ("Tenant" as ?contentkey ).
-	}
-				
-    union 
-	  {
-		
-	?Environment enrepo:hasTenant  ?ind.
-	bind(?Environment as ?Environmentiri)
-	 optional{?Environment  enrepo:name ?Environmentname.}
-	bind( "?Environment" as ?contentKey)
-	   }
-		
+{
+	 bind(enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4 as ?master).
+    {
+	bind(?master as ?s)
+	?s ?p ?o        
+    } 
+  
   union 
-	  {
-		  
-			
-	?Host enrepo:hasEnvironment+  ?Environment.
-	bind(?Host as ?Hostiri)
-        optional{?Host  enrepo:hasDatabaseSystem ?HosthasDatabaseSystem.}
-        optional{?Host  enrepo:hasOperatingSystem ?HosthasOperatingSystem.}
-        optional{?Host  enrepo:dbVersion ?HostdbVersion.}
-        optional{?Host  enrepo:name ?Hostname.}
-        optional{?Host  enrepo:osVersion ?HostosVersion.}
-        bind( "?Host" as ?contentKey)
-	  }
+   {
+      ?Environment enrepo:hasTenant  ?master.
+	bind(?Environment as ?s)
+	?s ?p ?o
+   } 
+    
   union 
-	  {
-		  
-			
-	?DatabaseInstance enrepo:hasHost+  ?Host.
-	bind(?DatabaseInstance as ?DatabaseInstanceiri)
-        optional{?DatabaseInstance  enrepo:name ?DatabaseInstancename.}
-        optional{?DatabaseInstance  enrepo:version ?DatabaseInstanceversion.}
-        bind( "?DatabaseInstance" as ?contentKey)
-	  }
-  union 
-	  {
-		  
-			
-	?Repository enrepo:hasDatabaseInstance+  ?DatabaseInstance.
-	bind(?Repository as ?Repositoryiri)
-        optional{?Repository  enrepo:id ?Repositoryid.}
-        optional{?Repository  enrepo:name ?Repositoryname.}
-        bind( "?Repository" as ?contentKey)
-	  }
-  union 
-	  {
-		  
-			
-	?Graph enrepo:hasRepository+  ?Repository.
-	bind(?Graph as ?Graphiri)
-        optional{?Graph  enrepo:graph ?Graphgraph.}
-        optional{?Graph  enrepo:name ?Graphname.}
-        bind( "?Graph" as ?contentKey)
-	  }	    
+   {
+        ?Host enrepo:hasEnvironment  ?Environment.
+	bind(?Host as ?s)
+        ?s ?p ?o
    }
+  union 
+   {
+        ?DatabaseInstance enrepo:hasHost  ?Host.
+	bind(?DatabaseInstance as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?Repository enrepo:hasDatabaseInstance  ?DatabaseInstance.
+	bind(?Repository as ?s)
+        ?s ?p ?o
+   }
+  union 
+   {
+        ?Graph enrepo:hasRepository  ?Repository.
+	bind(?Graph as ?s)
+        ?s ?p ?o
+   }
+	 filter(!isBlank(?o))
 }
-Success: [object Object]
-    √ Get Individual of a class with nested joins have master2childRelation (264ms)
+Success: true
+    √ A object with combined joins nesting only delete an individual of DatabaseInstance has child2MasterRelation (161ms)
 
 
-  4 passing (1s)
->>>>>>> ef-task-40
+  4 passing (840ms)
 
