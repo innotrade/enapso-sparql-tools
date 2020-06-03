@@ -187,18 +187,11 @@ where {
   },
 
   // show all individuals of a certain class in the enlogger
-  showAllIndividuals: async function (cls, populations) {
+  showAllIndividuals: async function (cls,populations) {
     // and retrieve all instances by the given in-memory class
     res = await this.getIndividualsByClass({
       cls,
       populations,
-      filter: [
-        {
-          key: '$sparql',
-          value: 'regEx(?email, "yasir@gmail.com", "i")'
-        }
-      ],
-
       prefixClass: true,
       prefixPredicates: true,
       prefixFilter: true,
@@ -225,7 +218,7 @@ where {
   // create a new instance of a certain class in the graph
   createIndividualByClass: async function (cls, ind, options) {
     let generated = this.enSPARQL.createIndividualByClass(cls, ind, options);
-    //enlogger.log('SPARQL:\n' + generated.sparql);
+    enlogger.log('SPARQL:\n' + generated.sparql);
     return this.update(generated.sparql, { iri: generated.iri });
   },
 
@@ -285,45 +278,23 @@ filter(?s = <${cls.getIRI()}>) .
 
     // import all classes into memory
     this.classCache = await this.buildClassCache();
-    // load some classes from the class cache for later convience
-    let joins = [
-      // first join (for tenants) on level 1
-      {
-        cls: 'Environment',
-        child2MasterRelation: 'hasTenant',
-        joins: [
-          {
-            cls: 'Host',
-            child2MasterRelation: 'hasEnvironment',
-            joins: [
-              {
-                cls: 'DatabaseInstance',
-                child2MasterRelation: 'hasHost',
-                joins: [
-                  {
-                    cls: 'Repository',
-                    child2MasterRelation: 'hasDatabaseInstance',
-                    joins: [
-                      {
-                        cls: 'Graph',
-                        child2MasterRelation: 'hasRepository'
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ];
-    let iri = 'enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4';
-    let res = await this.deleteIndividual({ iri: iri });
-    out = JSON.stringify(res, null, 2);
-    enlogger.log('Delete individuals' + out);
+	// load some classes from the class cache for later convience
+	this.companyClass = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
+	baseiri='http://ont.enapso.com/dotnetpro#';
+	//let baseiri;
+	let res = await this.createIndividualByClass(this.companyClass,baseiri,{
+		// optionally use a predefined IRI here
+		// if omitted then an UUID will be generated
+		//"iri": this.testCompanyIRI,
+		"name": "Company Ltd."
+	}, {
+		prefixClass: true,
+		prefixProperties: true,
+		prefixIndividual: true
+	});
+	
   }
 };
-
 enlogger.log('AUTH/Enapso SPARQL Client Demo');
 
 (async () => {
