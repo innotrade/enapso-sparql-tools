@@ -1,6 +1,6 @@
 {
   "name": "@innotrade/enapso-sparql-tools",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "enapso Platform Independent SPARQL Tools",
   "main": "index.js",
   "scripts": {
