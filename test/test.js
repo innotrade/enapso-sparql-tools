@@ -21,7 +21,7 @@ describe("SPARQL Tool Test Suites", () => {
 				"name": "Test Company"
 			}
 		];
-		testconfig.AUTH.createIndividualByClass({cls:this.Tenant, baseiri:baseiri, ind:ind}).then((result) => {
+		testconfig.AUTH.createIndividualByClass({ cls: this.Tenant, baseiri: baseiri, ind: ind }).then((result) => {
 			console.log("Success: " + result.success);
 			expect(result).to.have.property("success", true);
 		});
