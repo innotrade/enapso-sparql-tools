@@ -279,6 +279,10 @@ filter(?s = <${cls.getIRI()}>) .
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
 		this.classCache = await this.buildClassCache();
+		this.Tenant = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
+		let res=await this.showAllIndividuals({cls:this.Tenant});
+		console.log(res);
+
 	},
 };
 (async () => {
