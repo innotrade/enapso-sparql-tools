@@ -218,13 +218,13 @@ Initializing variables using that variable call the `createIndividualByClass` me
 ```javascript
 let Tenant = classCache.getClassByIRI(NS_AUTH + 'Tenant');
 // insert a new individual based on the in-memory class
-res = await this.createIndividualByClass(
+res = await this.createIndividualByClass({
   cls: Tenant,
   baseiri: baseiri,
   ind: {
     name: 'Test Company'
   }
-);
+});
 // save the iri for this individual
 iri = res.params.iri;
 out = JSON.stringify(res, null, 2);
