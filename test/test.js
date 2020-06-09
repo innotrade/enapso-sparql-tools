@@ -16,11 +16,11 @@ describe("SPARQL Tool Test Suites", () => {
 		this.classCache = await testconfig.AUTH.buildClassCache();
 		this.Tenant = this.classCache.getClassByIRI(NS_AUTH + "Tenant");
 		let baseiri = "http://ont.enapso.com/repo#";
-		let ind = [
+		let ind = 
 			{
 				"name": "Test Company"
 			}
-		];
+		;
 		testconfig.AUTH.createIndividualByClass({ cls: this.Tenant, baseiri: baseiri, ind: ind }).then((result) => {
 			console.log("Success: " + result.success);
 			expect(result).to.have.property("success", true);
