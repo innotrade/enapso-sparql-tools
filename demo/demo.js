@@ -20,8 +20,8 @@ _.merge(
 
 const GRAPHDB_BASE_URL = "http://localhost:7200",
 	GRAPHDB_REPOSITORY = "Test";
-const NS_AUTH = "http://ont.enapso.com/repo#",
-	PREFIX_AUTH = "enrepo";
+const NS_AUTH = "http://ont.enapso.com/foundation#",
+	PREFIX_AUTH = "enf";
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
 	EnapsoGraphDBClient.PREFIX_OWL,
@@ -279,8 +279,9 @@ filter(?s = <${cls.getIRI()}>) .
 			prefixes: this.enPrefixManager.getPrefixesForConnector(),
 		});
 		this.classCache = await this.buildClassCache();
-		let iri="enrepo:Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe";
-		let res=await this.deleteIndividual({ iri: iri });
+		let cls="http://ont.enapso.com/foundation#Attribute";
+        let res=await this.getClassProperties(cls);
+        console.log(res);
 
 	},
 };
