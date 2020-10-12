@@ -2,9 +2,11 @@
 // (C) Copyright 2019 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze, Osvaldo Aguilar Lauzurique
 
-const regexValidators = require('./regex-validators')
+const regexValidators = require('./regex-validators');
 
 module.exports = (url) => {
-	if (!url) { return false }
-	return regexValidators.URL.test(url)
-}
+    if (!url) {
+        return false;
+    }
+    return regexValidators.URL.test(url);
+};
