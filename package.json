@@ -4,7 +4,7 @@
     "description": "enapso Platform Independent SPARQL Tools",
     "main": "index.js",
     "scripts": {
-        "test": "mocha"
+        "test": "mocha --timeout 10000"
     },
     "repository": {
         "type": "git",

@@ -207,8 +207,8 @@ where {
     },
 
     // updates an individual by its class reference and a data object with the values
-    updateIndividualByClass: async function (cls, iri, ind) {
-        let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
+    updateIndividualByClass: async function (args) {
+        let generated = this.enSPARQL.updateIndividualByClass(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },

@@ -1,0 +1,142 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX enf: <http://ont.enapso.com/foundation#>
+select ?contentKey ?iri ?code ?dataId ?hash ?name ?rights ?type ?user ?canHaveResource ?hasCss ?mustHaveResource ?shouldHaveResource ?capabilityIri ?capabilityHasResultType ?capabilityImplementation ?capabilityUuid ?capabilityExceptions ?capabilityName ?capabilityHasArgument ?attributeIri ?attributeHasDataType ?attributeHasDefaulty ?attributeHasValue ?attributeName ?attributeUuid ?attributeAuthorization ?attributeScope ?behaviorIri ?behaviorHasEventEmitter ?behaviorHasEventListener ?argumentIri ?argumentHasDataType ?argumentHasDefaulty ?argumentName ?argumentOrder ?argumentUuid ?eventEmitterIri ?eventEmitterHasEvent ?eventEmitterScheduling ?eventIri ?eventData ?eventLifeCyle ?eventName ?eventListenerIri ?eventListenerHasEvent ?eventListenerHasResultType ?eventListenerExceptions ?eventListenerImplementation ?eventListenerName ?eventListenerUuid ?eventListenerHasArgument
+where
+  {
+        ?ind rdf:type + enf:Resource .
+        filter(regEx(str(?ind), "http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e", "i"))  {
+
+    bind(str(?ind) as ?iri) .
+    optional {?ind enf:code ?code }.
+    optional {?ind enf:dataId ?dataId }.
+    optional {?ind enf:hash ?hash }.
+    optional {?ind enf:name ?name }.
+    optional {?ind enf:rights ?rights }.
+    optional {?ind enf:type ?type }.
+    optional {?ind enf:user ?user }.
+    optional {?ind enf:canHaveResource ?canHaveResource }.
+    optional {?ind enf:hasCss ?hasCss }.
+    optional {?ind enf:mustHaveResource ?mustHaveResource }.
+    optional {?ind enf:shouldHaveResource ?shouldHaveResource }.
+    bind ("Resource" as ?contentKey ).
+   }
+    union {
+
+    ?ind enf:hasCapabilities  ?capability
+    {
+    bind(?capability as ?capabilityIri)
+    optional{?capability  enf:hasResultType ?capabilityHasResultType.}
+    optional{?capability  enf:implementation ?capabilityImplementation.}
+    optional{?capability  enf:uuid ?capabilityUuid.}
+    optional{?capability  enf:exceptions ?capabilityExceptions.}
+    optional{?capability  enf:name ?capabilityName.}
+    optional{?capability  enf:hasArgument ?capabilityHasArgument.}
+    bind( "Resource.Capability" as ?contentKey)
+    }
+    union
+    {
+    ?capability  enf:hasArgument+ ?argument.
+    {
+        bind(?argument as ?argumentIri)
+    optional{?argument  enf:hasDataType ?argumentHasDataType.}
+    optional{?argument  enf:hasDefaulty ?argumentHasDefaulty.}
+    optional{?argument  enf:name ?argumentName.}
+    optional{?argument  enf:order ?argumentOrder.}
+    optional{?argument  enf:uuid ?argumentUuid.}
+    bind( "Capability.Argument" as ?contentKey)
+    }   } }
+    union {
+
+
+    ?ind enf:hasAttributes  ?attribute
+    {
+    bind(?attribute as ?attributeIri)
+    optional{?attribute  enf:hasDataType ?attributeHasDataType.}
+    optional{?attribute  enf:hasDefaulty ?attributeHasDefaulty.}
+    optional{?attribute  enf:hasValue ?attributeHasValue.}
+    optional{?attribute  enf:name ?attributeName.}
+    optional{?attribute  enf:uuid ?attributeUuid.}
+    optional{?attribute  enf:authorization ?attributeAuthorization.}
+    optional{?attribute  enf:scope ?attributeScope.}
+    bind( "Resource.Attribute" as ?contentKey)
+    }
+    union
+    {
+    ?attribute  enf:hasArgument+ ?argument.
+    {
+        bind(?argument as ?argumentIri)
+    optional{?argument  enf:hasDataType ?argumentHasDataType.}
+    optional{?argument  enf:hasDefaulty ?argumentHasDefaulty.}
+    optional{?argument  enf:name ?argumentName.}
+    optional{?argument  enf:order ?argumentOrder.}
+    optional{?argument  enf:uuid ?argumentUuid.}
+    bind( "Attribute.Argument" as ?contentKey)
+    }   } }
+    union {
+
+
+
+
+    ?ind enf:hasBehavior  ?behavior
+    {
+    bind(?behavior as ?behaviorIri)
+    optional{?behavior  enf:hasEventEmitter ?behaviorHasEventEmitter.}
+    optional{?behavior  enf:hasEventListener ?behaviorHasEventListener.}
+    bind( "Resource.Behavior" as ?contentKey)
+    }
+    union
+    {
+    ?behavior  enf:hasEventEmitter+ ?eventEmitter.
+    {
+        bind(?eventEmitter as ?eventEmitterIri)
+    optional{?eventEmitter  enf:hasEvent ?eventEmitterHasEvent.}
+    optional{?eventEmitter  enf:scheduling ?eventEmitterScheduling.}
+    bind( "Behavior.EventEmitter" as ?contentKey)
+    }
+    union
+    {
+    ?eventEmitter  enf:hasEvent+ ?event.
+    {
+        bind(?event as ?eventIri)
+    optional{?event  enf:data ?eventData.}
+    optional{?event  enf:lifeCyle ?eventLifeCyle.}
+    optional{?event  enf:name ?eventName.}
+    bind( "EventEmitter.Event" as ?contentKey)
+    }
+    union
+    {
+    ?behavior  enf:hasEventListener+ ?eventListener.
+    {
+        bind(?eventListener as ?eventListenerIri)
+    optional{?eventListener  enf:hasEvent ?eventListenerHasEvent.}
+    optional{?eventListener  enf:hasResultType ?eventListenerHasResultType.}
+    optional{?eventListener  enf:exceptions ?eventListenerExceptions.}
+    optional{?eventListener  enf:implementation ?eventListenerImplementation.}
+    optional{?eventListener  enf:name ?eventListenerName.}
+    optional{?eventListener  enf:uuid ?eventListenerUuid.}
+    optional{?eventListener  enf:hasArgument ?eventListenerHasArgument.}
+    bind( "Behavior.EventListener" as ?contentKey)
+    }
+    union
+    {
+    ?eventListener  enf:hasEvent+ ?event.
+    {
+        bind(?event as ?eventIri)
+    optional{?event  enf:data ?eventData.}
+    optional{?event  enf:lifeCyle ?eventLifeCyle.}
+    optional{?event  enf:name ?eventName.}
+    bind( "EventListener.Event" as ?contentKey)
+    }
+    union
+    {
+    ?eventListener  enf:hasArgument+ ?argument.
+    {
+        bind(?argument as ?argumentIri)
+    optional{?argument  enf:hasDataType ?argumentHasDataType.}
+    optional{?argument  enf:hasDefaulty ?argumentHasDefaulty.}
+    optional{?argument  enf:name ?argumentName.}
+    optional{?argument  enf:order ?argumentOrder.}
+    optional{?argument  enf:uuid ?argumentUuid.}
+    bind( "EventListener.Argument" as ?contentKey)
+    }   } } } } } }
+  }

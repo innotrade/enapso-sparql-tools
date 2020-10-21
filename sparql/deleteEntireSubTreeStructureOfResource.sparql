@@ -1,0 +1,74 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX enf: <http://ont.enapso.com/foundation#>
+delete {?s ?p ?o}
+where
+{
+         bind(enf:Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e as ?master).
+    {
+        bind(?master as ?s)
+        ?s ?p ?o
+    }
+
+  union
+   {
+      ?master  enf:hasCapabilities ?capability.
+        bind(?capability as ?s)
+    ?s ?p ?o
+   }
+  union
+   {
+      ?master  enf:hasAttributes ?attribute.
+        bind(?attribute as ?s)
+    ?s ?p ?o
+   }
+  union
+   {
+      ?master  enf:hasBehavior ?behavior.
+        bind(?behavior as ?s)
+    ?s ?p ?o
+   }
+
+  union
+   {
+        ?capability  enf:hasArgument ?argument.
+        bind(?argument as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?attribute  enf:hasArgument ?argument.
+        bind(?argument as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?behavior  enf:hasEventEmitter ?eventEmitter.
+        bind(?eventEmitter as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?behavior  enf:hasEventListener ?eventListener.
+        bind(?eventListener as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?eventEmitter  enf:hasEvent ?event.
+        bind(?event as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?eventListener  enf:hasEvent ?event.
+        bind(?event as ?s)
+        ?s ?p ?o
+   }
+  union
+   {
+        ?eventListener  enf:hasArgument ?argument.
+        bind(?argument as ?s)
+        ?s ?p ?o
+   }
+         filter(!isBlank(?o))
+}

@@ -37,7 +37,7 @@ describe('SPARQL Tool Test Suites', () => {
                 name: 'Test'
             }
         ];
-        testconfig.AUTH.updateIndividualByClass(this.Tenant, iri, ind).then(
+        testconfig.AUTH.updateIndividualByClass({cls:this.Tenant, iri:iri, ind:ind}).then(
             (result) => {
                 console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
