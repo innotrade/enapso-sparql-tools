@@ -19,7 +19,7 @@ _.merge(
 );
 
 const GRAPHDB_BASE_URL = 'http://localhost:7200',
-    GRAPHDB_REPOSITORY = 'yasir';
+    GRAPHDB_REPOSITORY = 'Test';
 const NS_AUTH = 'http://ont.enapso.com/foundation#',
     PREFIX_AUTH = 'enf';
 // the default prefixes for all SPARQL queries

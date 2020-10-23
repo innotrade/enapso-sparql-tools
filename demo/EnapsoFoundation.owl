@@ -1,0 +1,1507 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://ont.enapso.com/foundation#"
+     xml:base="http://ont.enapso.com/foundation"
+     xmlns:enf="http://ont.enapso.com/foundation#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:enterms="http://ont.enapso.com/terms#">
+    <owl:Ontology rdf:about="http://ont.enapso.com/foundation">
+        <owl:versionIRI rdf:resource="http://ont.enapso.com/foundation/1.0.0"/>
+        <owl:imports rdf:resource="http://ont.enapso.com/datatypes/1.0.0"/>
+        <owl:imports rdf:resource="http://ont.enapso.com/terms/1.0.0"/>
+        <rdfs:comment xml:lang="en">(C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany</rdfs:comment>
+        <rdfs:comment xml:lang="en">enapso foundation ontology</rdfs:comment>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ont.enapso.com/foundation#add -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#add">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#include"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#append -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#append">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#include"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canHaveResource -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#canHaveResource">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:comment xml:lang="en">&quot;canHave&quot; means that a resource optionally can include a sub-resource. If a resource uses &quot;canHave&quot; it must be equipped with an &quot;add&quot; property to enable an external instance (like an agent) to include a sub-resource.
+&quot;canHave&quot; refers to another resource, thus the range is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">can have resource</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#emitsEvent -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#emitsEvent">
+        <rdfs:comment xml:lang="en">Individual fires an event with a message.</rdfs:comment>
+        <rdfs:label xml:lang="en">emits event</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#exclude -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#exclude">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <rdfs:comment xml:lang="en">&quot;exclude&quot; for a resource specifies a service that enables a resource to remove a sub-resource. All resources that use the &quot;canHave&quot; property can to be equipped with a &quot;exclude&quot; service to enable an agent to remove a sub-resource from the resource. 
+&quot;exclude&quot; does not mean, that the sub-resource is &quot;destroyed&quot;. The sub-resource remains &quot;alive&quot;.
+&quot;exclude&quot; refers to an action (a service), thus the range is &quot;Action&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">exclude</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasArgument -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasArgument">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+        <rdfs:label xml:lang="en">has Argument</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasAspect -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasAspect">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">has Aspect</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasAttributes -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasAttributes">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Attribute"/>
+        <rdfs:label xml:lang="en">has Attributes</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasBehavior -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasBehavior">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+        <rdfs:label xml:lang="en">has Behvior</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasCapabilities -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasCapabilities">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <rdfs:comment xml:lang="en">&quot;has Capability&quot; means that an individual can perform an action. Opposed to &quot;does&quot; this action needs to be triggered explictly. The object in the statement is an individual of the type &quot;Action&quot;. thus the range is &quot;Action&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">has Capabilities</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasContext -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasContext">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Context"/>
+        <rdfs:comment xml:lang="en">A context for a certain resource. For instance, a context mapper maps a certain term in a certain context to a certain meaning.</rdfs:comment>
+        <rdfs:label xml:lang="en">context</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasCss -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasCss">
+        <rdfs:label xml:lang="en">hasCss</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasDataType -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasDataType">
+        <rdfs:comment xml:lang="en">Data type of each attribute or argument</rdfs:comment>
+        <rdfs:label xml:lang="en">has Data Type</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasDefaulty -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasDefaulty">
+        <rdfs:label xml:lang="en">default</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasEvent -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasEvent">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Event"/>
+        <rdfs:comment xml:lang="en">Used by Event Emitters and Event Listeners.</rdfs:comment>
+        <rdfs:label xml:lang="en">has event</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasEventEmitter -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasEventEmitter">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#EventEmitter"/>
+        <rdfs:label xml:lang="en">has Event Emitter</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasEventListener -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasEventListener">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#EventListener"/>
+        <rdfs:label xml:lang="en">has Event Listener</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasMeaning -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasMeaning">
+        <rdfs:comment xml:lang="en">A term has a certain meaning in a certain context.</rdfs:comment>
+        <rdfs:label xml:lang="en">means</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasResource -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasResource">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:comment xml:lang="en">&quot;has&quot; for a resource means to include (embed) another resource, a sub-resource. Opposed to &quot;canHave&quot; this is not optional, meaning that the resource in fact includes the sub-resource already, not that it just possible to include it.
+&quot;has&quot; always refers to a resource, this the range is &quot;Resource&quot;.
+Since a resource canot include itself, the property is irreflexive.</rdfs:comment>
+        <rdfs:label xml:lang="en">has Resource</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasResourceSpecification -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasResourceSpecification">
+        <rdfs:label xml:lang="en">has Resource Specification</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasResultType -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasResultType">
+        <rdfs:label xml:lang="en">result Type</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasTerm -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasTerm">
+        <rdfs:range rdf:resource="http://ont.enapso.com/terms#Term"/>
+        <rdfs:comment xml:lang="en">A term used for a certain context in a context mapper.</rdfs:comment>
+        <rdfs:label xml:lang="en">term</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasValue -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasValue">
+        <rdfs:label xml:lang="en">value</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hasVerb -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#hasVerb">
+        <rdfs:range rdf:resource="http://ont.enapso.com/terms#Verb"/>
+        <rdfs:comment xml:lang="en">The verb(s) for a certain action.</rdfs:comment>
+        <rdfs:label xml:lang="en">has verb</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#include -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#include">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <rdfs:comment xml:lang="en">&quot;include&quot; for a resource specifies a service that enables a resource to add a sub-resource. All resources that use the &quot;canHave&quot; property need to be equipped with and &quot;include&quot; service to enable an agent to add a sub-resource to the resource. 
+&quot;include&quot; refers to an action, thus the range is &quot;Action&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">include</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#insert -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#insert">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#include"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#listensToEvent -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#listensToEvent">
+        <rdfs:comment xml:lang="en">Individual processes an event with a message.</rdfs:comment>
+        <rdfs:label xml:lang="en">listens to event</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#mustHaveResource -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#mustHaveResource">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:comment xml:lang="en">&quot;must have&quot; means that an undividual requires a certain resource (another individual). The resource cannot exist or work without this resource. The agent or user needs to ensure that the resource is provided to the resource. A resource that uses the &quot;mustHave&quot; property must provide a &quot;include&quot; service.
+&quot;mustHave&quot; refers to another resource, thus the range is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">mustHaveResource</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#optional -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#optional">
+        <rdfs:comment xml:lang="en">Individual can make use of a resource (optional, not required)</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#peek -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#peek">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#exclude"/>
+        <rdfs:label xml:lang="en">peek</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#pop -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#pop">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#exclude"/>
+        <rdfs:label xml:lang="en">pop</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#prepend -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#prepend">
+        <rdfs:subPropertyOf rdf:resource="http://ont.enapso.com/foundation#include"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#replace -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#replace">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:label xml:lang="en">replace</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#shouldHaveResource -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#shouldHaveResource">
+        <rdfs:range rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:comment xml:lang="en">&quot;should have&quot; means that an individual &quot;should&quot; include a certain sub-resource (another individual). The resource can exist or work without this sub-resource but it is recommended to include it for certain reasons. The agent or user is encouraged to that the SUB-resource is provided to the resource. A resource that uses the &quot;shouldHave&quot; property must provide a &quot;include&quot; service.
+&quot;shouldHave&quot; refers to another resource, thus the range is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">shouldHaveResource</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#states -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#states">
+        <rdfs:comment xml:lang="en">a certain property / characteristic</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#update -->
+
+    <owl:ObjectProperty rdf:about="http://ont.enapso.com/foundation#update">
+        <rdfs:label xml:lang="en">update</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ont.enapso.com/foundation#authorization -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#authorization">
+        <rdfs:label xml:lang="en">authorization</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canBeDestroyed -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#canBeDestroyed">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Specifies if the resource can be destroyed.
+Only resources can have this property, thus the domain is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">can be destroyed</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canBeExcluded -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#canBeExcluded">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Specifies that a sub-resource can be excluded from its parent.
+Only resources  can have this property, thus the domain is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">can be excluded</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canBeIncluded -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#canBeIncluded">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Specifies that the resoure can be included into a parent resource.
+Only resources  can have this property, thus the domain is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">can be included</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canBeReplaced -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#canBeReplaced">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Specifies if the resource can be replaced.
+Only resources can have this property, thus the domain is &quot;Resource&quot;.</rdfs:comment>
+        <rdfs:label xml:lang="en">can be replaced</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#canBeUpdated -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#canBeUpdated">
+        <rdfs:domain rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Specifies if the resource can be updated (changed).
+Only resources can have this property, thus the domain is &quot;Resource&quot;.</rdfs:comment>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#code -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#code">
+        <rdfs:label xml:lang="en">code</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#data -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#data">
+        <rdfs:label xml:lang="en">data</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#dataId -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#dataId">
+        <rdfs:label xml:lang="en">dataId</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#destroyOnRemove -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#destroyOnRemove"/>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#eventType -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#eventType">
+        <rdfs:label xml:lang="en">Event Type</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#exceptions -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#exceptions">
+        <rdfs:label xml:lang="en">exceptions</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#hash -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#hash">
+        <rdfs:label xml:lang="en">hash</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#implementation -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#implementation">
+        <rdfs:label xml:lang="en">implementation</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#lifeCyle -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#lifeCyle">
+        <rdfs:label xml:lang="en">life Cycle</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#name -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#name">
+        <rdfs:label xml:lang="en">name</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#order -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#order"/>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#propertyUnit -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#propertyUnit">
+        <rdfs:comment xml:lang="en">The unit of the value for a property, might be empty or non-existent e.g. for String properties.</rdfs:comment>
+        <rdfs:label xml:lang="en">Attribute unit</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#propertyValue -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#propertyValue">
+        <rdfs:comment xml:lang="en">The literal value for a property.</rdfs:comment>
+        <rdfs:label xml:lang="en">Attribute value</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#rights -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#rights">
+        <rdfs:label xml:lang="en">rights</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#scheduling -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#scheduling">
+        <rdfs:label xml:lang="en">scheduling</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#scope -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#scope">
+        <rdfs:comment xml:lang="en">scope of each attribute</rdfs:comment>
+        <rdfs:label xml:lang="en">scope</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#style -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#style">
+        <rdfs:label xml:lang="en">style</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#type -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#type">
+        <rdfs:label xml:lang="en">type</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#user -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#user">
+        <rdfs:label xml:lang="en">user</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#uuid -->
+
+    <owl:DatatypeProperty rdf:about="http://ont.enapso.com/foundation#uuid">
+        <rdfs:comment xml:lang="en">A universally unique identifier (UUID) is a 128-bit number used to create unique number</rdfs:comment>
+        <rdfs:label>uuid</rdfs:label>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Argument -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Argument">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasDataType"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasDefaulty"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#order"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#uuid"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">Argument</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Aspect -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Aspect">
+        <rdfs:label xml:lang="de">Aspect</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectArchitecture -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectArchitecture">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Architecture&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectBehavior -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectBehavior">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Behavior&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectBusinessLogic -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectBusinessLogic">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Business Logic&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectDesign -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectDesign">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Design&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectLayout -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectLayout">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Layout&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectLifeCycle -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectLifeCycle">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Life Cycle&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectNavigation -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectNavigation">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Navigation&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectUserInteraction -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectUserInteraction">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;User Interaction&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#AspectWorkflow -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#AspectWorkflow">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Aspect"/>
+        <rdfs:label xml:lang="en">Aspect &quot;Workflow&quot;</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Attribute -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Attribute">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasDataType"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasDefaulty"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasValue"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#uuid"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#authorization"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#scope"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">An &quot;attribute&quot; is a semantically uniquely defined base property. Compound attributes are composed of these attributes and so have a defined meaning as well, e.g. position composed of x and y corrdinate.</rdfs:comment>
+        <rdfs:label xml:lang="en">Attribute</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Behavior -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Behavior">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasEventEmitter"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#EventEmitter"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasEventListener"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#EventListener"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Behavior</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Capability -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Capability">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasArgument"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasResultType"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#implementation"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#uuid"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#exceptions"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">An capability is defined as a change of a status, an activity that leads to a different status of an object. An action needs to be triggered, it is not performed automatically.</rdfs:comment>
+        <rdfs:label xml:lang="en">Capability</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Class -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Class">
+        <rdfs:comment xml:lang="en">A class is set of individuals with common characteristics.</rdfs:comment>
+        <rdfs:label xml:lang="en">Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#CompoundAttribute -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#CompoundAttribute">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasAttributes"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#Attribute"/>
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#CompoundAttribute"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">Compound Attributes are sets of (known and semantically uniquely defined) base-attributes. Compound Attributes can be nested.</rdfs:comment>
+        <rdfs:label xml:lang="en">Compound Attribute</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#CompoundCapability -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#CompoundCapability">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasCapabilities"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#Capability"/>
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#CompoundCapability"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">Compound Capabilities are sets of (known and semantically uniquely defined) base-capabilities. Compound Capabilities can be nested.</rdfs:comment>
+        <rdfs:label xml:lang="en">Compound Capability</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#CompoundResource -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#CompoundResource">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasResource"/>
+                <owl:someValuesFrom>
+                    <owl:Class>
+                        <owl:unionOf rdf:parseType="Collection">
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#CompoundResource"/>
+                            <rdf:Description rdf:about="http://ont.enapso.com/foundation#Resource"/>
+                        </owl:unionOf>
+                    </owl:Class>
+                </owl:someValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">Compound Resources are sets of (known and semantically uniquely defined) base-resources. Compound Resources can be nested.</rdfs:comment>
+        <rdfs:label xml:lang="en">Compound Resource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Context -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Context">
+        <rdfs:comment xml:lang="en">A context is a space in which a certain term has a certain meaning.</rdfs:comment>
+        <rdfs:label xml:lang="en">Context</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#ContextMapper -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#ContextMapper">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasContext"/>
+                <owl:someValuesFrom rdf:resource="http://ont.enapso.com/foundation#Context"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasTerm"/>
+                <owl:someValuesFrom rdf:resource="http://ont.enapso.com/terms#Term"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasMeaning"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">A context mapper maps a certain term to a certain context.</rdfs:comment>
+        <rdfs:label xml:lang="en">Context Mapper</rdfs:label>
+    </owl:Class>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://ont.enapso.com/foundation#ContextMapper"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasContext"/>
+                <owl:someValuesFrom rdf:resource="http://ont.enapso.com/foundation#Context"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+        <rdfs:comment xml:lang="en">A context mapper maps a term to one or more contexts. The contexts are interpreted in logical &quot;and&quot; operations</rdfs:comment>
+    </owl:Axiom>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://ont.enapso.com/foundation#ContextMapper"/>
+        <owl:annotatedProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#subClassOf"/>
+        <owl:annotatedTarget>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasTerm"/>
+                <owl:someValuesFrom rdf:resource="http://ont.enapso.com/terms#Term"/>
+            </owl:Restriction>
+        </owl:annotatedTarget>
+        <rdfs:comment xml:lang="en">This is the actual term to be mapped to one or more contexts.</rdfs:comment>
+    </owl:Axiom>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Css -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Css">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#style"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Css</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Event -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Event">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#data"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#lifeCyle"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Event</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#EventEmitter -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#EventEmitter">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasEvent"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/foundation#Event"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#scheduling"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Event Emitter</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#EventListener -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#EventListener">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasArgument"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasEvent"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/foundation#Event"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasResultType"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/datatypes#DataType"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#exceptions"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#implementation"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#uuid"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Event Listener</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Experience -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Experience"/>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#JavascriptService -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#JavascriptService">
+        <rdfs:subClassOf rdf:resource="http://ont.enapso.com/foundation#Service"/>
+        <rdfs:label xml:lang="en">JavaScript Service</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Message -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Message"/>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Process -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Process"/>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Requirement -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Requirement">
+        <rdfs:comment xml:lang="en">A requirement is a noun. Required is an object, that either does something, can do something, has something, emits something or reacts on something.</rdfs:comment>
+        <rdfs:label xml:lang="en">Requirement</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Resource -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Resource">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#canHaveResource"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasAttributes"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Attribute"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasCapabilities"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasCss"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Css"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#mustHaveResource"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#shouldHaveResource"/>
+                <owl:allValuesFrom rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hasBehavior"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onClass rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#code"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#dataId"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#hash"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#name"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#rights"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#type"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="http://ont.enapso.com/foundation#user"/>
+                <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+                <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment xml:lang="en">An object is an existing (instantiated) individual, that can execute certain actions, has certain characteristics and that behaves in a certain way.
+A object can send, receive and react on events. Events can contain messages.</rdfs:comment>
+        <rdfs:label xml:lang="en">Resource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#ResourceContainer -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#ResourceContainer">
+        <rdfs:comment xml:lang="en">A list of resources. A container is used when a resource can include more than one object of the same type.</rdfs:comment>
+        <rdfs:label xml:lang="en">Resource Container</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#ResourceSpecification -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#ResourceSpecification">
+        <rdfs:label xml:lang="en">Resource Specification</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Service -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/foundation#Service">
+        <rdfs:comment xml:lang="en">A service is an executable code that can perform a certain action. Examples are to include or exclude resources from a resource container.</rdfs:comment>
+        <rdfs:label xml:lang="en">Service</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://ont.enapso.com/terms#Term -->
+
+    <owl:Class rdf:about="http://ont.enapso.com/terms#Term"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Argument_2e024cbc_73fd_4275_85dd_8032f9a6132c -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Argument_2e024cbc_73fd_4275_85dd_8032f9a6132c">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ytrfeds</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hgrfedwsa</uuid>
+        <rdfs:label xml:lang="en">argument13</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Argument_add13784_de2f_43ee_923f_c4555afeee24 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Argument_add13784_de2f_43ee_923f_c4555afeee24">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">yasir</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12345yhvdw23456</uuid>
+        <rdfs:label xml:lang="en">argumentDemo</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Argument_c84f36ab_627a_4836_b0db_33a76b4bc1f0 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Argument_c84f36ab_627a_4836_b0db_33a76b4bc1f0">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Argument"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">OPTION</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">vrewszaq</uuid>
+        <rdfs:label xml:lang="en">argumentDemo2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Attribute"/>
+        <hasArgument rdf:resource="http://ont.enapso.com/foundation#Argument_2e024cbc_73fd_4275_85dd_8032f9a6132c"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">attri</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">uybtgvrcfedxsza</uuid>
+        <rdfs:label xml:lang="en">attribute</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+        <hasEventEmitter rdf:resource="http://ont.enapso.com/foundation#EventEmitter_337e7574_81b4_4553_9e8c_86bee826d0e7"/>
+        <hasEventListener rdf:resource="http://ont.enapso.com/foundation#EventListener_c21583a0_1d29_45b4_9abc_bb885d76411c"/>
+        <rdfs:label>behavior</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <hasArgument rdf:resource="http://ont.enapso.com/foundation#Argument_add13784_de2f_43ee_923f_c4555afeee24"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hello</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1234ujhgfew123456iuyt</uuid>
+        <rdfs:label xml:lang="en">capabilityDemo</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Capability_54552667_fe63_49e1_9f03_2aad85ecfa66 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Capability_54552667_fe63_49e1_9f03_2aad85ecfa66">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <hasArgument rdf:resource="http://ont.enapso.com/foundation#Argument_c84f36ab_627a_4836_b0db_33a76b4bc1f0"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">test</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">j76yb5tf4d3s2a1</uuid>
+        <rdfs:label xml:lang="en">capabilityDemo2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Capability_e2ee4b09_65e6_439e_a5b9_f2cba91e0f2e -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Capability_e2ee4b09_65e6_439e_a5b9_f2cba91e0f2e">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Capability"/>
+        <hasArgument rdf:resource="http://ont.enapso.com/foundation#Argument_2e024cbc_73fd_4275_85dd_8032f9a6132c"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">once afin</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ukjljkl</uuid>
+        <rdfs:label xml:lang="en">capability2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#DataType_c3bae0bc_caa8_4ea1_9ab1_20f0d20596db -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#DataType_c3bae0bc_caa8_4ea1_9ab1_20f0d20596db">
+        <rdfs:label>datatypedemo</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#EventEmitter_337e7574_81b4_4553_9e8c_86bee826d0e7 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#EventEmitter_337e7574_81b4_4553_9e8c_86bee826d0e7">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#EventEmitter"/>
+        <hasEvent rdf:resource="http://ont.enapso.com/foundation#Event_eaf23607_73e0_4a1a_9a91_4d62d16d07a9"/>
+        <scheduling rdf:datatype="http://www.w3.org/2001/XMLSchema#string">onblur</scheduling>
+        <rdfs:label>eventEmitter</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#EventListener_c21583a0_1d29_45b4_9abc_bb885d76411c -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#EventListener_c21583a0_1d29_45b4_9abc_bb885d76411c">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#EventListener"/>
+        <hasArgument rdf:resource="http://ont.enapso.com/foundation#Argument_2e024cbc_73fd_4275_85dd_8032f9a6132c"/>
+        <hasEvent rdf:resource="http://ont.enapso.com/foundation#Event_eaf23607_73e0_4a1a_9a91_4d62d16d07a9"/>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">event Listener</name>
+        <uuid rdf:datatype="http://www.w3.org/2001/XMLSchema#string">iuyb6t5vrce3xwzq</uuid>
+        <rdfs:label>eventListener</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Event_eaf23607_73e0_4a1a_9a91_4d62d16d07a9 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Event_eaf23607_73e0_4a1a_9a91_4d62d16d07a9">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Event"/>
+        <data rdf:datatype="http://www.w3.org/2001/XMLSchema#string">nothing</data>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">event</name>
+        <rdfs:label>Event</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <hasAttributes rdf:resource="http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353"/>
+        <hasBehavior rdf:resource="http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8"/>
+        <hasCapabilities rdf:resource="http://ont.enapso.com/foundation#Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47"/>
+        <hasCapabilities rdf:resource="http://ont.enapso.com/foundation#Capability_e2ee4b09_65e6_439e_a5b9_f2cba91e0f2e"/>
+        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">function test(yasir){
+console.log(`Hello World`)
+}</code>
+        <dataId rdf:datatype="http://www.w3.org/2001/XMLSchema#string">jhtr432wedfgh8765</dataId>
+        <hash rdf:datatype="http://www.w3.org/2001/XMLSchema#string">23hgf6uyt56uyt</hash>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Demo</name>
+        <rights rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rwx</rights>
+        <type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">function</type>
+        <user rdf:datatype="http://www.w3.org/2001/XMLSchema#string">hgt5432hyt54</user>
+        <rdfs:label xml:lang="en">resourceDemo</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/foundation#Resource_b28f1180_3d01_4297_bbe0_9f0c51ecb909 -->
+
+    <owl:NamedIndividual rdf:about="http://ont.enapso.com/foundation#Resource_b28f1180_3d01_4297_bbe0_9f0c51ecb909">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Resource"/>
+        <hasCapabilities rdf:resource="http://ont.enapso.com/foundation#Capability_54552667_fe63_49e1_9f03_2aad85ecfa66"/>
+        <code rdf:datatype="http://www.w3.org/2001/XMLSchema#string">function(option){
+alert(option)
+}</code>
+        <dataId rdf:datatype="http://www.w3.org/2001/XMLSchema#string">65trfedwq</dataId>
+        <name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">arms</name>
+        <rights rdf:datatype="http://www.w3.org/2001/XMLSchema#string">rwx</rights>
+        <type rdf:datatype="http://www.w3.org/2001/XMLSchema#string">function</type>
+        <user rdf:datatype="http://www.w3.org/2001/XMLSchema#string">un6ybtvrfeds</user>
+        <rdfs:label xml:lang="en">resourceDemo2</rdfs:label>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://ont.enapso.com/terms#Noun_a7cfc05d_6f68_4f38_b94d_a905d5a1d768 -->
+
+    <rdf:Description rdf:about="http://ont.enapso.com/terms#Noun_a7cfc05d_6f68_4f38_b94d_a905d5a1d768">
+        <rdf:type rdf:resource="http://ont.enapso.com/foundation#Behavior"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://ont.enapso.com/terms#Verb_05bc860d_2247_4b47_a8be_ddda022a83ff -->
+
+    <rdf:Description rdf:about="http://ont.enapso.com/terms#Verb_05bc860d_2247_4b47_a8be_ddda022a83ff">
+        <rdf:type rdf:resource="http://ont.enapso.com/terms#Noun"/>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

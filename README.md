@@ -18,6 +18,7 @@ The concept is to:
 
 This package is SPARQL 1.1 compliant. It is designed to run on all SPARQL 1.1 compliant databases.
 **The following demos use the Enapso GraphDB Client. Therefore, these examples require a running GraphDB 8.x/9.x instance on localhost at port 7200. The demos as well as the automated tests require a fully working Ontotext GraphDB repository "Test" and a user "Test" with the password "Test" being set up, which has read/write access to the "Test" Repository.**
+To run the demo.js first import the foundation Ontology as available in demo folder a in Test repository and to run the test cases import the EnapsoOntologyRepository as available in test folder in Test repository
 Get the latest version of GraphDB for free at https://www.ontotext.com/products/graphdb/.
 
 **This project is actively developed and maintained.**
