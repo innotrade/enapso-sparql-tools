@@ -291,50 +291,48 @@ filter(?s = <${cls.getIRI()}>) .
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
         this.classCache = await this.buildClassCache();
+//         this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+//         let iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
+//         let ind1 = {
+//             iri:iri,
+//             name: 'Test Company',
+//             uuid:'12345tyuiigfds',
+//             dataId:'hgfdsdddddd',
+//             hash:'Tqwerhvh',
+//             rights:'rwx',
+//             code:'function(option){console.log(option)}',
+//             user:'jnhgtresss',
+//             hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+//             hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+//             hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
+//         };
+// let res=await this.createIndividualByClass({
+//     cls: this.Resource,
+//     ind: ind1
+// })
+// console.log(res);
 
 
-        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-        let iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
-        let ind1 = {
-            iri:iri,
-            name: 'Test Company',
-            uuid:'12345tyuiigfds',
-            dataId:'hgfdsdddddd',
-            hash:'Tqwerhvh',
-            rights:'rwx',
-            code:'function(option){console.log(option)}',
-            user:'jnhgtresss',
-            hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-            hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-            hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
-        };
-let res=await this.createIndividualByClass({
-    cls: this.Resource,
-    ind: ind1
-})
-console.log(res);
-
-
-  this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-         iri = "http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
-        let ind = {
-            name: 'Updated Test Company',
-            uuid:'12345tyuiigfds',
-            dataId:'hgfdsdddddd',
-            hash:'Tqwerhvh',
-            rights:'rwx',
-            code:'function(option){console.log(option)}',
-            user:'jnhgtresss',
-            hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-            hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-            hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
-        };
-let res1=await this.updateIndividualByClass({
-    cls: this.Resource,
-    iri: iri,
-    ind: ind
-})
-console.log(res1);
+//   this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+//          iri = "http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
+//         let ind = {
+//             name: 'Updated Test Company',
+//             uuid:'12345tyuiigfds',
+//             dataId:'hgfdsdddddd',
+//             hash:'Tqwerhvh',
+//             rights:'rwx',
+//             code:'function(option){console.log(option)}',
+//             user:'jnhgtresss',
+//             hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+//             hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+//             hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
+//         };
+// let res1=await this.updateIndividualByClass({
+//     cls: this.Resource,
+//     iri: iri,
+//     ind: ind
+// })
+// console.log(res1);
 
         let cls = 'http://ont.enapso.com/foundation#Resource';
         cls = this.classCache.getClassByIRI(cls);
@@ -397,70 +395,70 @@ console.log(res1);
         ];
         let filter= [{
             "key": "$sparql",
-            "value": "regEx(str(?ind), \"http://ont.enapso.com/foundation#00a5e37f_3452_4b48\", \"i\")"
+            "value": "regEx(str(?ind), \"http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e\", \"i\")"
         }]
         let res2 = await this.showAllIndividuals({cls:cls,joins:joins,filter:filter});
     console.log(res2);
-     iri="http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
-    let join = [
-        {
-             cls: 'Capability',
-             master2childRelation: 'hasCapabilities',
-             joins :
-             [
-                 {
-                     cls: 'Argument',
-                     master2childRelation: 'hasArgument',
-                 }
-             ]
-         },
-         {
-             cls: 'Attribute',
-             master2childRelation: 'hasAttributes',
-             joins :
-             [
-                 {
-                     cls: 'Argument',
-                     master2childRelation: 'hasArgument'
-                 }
-             ]
-         },
-         {
-             cls: 'Behavior',
-             master2childRelation: 'hasBehavior',
-             joins :
-             [
-                 {
-                     cls: 'EventEmitter',
-                     master2childRelation: 'hasEventEmitter',
-                     joins :
-                     [
-                         {
-                             cls: 'Event',
-                             master2childRelation: 'hasEvent'
-                         }
-                     ]
-                 },
-                 {
-                     cls: 'EventListener',
-                     master2childRelation: 'hasEventListener',
-                     joins :
-                     [
-                         {
-                             cls: 'Event',
-                             master2childRelation: 'hasEvent'
-                         },
-                         {
-                             cls: 'Argument',
-                             master2childRelation: 'hasArgument'
-                         }
-                     ]
-                 }
-             ]
-         },
-     ];
-  let res3=await this.deleteIndividual({ iri: iri, joins: join })
-  console.log(res3);
+//      iri="http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
+//     let join = [
+//         {
+//              cls: 'Capability',
+//              master2childRelation: 'hasCapabilities',
+//              joins :
+//              [
+//                  {
+//                      cls: 'Argument',
+//                      master2childRelation: 'hasArgument',
+//                  }
+//              ]
+//          },
+//          {
+//              cls: 'Attribute',
+//              master2childRelation: 'hasAttributes',
+//              joins :
+//              [
+//                  {
+//                      cls: 'Argument',
+//                      master2childRelation: 'hasArgument'
+//                  }
+//              ]
+//          },
+//          {
+//              cls: 'Behavior',
+//              master2childRelation: 'hasBehavior',
+//              joins :
+//              [
+//                  {
+//                      cls: 'EventEmitter',
+//                      master2childRelation: 'hasEventEmitter',
+//                      joins :
+//                      [
+//                          {
+//                              cls: 'Event',
+//                              master2childRelation: 'hasEvent'
+//                          }
+//                      ]
+//                  },
+//                  {
+//                      cls: 'EventListener',
+//                      master2childRelation: 'hasEventListener',
+//                      joins :
+//                      [
+//                          {
+//                              cls: 'Event',
+//                              master2childRelation: 'hasEvent'
+//                          },
+//                          {
+//                              cls: 'Argument',
+//                              master2childRelation: 'hasArgument'
+//                          }
+//                      ]
+//                  }
+//              ]
+//          },
+//      ];
+//   let res3=await this.deleteIndividual({ iri: iri, joins: join })
+//   console.log(res3);
     }
 };
 (async () => {
