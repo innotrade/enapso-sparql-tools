@@ -4,21 +4,21 @@ Generic SPARQL query generator for Node.js
 
 This package provides of the following features:
 
-- Class Manager, ontology class cache to use OWL classes as a schema
-- Prefix Manager, manages the prefixes for the named prefix notation of ontology IRIs
-- Generator, SPARQL generator for class, property and annotation operations as well as CRUD-Operations for individuals
+-   Class Manager, ontology class cache to use OWL classes as a schema
+-   Prefix Manager, manages the prefixes for the named prefix notation of ontology IRIs
+-   Generator, SPARQL generator for class, property and annotation operations as well as CRUD-Operations for individuals
 
 The concept is to:
 
-- specify classes in a W3C-compliant ontology modelling tool
-- import the model into a W3C-compliant semantic graph-database (e.g. Ontotext GraphDB)
-- read the classes of the model into a Class Cache in a node.js application
-- let the node.js application automatically generate the SPARQL queries for CRUD operations for the individuals of the specified classes (done by this library)
-- Perform the generated SPARQL queries against the semantic graph-database to manage the individuals (supported by the enapso-graphdb-client package)
+-   specify classes in a W3C-compliant ontology modelling tool
+-   import the model into a W3C-compliant semantic graph-database (e.g. Ontotext GraphDB)
+-   read the classes of the model into a Class Cache in a node.js application
+-   let the node.js application automatically generate the SPARQL queries for CRUD operations for the individuals of the specified classes (done by this library)
+-   Perform the generated SPARQL queries against the semantic graph-database to manage the individuals (supported by the enapso-graphdb-client package)
 
 This package is SPARQL 1.1 compliant. It is designed to run on all SPARQL 1.1 compliant databases.
 **The following demos use the Enapso GraphDB Client. Therefore, these examples require a running GraphDB 8.x/9.x instance on localhost at port 7200. The demos as well as the automated tests require a fully working Ontotext GraphDB repository "Test" and a user "Test" with the password "Test" being set up, which has read/write access to the "Test" Repository.**
-To run the demo.js first import the foundation Ontology as available in demo folder a in Test repository and to run the test cases import the EnapsoOntologyRepository as available in test folder in Test repository
+To run the demo.js first import the foundation Ontology (as available in demo folder) in Test repository and to run the test cases import the EnapsoOntologyRepository (as available in test folder) in Test repository
 Get the latest version of GraphDB for free at https://www.ontotext.com/products/graphdb/.
 
 **This project is actively developed and maintained.**
@@ -36,154 +36,163 @@ There we do configuration to create an connection with GraphDB using enapso grap
 
 ```javascript
 const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
-  { EnapsoLogger } = require('@innotrade/enapso-logger');
+    { EnapsoLogger } = require('@innotrade/enapso-logger');
 global.enlogger = new EnapsoLogger();
 const EnapsoSPARQLTools = '@innotrade/enapso-sparql-tools';
 const GRAPHDB_BASE_URL = 'http://localhost:7200',
-  GRAPHDB_REPOSITORY = 'Test';
+    GRAPHDB_REPOSITORY = 'Test';
 const NS_AUTH = 'http://ont.enapso.com/repo#',
-  PREFIX_AUTH = 'enrepo';
+    PREFIX_AUTH = 'enrepo';
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
-  EnapsoGraphDBClient.PREFIX_OWL,
-  EnapsoGraphDBClient.PREFIX_RDF,
-  EnapsoGraphDBClient.PREFIX_RDFS,
-  EnapsoGraphDBClient.PREFIX_XSD,
-  {
-    prefix: PREFIX_AUTH,
-    iri: NS_AUTH
-  }
+    EnapsoGraphDBClient.PREFIX_OWL,
+    EnapsoGraphDBClient.PREFIX_RDF,
+    EnapsoGraphDBClient.PREFIX_RDFS,
+    EnapsoGraphDBClient.PREFIX_XSD,
+    {
+        prefix: PREFIX_AUTH,
+        iri: NS_AUTH
+    }
 ];
 
 const AUTH = {
-  graphDBEndpoint: null,
-  authentication: null,
-  defaultBaseIRI: NS_AUTH,
-  defaultPrefix: PREFIX_AUTH,
-  defaultIRISeparator: '#',
-  query: async function (sparql) {
-    let query = await this.graphDBEndpoint.query(sparql);
-    let resp;
-    if (query.success) {
-      resp = await this.graphDBEndpoint.transformBindingsToResultSet(query, {
-        dropPrefixes: true
-      });
-    } else {
-      let lMsg = query.message;
-      if (400 === query.statusCode) {
-        lMsg += ', check your query for potential errors';
-      } else if (403 === query.statusCode) {
-        lMsg +=
-          ', check if user "' +
-          GRAPHDB_USERNAME +
-          '" has appropriate access rights to the Repository ' +
-          '"' +
-          this.graphDBEndpoint.getRepository() +
-          '"';
-      }
-      resp = {
-        total: 0,
-        success: false,
-        message: lMsg
-      };
+    graphDBEndpoint: null,
+    authentication: null,
+    defaultBaseIRI: NS_AUTH,
+    defaultPrefix: PREFIX_AUTH,
+    defaultIRISeparator: '#',
+    query: async function (sparql) {
+        let query = await this.graphDBEndpoint.query(sparql);
+        let resp;
+        if (query.success) {
+            resp = await this.graphDBEndpoint.transformBindingsToResultSet(
+                query,
+                {
+                    dropPrefixes: true
+                }
+            );
+        } else {
+            let lMsg = query.message;
+            if (400 === query.statusCode) {
+                lMsg += ', check your query for potential errors';
+            } else if (403 === query.statusCode) {
+                lMsg +=
+                    ', check if user "' +
+                    GRAPHDB_USERNAME +
+                    '" has appropriate access rights to the Repository ' +
+                    '"' +
+                    this.graphDBEndpoint.getRepository() +
+                    '"';
+            }
+            resp = {
+                total: 0,
+                success: false,
+                message: lMsg
+            };
+        }
+        return resp;
+    },
+    update: async function (sparql, params) {
+        let resp = await this.graphDBEndpoint.update(sparql, params);
+        if (!resp.success) {
+            let lMsg = resp.message;
+            if (400 === resp.statusCode) {
+                lMsg += ', check your query for potential errors';
+            } else if (403 === resp.statusCode) {
+                lMsg +=
+                    ', check if user "' +
+                    GRAPHDB_USERNAME +
+                    '" has appropriate access rights to the Repository ' +
+                    '"' +
+                    this.graphDBEndpoint.getRepository() +
+                    '"';
+            }
+        }
+        return resp;
+    },
+    // retrieve all classes from the graph
+    getAllClasses: async function () {
+        let generated = this.enSPARQL.getAllClasses();
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+
+    // retrieve all properties from a given class
+    getClassProperties: async function (cls) {
+        let generated = this.enSPARQL.getClassProperties(cls);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+
+    // generates an in-memory class from a SPARQL result set
+    generateClassFromClassProperties: function (ns, name, classProps) {
+        let cls = new EnapsoSPARQLTools.Class(ns, name);
+        for (let propRec of classProps.records) {
+            // todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
+            let prop = new EnapsoSPARQLTools.Property(
+                ns,
+                propRec.prop,
+                propRec.type,
+                propRec.range,
+                propRec.domain
+            );
+            // add the property to the classs
+            cls.addProperty(prop);
+        }
+        return cls;
+    },
+    // builds the class cache for all or selected classes
+    buildClassCache: async function () {
+        let classCache = new EnapsoSPARQLTools.ClassCache();
+
+        // get all classes of the database
+        let classes = await this.getAllClasses();
+
+        // iterate through all returned classes
+        for (let clsRec of classes.records) {
+            let className = clsRec.class;
+            // get the properties of the given class
+            res = await this.getClassProperties(className);
+
+            // generate an in-memory class of the retrieved properties
+            let cls = this.generateClassFromClassProperties(
+                NS_AUTH,
+                className,
+                res
+            );
+
+            // add the class to the cache
+            classCache.addClass(cls);
+        }
+
+        return classCache;
+    },
+    demo: async function () {
+        // instantiate a prefix manager
+        enlogger.setLevel(EnapsoLogger.ALL);
+        this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(
+            AUTH_PREFIXES
+        );
+
+        // in case no prefix is given for a certain resource identifier use the EDO: here
+        this.enPrefixManager.setDefaultPrefix(PREFIX_AUTH);
+
+        // create a SPARQL generator using the prefix manager
+        this.enSPARQL = new EnapsoSPARQLTools.Generator({
+            prefixManager: this.enPrefixManager
+        });
+
+        // instantiate a GraphDB connector and connect to GraphDB
+        this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
+            baseURL: GRAPHDB_BASE_URL,
+            repository: GRAPHDB_REPOSITORY,
+            prefixes: this.enPrefixManager.getPrefixesForConnector()
+        });
+        classCache = await this.buildClassCache();
     }
-    return resp;
-  },
-  update: async function (sparql, params) {
-    let resp = await this.graphDBEndpoint.update(sparql, params);
-    if (!resp.success) {
-      let lMsg = resp.message;
-      if (400 === resp.statusCode) {
-        lMsg += ', check your query for potential errors';
-      } else if (403 === resp.statusCode) {
-        lMsg +=
-          ', check if user "' +
-          GRAPHDB_USERNAME +
-          '" has appropriate access rights to the Repository ' +
-          '"' +
-          this.graphDBEndpoint.getRepository() +
-          '"';
-      }
-    }
-    return resp;
-  },
-  // retrieve all classes from the graph
-  getAllClasses: async function () {
-    let generated = this.enSPARQL.getAllClasses();
-    //	enlogger.log('SPARQL:\n' + generated.sparql);
-    return this.query(generated.sparql);
-  },
-
-  // retrieve all properties from a given class
-  getClassProperties: async function (cls) {
-    let generated = this.enSPARQL.getClassProperties(cls);
-    // enlogger.log('SPARQL:\n' + generated.sparql);
-    return this.query(generated.sparql);
-  },
-
-  // generates an in-memory class from a SPARQL result set
-  generateClassFromClassProperties: function (ns, name, classProps) {
-    let cls = new EnapsoSPARQLTools.Class(ns, name);
-    for (let propRec of classProps.records) {
-      // todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
-      let prop = new EnapsoSPARQLTools.Property(
-        ns,
-        propRec.prop,
-        propRec.type,
-        propRec.range,
-        propRec.domain
-      );
-      // add the property to the classs
-      cls.addProperty(prop);
-    }
-    return cls;
-  },
-  // builds the class cache for all or selected classes
-  buildClassCache: async function () {
-    let classCache = new EnapsoSPARQLTools.ClassCache();
-
-    // get all classes of the database
-    let classes = await this.getAllClasses();
-
-    // iterate through all returned classes
-    for (let clsRec of classes.records) {
-      let className = clsRec.class;
-      // get the properties of the given class
-      res = await this.getClassProperties(className);
-
-      // generate an in-memory class of the retrieved properties
-      let cls = this.generateClassFromClassProperties(NS_AUTH, className, res);
-
-      // add the class to the cache
-      classCache.addClass(cls);
-    }
-
-    return classCache;
-  },
-  demo: async function () {
-    // instantiate a prefix manager
-    enlogger.setLevel(EnapsoLogger.ALL);
-    this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(AUTH_PREFIXES);
-
-    // in case no prefix is given for a certain resource identifier use the EDO: here
-    this.enPrefixManager.setDefaultPrefix(PREFIX_AUTH);
-
-    // create a SPARQL generator using the prefix manager
-    this.enSPARQL = new EnapsoSPARQLTools.Generator({
-      prefixManager: this.enPrefixManager
-    });
-
-    // instantiate a GraphDB connector and connect to GraphDB
-    this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
-      baseURL: GRAPHDB_BASE_URL,
-      repository: GRAPHDB_REPOSITORY,
-      prefixes: this.enPrefixManager.getPrefixesForConnector()
-    });
-    classCache = await this.buildClassCache();
-  }
 };
 (async () => {
-  await AUTH.demo();
+    await AUTH.demo();
 })();
 ```
 
@@ -220,11 +229,11 @@ Initializing variables using that variable call the `createIndividualByClass` me
 let Tenant = classCache.getClassByIRI(NS_AUTH + 'Tenant');
 // insert a new individual based on the in-memory class
 res = await this.createIndividualByClass({
-  cls: Tenant,
-  baseiri: baseiri,
-  ind: {
-    name: 'Test Company'
-  }
+    cls: Tenant,
+    baseiri: baseiri,
+    ind: {
+        name: 'Test Company'
+    }
 });
 // save the iri for this individual
 iri = res.params.iri;
@@ -253,10 +262,10 @@ Initializing variables using that variable call the `updateIndividualByClass` me
 ```javascript
 let Tenant = classCache.getClassByIRI(NS_AUTH + 'Tenant');
 let iri =
-  'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
+    'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
 // Update an exisitng individual based on the in-memory class
 res = await this.updateIndividualByClass(Tenant, baseiri, {
-  name: 'Test'
+    name: 'Test'
 });
 out = JSON.stringify(res, null, 2);
 console.log('Update an individual by class:' + out);
@@ -284,52 +293,52 @@ this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
 this.Environment = this.classCache.getClassByIRI(NS_AUTH + 'Environment');
 this.Host = this.classCache.getClassByIRI(NS_AUTH + 'Host');
 this.DatabaseInstance = this.classCache.getClassByIRI(
-  NS_AUTH + 'DatabaseInstance'
+    NS_AUTH + 'DatabaseInstance'
 );
 this.Repository = this.classCache.getClassByIRI(NS_AUTH + 'Repository');
 this.Graph = this.classCache.getClassByIRI(NS_AUTH + 'Graph');
 let joins = [
-  // first join (for tenants) on level 1
-  {
-    cls: this.Environment,
-    child2MasterRelation: 'hasTenant',
-    joins: [
-      {
-        cls: this.Host,
-        child2MasterRelation: 'hasEnvironment',
+    // first join (for tenants) on level 1
+    {
+        cls: this.Environment,
+        child2MasterRelation: 'hasTenant',
         joins: [
-          {
-            cls: this.DatabaseInstance,
-            child2MasterRelation: 'hasHost',
-            joins: [
-              {
-                cls: this.Repository,
-                child2MasterRelation: 'hasDatabaseInstance',
+            {
+                cls: this.Host,
+                child2MasterRelation: 'hasEnvironment',
                 joins: [
-                  {
-                    cls: this.Graph,
-                    child2MasterRelation: 'hasRepository'
-                  }
+                    {
+                        cls: this.DatabaseInstance,
+                        child2MasterRelation: 'hasHost',
+                        joins: [
+                            {
+                                cls: this.Repository,
+                                child2MasterRelation: 'hasDatabaseInstance',
+                                joins: [
+                                    {
+                                        cls: this.Graph,
+                                        child2MasterRelation: 'hasRepository'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
+            }
         ]
-      }
-    ]
-  }
+    }
 ];
 let filter = [
-  {
-    key: '$sparql',
-    value: 'regEx(?name, "Ebner", "i")'
-  }
+    {
+        key: '$sparql',
+        value: 'regEx(?name, "Ebner", "i")'
+    }
 ];
 // Read individual based on the in-memory class
 res = await this.getIndividualsByClass({
-  cls: this.Tenant,
-  joins: joins,
-  filter: filter
+    cls: this.Tenant,
+    joins: joins,
+    filter: filter
 });
 out = JSON.stringify(res, null, 2);
 console.log('Read individuals by class:' + out);
@@ -354,39 +363,39 @@ Initializing variables using that variable call the `deleteIndividual` method
 ```javascript
 let iri = 'enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4';
 let joins = [
-  // first join (for tenants) on level 1
-  {
-    cls: 'Environment',
-    child2MasterRelation: 'hasTenant',
-    joins: [
-      {
-        cls: 'Host',
-        child2MasterRelation: 'hasEnvironment',
+    // first join (for tenants) on level 1
+    {
+        cls: 'Environment',
+        child2MasterRelation: 'hasTenant',
         joins: [
-          {
-            cls: 'DatabaseInstance',
-            child2MasterRelation: 'hasHost',
-            joins: [
-              {
-                cls: 'Repository',
-                child2MasterRelation: 'hasDatabaseInstance',
+            {
+                cls: 'Host',
+                child2MasterRelation: 'hasEnvironment',
                 joins: [
-                  {
-                    cls: 'Graph',
-                    child2MasterRelation: 'hasRepository'
-                  }
+                    {
+                        cls: 'DatabaseInstance',
+                        child2MasterRelation: 'hasHost',
+                        joins: [
+                            {
+                                cls: 'Repository',
+                                child2MasterRelation: 'hasDatabaseInstance',
+                                joins: [
+                                    {
+                                        cls: 'Graph',
+                                        child2MasterRelation: 'hasRepository'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 ]
-              }
-            ]
-          }
+            }
         ]
-      }
-    ]
-  }
+    }
 ];
 res = await this.deleteIndividual({
-  iri: iri,
-  joins: joins
+    iri: iri,
+    joins: joins
 });
 out = JSON.stringify(res, null, 2);
 console.log('Delete individuals by iri:' + out);
@@ -411,10 +420,10 @@ Initializing variables using that variable call the `createRelation` method
 
 ```javascript
 let master =
-  'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
+    'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
 let relation = 'hasTenant';
 let child =
-  'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
+    'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
 res = await this.createRelation(master, relation, child);
 out = JSON.stringify(res, null, 2);
 console.log('Create Relation between two individuals:' + out);
@@ -439,10 +448,10 @@ Initializing variables using that variable call the `createRelation` method
 
 ```javascript
 let master =
-  'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
+    'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
 let relation = 'hasTenant';
 let child =
-  'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
+    'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
 res = await this.deleteRelation(master, relation, child);
 out = JSON.stringify(res, null, 2);
 console.log('Delete Relation between two individuals:' + out);
@@ -492,8 +501,8 @@ Initializing variables using that variable call the `deleteLabelOfEachClassIndiv
 let cls = 'Environment';
 let language = 'en';
 res = await this.deleteLabelOfEachClassIndividual({
-  cls: cls,
-  labelLanguage: language
+    cls: cls,
+    labelLanguage: language
 });
 out = JSON.stringify(res, null, 2);
 console.log('Delete label of each individual of a class :' + out);
@@ -521,9 +530,9 @@ let cls = 'Environment';
 let property = 'name';
 let language = 'en';
 res = await this.copyLabelToDataPropertyOfEachIndividual({
-  cls: cls,
-  labelLanguage: language,
-  dataProperty: property
+    cls: cls,
+    labelLanguage: language,
+    dataProperty: property
 });
 out = JSON.stringify(res, null, 2);
 console.log('Copy label of each individual of a class into Property :' + out);
@@ -551,9 +560,9 @@ let cls = 'Environment';
 let property = 'name';
 let language = 'en';
 res = await this.copyDataPropertyToLabelOfEachIndividual({
-  cls: cls,
-  labelLanguage: language,
-  dataProperty: property
+    cls: cls,
+    labelLanguage: language,
+    dataProperty: property
 });
 out = JSON.stringify(res, null, 2);
 console.log('Delete label of each individual of a class :' + out);
