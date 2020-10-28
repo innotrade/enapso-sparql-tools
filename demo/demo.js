@@ -334,131 +334,131 @@ filter(?s = <${cls.getIRI()}>) .
 // })
 // console.log(res1);
 
-        let cls = 'http://ont.enapso.com/foundation#Resource';
-        cls = this.classCache.getClassByIRI(cls);
-        let joins = [
-           {
-                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Capability'),
-                master2childRelation: 'hasCapabilities',
-                joins :
-                [
-                    {
-                        cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-                        master2childRelation: 'hasArgument',
-                    }
-                ]
-            },
-            {
-                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Attribute'),
-                master2childRelation: 'hasAttributes',
-                joins :
-                [
-                    {
-                        cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-                        master2childRelation: 'hasArgument'
-                    }
-                ]
-            },
-            {
-                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Behavior'),
-                master2childRelation: 'hasBehavior',
-                joins :
-                [
-                    {
-                        cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventEmitter'),
-                        master2childRelation: 'hasEventEmitter',
-                        joins :
-                        [
-                            {
-                                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
-                                master2childRelation: 'hasEvent'
-                            }
-                        ]
-                    },
-                    {
-                        cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventListener'),
-                        master2childRelation: 'hasEventListener',
-                        joins :
-                        [
-                            {
-                                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
-                                master2childRelation: 'hasEvent'
-                            },
-                            {
-                                cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-                                master2childRelation: 'hasArgument'
-                            }
-                        ]
-                    }
-                ]
-            },
-        ];
-        let filter= [{
-            "key": "$sparql",
-            "value": "regEx(str(?ind), \"http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e\", \"i\")"
-        }]
-        let res2 = await this.showAllIndividuals({cls:cls,joins:joins,filter:filter});
-    console.log(res2);
-//      iri="http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
-//     let join = [
-//         {
-//              cls: 'Capability',
-//              master2childRelation: 'hasCapabilities',
-//              joins :
-//              [
-//                  {
-//                      cls: 'Argument',
-//                      master2childRelation: 'hasArgument',
-//                  }
-//              ]
-//          },
-//          {
-//              cls: 'Attribute',
-//              master2childRelation: 'hasAttributes',
-//              joins :
-//              [
-//                  {
-//                      cls: 'Argument',
-//                      master2childRelation: 'hasArgument'
-//                  }
-//              ]
-//          },
-//          {
-//              cls: 'Behavior',
-//              master2childRelation: 'hasBehavior',
-//              joins :
-//              [
-//                  {
-//                      cls: 'EventEmitter',
-//                      master2childRelation: 'hasEventEmitter',
-//                      joins :
-//                      [
-//                          {
-//                              cls: 'Event',
-//                              master2childRelation: 'hasEvent'
-//                          }
-//                      ]
-//                  },
-//                  {
-//                      cls: 'EventListener',
-//                      master2childRelation: 'hasEventListener',
-//                      joins :
-//                      [
-//                          {
-//                              cls: 'Event',
-//                              master2childRelation: 'hasEvent'
-//                          },
-//                          {
-//                              cls: 'Argument',
-//                              master2childRelation: 'hasArgument'
-//                          }
-//                      ]
-//                  }
-//              ]
-//          },
-//      ];
-//   let res3=await this.deleteIndividual({ iri: iri, joins: join })
-//   console.log(res3);
+    //     let cls = 'http://ont.enapso.com/foundation#Resource';
+    //     cls = this.classCache.getClassByIRI(cls);
+    //     let joins = [
+    //        {
+    //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Capability'),
+    //             master2childRelation: 'hasCapabilities',
+    //             joins :
+    //             [
+    //                 {
+    //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
+    //                     master2childRelation: 'hasArgument',
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Attribute'),
+    //             master2childRelation: 'hasAttributes',
+    //             joins :
+    //             [
+    //                 {
+    //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
+    //                     master2childRelation: 'hasArgument'
+    //                 }
+    //             ]
+    //         },
+    //         {
+    //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Behavior'),
+    //             master2childRelation: 'hasBehavior',
+    //             joins :
+    //             [
+    //                 {
+    //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventEmitter'),
+    //                     master2childRelation: 'hasEventEmitter',
+    //                     joins :
+    //                     [
+    //                         {
+    //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
+    //                             master2childRelation: 'hasEvent'
+    //                         }
+    //                     ]
+    //                 },
+    //                 {
+    //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventListener'),
+    //                     master2childRelation: 'hasEventListener',
+    //                     joins :
+    //                     [
+    //                         {
+    //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
+    //                             master2childRelation: 'hasEvent'
+    //                         },
+    //                         {
+    //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
+    //                             master2childRelation: 'hasArgument'
+    //                         }
+    //                     ]
+    //                 }
+    //             ]
+    //         },
+    //     ];
+    //     let filter= [{
+    //         "key": "$sparql",
+    //         "value": "regEx(str(?ind), \"http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e\", \"i\")"
+    //     }]
+    //     let res2 = await this.showAllIndividuals({cls:cls,joins:joins,filter:filter});
+    // console.log(res2);
+     iri="http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
+    let join =[
+        {
+             "cls": "http://ont.enapso.com/foundation#Capability",
+             "master2childRelation": "http://ont.enapso.com/foundation#hasCapabilities",
+             "joins" :
+             [
+                 {
+                     "cls": "http://ont.enapso.com/foundation#Argument",
+                     "master2childRelation": "http://ont.enapso.com/foundation#hasArgument"
+                 }
+             ]
+         },
+         {
+             "cls": "http://ont.enapso.com/foundation#Attribute",
+             "master2childRelation": "http://ont.enapso.com/foundation#hasAttributes",
+             "joins" :
+             [
+                 {
+                     "cls": "http://ont.enapso.com/foundation#Argument",
+                     "master2childRelation": "http://ont.enapso.com/foundation#hasArgument"
+                 }
+             ]
+         },
+         {
+             "cls": "http://ont.enapso.com/foundation#Behavior",
+             "master2childRelation": "http://ont.enapso.com/foundation#hasBehavior",
+             "joins" :
+             [
+                 {
+                     "cls": "http://ont.enapso.com/foundation#EventEmitter",
+                     "master2childRelation": "http://ont.enapso.com/foundation#hasEventEmitter",
+                     "joins" :
+                     [
+                         {
+                             "cls": "http://ont.enapso.com/foundation#Event",
+                             "master2childRelation": "http://ont.enapso.com/foundation#hasEvent"
+                         }
+                     ]
+                 },
+                 {
+                     "cls": "http://ont.enapso.com/foundation#EventListener",
+                     "master2childRelation": "http://ont.enapso.com/foundation#hasEventListener",
+                     "joins" :
+                     [
+                         {
+                             "cls": "http://ont.enapso.com/foundation#Event",
+                             "master2childRelation": "http://ont.enapso.com/foundation#hasEvent"
+                         },
+                         {
+                             "cls": "http://ont.enapso.com/foundation#Argument",
+                             "master2childRelation": "http://ont.enapso.com/foundation#hasArgument"
+                         }
+                     ]
+                 }
+             ]
+         }
+     ];
+  let res3=await this.deleteIndividual({ iri: iri, joins: join })
+  console.log(res3);
     }
 };
 (async () => {

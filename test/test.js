@@ -67,7 +67,7 @@ describe('SPARQL Tool Test Suites', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.Environment,
-                child2MasterRelation: 'hasTenant'
+                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant'
             }
         ];
 
@@ -93,11 +93,11 @@ describe('SPARQL Tool Test Suites', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.DatabaseSystem,
-                master2childRelation: 'hasDatabaseSystem'
+                master2childRelation: 'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
                 cls: this.Environment,
-                master2childRelation: 'hasEnvironment'
+                master2childRelation: 'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
 
@@ -126,25 +126,25 @@ describe('SPARQL Tool Test Suites', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.Environment,
-                child2MasterRelation: 'hasTenant',
+                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant',
                 joins: [
                     {
                         cls: this.Host,
-                        child2MasterRelation: 'hasEnvironment',
+                        child2MasterRelation: 'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
                                 cls: this.DatabaseInstance,
-                                child2MasterRelation: 'hasHost',
+                                child2MasterRelation: 'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
                                         cls: this.Repository,
                                         child2MasterRelation:
-                                            'hasDatabaseInstance',
+                                            'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
                                                 cls: this.Graph,
                                                 child2MasterRelation:
-                                                    'hasRepository'
+                                                    'http://ont.enapso.com/repo#hasRepository'
                                             }
                                         ]
                                     }
@@ -177,12 +177,12 @@ describe('SPARQL Tool Test Suites', () => {
             'enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f';
         let joins = [
             {
-                cls: 'Repository',
-                child2MasterRelation: 'hasDatabaseInstance',
+                cls: 'http://ont.enapso.com/repo#Repository',
+                child2MasterRelation: 'http://ont.enapso.com/repo#hasDatabaseInstance',
                 joins: [
                     {
-                        cls: 'Graph',
-                        child2MasterRelation: 'hasRepository'
+                        cls: 'http://ont.enapso.com/repo#Graph',
+                        child2MasterRelation: 'http://ont.enapso.com/repo#hasRepository'
                     }
                 ]
             }
@@ -200,12 +200,12 @@ describe('SPARQL Tool Test Suites', () => {
         let joins = [
             // first join (for tenants) on level 1
             {
-                cls: 'DatabaseSystem',
-                master2childRelation: 'hasDatabaseSystem'
+                cls: 'http://ont.enapso.com/repo#DatabaseSystem',
+                master2childRelation: 'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
-                cls: 'Environment',
-                master2childRelation: 'hasEnvironment'
+                cls: 'http://ont.enapso.com/repo#Environment',
+                master2childRelation: 'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
         testconfig.AUTH.deleteIndividual({ iri: iri, joins: joins }).then(
@@ -222,26 +222,26 @@ describe('SPARQL Tool Test Suites', () => {
         let joins = [
             // first join (for tenants) on level 1
             {
-                cls: 'Environment',
-                child2MasterRelation: 'hasTenant',
+                cls: 'http://ont.enapso.com/repo#Environment',
+                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant',
                 joins: [
                     {
-                        cls: 'Host',
-                        child2MasterRelation: 'hasEnvironment',
+                        cls: 'http://ont.enapso.com/repo#Host',
+                        child2MasterRelation: 'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
-                                cls: 'DatabaseInstance',
-                                child2MasterRelation: 'hasHost',
+                                cls: 'http://ont.enapso.com/repo#DatabaseInstance',
+                                child2MasterRelation: 'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
-                                        cls: 'Repository',
+                                        cls: 'http://ont.enapso.com/repo#Repository',
                                         child2MasterRelation:
-                                            'hasDatabaseInstance',
+                                            'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
-                                                cls: 'Graph',
+                                                cls: 'http://ont.enapso.com/repo#Graph',
                                                 child2MasterRelation:
-                                                    'hasRepository'
+                                                    'http://ont.enapso.com/repo#hasRepository'
                                             }
                                         ]
                                     }
