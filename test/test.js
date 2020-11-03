@@ -37,23 +37,25 @@ describe('SPARQL Tool Test Suites', () => {
                 name: 'Test'
             }
         ];
-        testconfig.AUTH.updateIndividualByClass({cls:this.Tenant, iri:iri, ind:ind}).then(
-            (result) => {
-                console.log('Success: ' + result.success);
-                expect(result).to.have.property('success', true);
-                done();
-            }
-        );
+        testconfig.AUTH.updateIndividualByClass({
+            cls: this.Tenant,
+            iri: iri,
+            ind: ind
+        }).then((result) => {
+            console.log('Success: ' + result.success);
+            expect(result).to.have.property('success', true);
+            done();
+        });
     });
 
     it('Get Individual of a class without join', (done) => {
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
-         testconfig.AUTH.showAllIndividuals({
+        testconfig.AUTH.showAllIndividuals({
             cls: this.Tenant
         }).then((result) => {
             console.log('Success: ' + result.success);
             expect(result).to.have.property('success', true);
-            done()
+            done();
         });
     });
 
@@ -93,11 +95,13 @@ describe('SPARQL Tool Test Suites', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.DatabaseSystem,
-                master2childRelation: 'http://ont.enapso.com/repo#hasDatabaseSystem'
+                master2childRelation:
+                    'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
                 cls: this.Environment,
-                master2childRelation: 'http://ont.enapso.com/repo#hasEnvironment'
+                master2childRelation:
+                    'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
 
@@ -130,11 +134,13 @@ describe('SPARQL Tool Test Suites', () => {
                 joins: [
                     {
                         cls: this.Host,
-                        child2MasterRelation: 'http://ont.enapso.com/repo#hasEnvironment',
+                        child2MasterRelation:
+                            'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
                                 cls: this.DatabaseInstance,
-                                child2MasterRelation: 'http://ont.enapso.com/repo#hasHost',
+                                child2MasterRelation:
+                                    'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
                                         cls: this.Repository,
@@ -178,11 +184,13 @@ describe('SPARQL Tool Test Suites', () => {
         let joins = [
             {
                 cls: 'http://ont.enapso.com/repo#Repository',
-                child2MasterRelation: 'http://ont.enapso.com/repo#hasDatabaseInstance',
+                child2MasterRelation:
+                    'http://ont.enapso.com/repo#hasDatabaseInstance',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/repo#Graph',
-                        child2MasterRelation: 'http://ont.enapso.com/repo#hasRepository'
+                        child2MasterRelation:
+                            'http://ont.enapso.com/repo#hasRepository'
                     }
                 ]
             }
@@ -201,11 +209,13 @@ describe('SPARQL Tool Test Suites', () => {
             // first join (for tenants) on level 1
             {
                 cls: 'http://ont.enapso.com/repo#DatabaseSystem',
-                master2childRelation: 'http://ont.enapso.com/repo#hasDatabaseSystem'
+                master2childRelation:
+                    'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
                 cls: 'http://ont.enapso.com/repo#Environment',
-                master2childRelation: 'http://ont.enapso.com/repo#hasEnvironment'
+                master2childRelation:
+                    'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
         testconfig.AUTH.deleteIndividual({ iri: iri, joins: joins }).then(
@@ -227,19 +237,24 @@ describe('SPARQL Tool Test Suites', () => {
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/repo#Host',
-                        child2MasterRelation: 'http://ont.enapso.com/repo#hasEnvironment',
+                        child2MasterRelation:
+                            'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
-                                cls: 'http://ont.enapso.com/repo#DatabaseInstance',
-                                child2MasterRelation: 'http://ont.enapso.com/repo#hasHost',
+                                cls:
+                                    'http://ont.enapso.com/repo#DatabaseInstance',
+                                child2MasterRelation:
+                                    'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
-                                        cls: 'http://ont.enapso.com/repo#Repository',
+                                        cls:
+                                            'http://ont.enapso.com/repo#Repository',
                                         child2MasterRelation:
                                             'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
-                                                cls: 'http://ont.enapso.com/repo#Graph',
+                                                cls:
+                                                    'http://ont.enapso.com/repo#Graph',
                                                 child2MasterRelation:
                                                     'http://ont.enapso.com/repo#hasRepository'
                                             }
