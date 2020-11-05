@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 const testconfig = require('./config');
 const NS_AUTH = 'http://ont.enapso.com/repo#';
 
-describe('SPARQL Tool Test Suites', () => {
+describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
     it('Create an Individual of a Class ', async () => {
         this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
