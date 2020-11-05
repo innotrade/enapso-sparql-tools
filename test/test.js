@@ -66,9 +66,7 @@ describe('SPARQL Tool Test Suites', () => {
                 done();
             })
             .catch((err) => {
-                console.log(
-                    `Get Individual of a class without join: ${err.message}`
-                );
+                console.log(`Get Individual: ${err.message}`);
                 done(err);
             });
     });

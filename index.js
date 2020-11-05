@@ -3,29 +3,29 @@
 // Authors: Alexander Schulze
 
 const { ClassCache } = require('./lib/classCache'),
-  { Entity } = require('./lib/entity'),
-  { Class } = require('./lib/classes'),
-  { Generator } = require('./lib/generator'),
-  { Property } = require('./lib/properties'),
-  { Prefix, PrefixManager } = require('./lib/prefixManager');
+    { Entity } = require('./lib/entity'),
+    { Class } = require('./lib/classes'),
+    { Generator } = require('./lib/generator'),
+    { Property } = require('./lib/properties'),
+    { Prefix, PrefixManager } = require('./lib/prefixManager');
 
 const ensptools = {
-  ClassCache,
-  Entity,
-  Class,
-  Generator,
-  Property,
-  Prefix,
-  PrefixManager
+    ClassCache,
+    Entity,
+    Class,
+    Generator,
+    Property,
+    Prefix,
+    PrefixManager
 };
 
 module.exports = {
-  ensptools,
-  ClassCache,
-  Entity,
-  Class,
-  Generator,
-  Property,
-  Prefix,
-  PrefixManager
+    ensptools,
+    ClassCache,
+    Entity,
+    Class,
+    Generator,
+    Property,
+    Prefix,
+    PrefixManager
 };
