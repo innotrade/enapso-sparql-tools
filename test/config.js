@@ -3,9 +3,12 @@
 // Authors: Alexander Schulze and Muhammad Yasir
 
 // requires the Enapso GraphDB Client package
-const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
-    { EnapsoLogger } = require('@innotrade/enapso-logger');
-const { EnapsoGraphDBAdmin } = require('@innotrade/enapso-graphdb-admin');
+require('@innotrade/enapso-config');
+
+// requires the Enapso GraphDB Client package
+const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
+    { EnapsoLogger } = requireEx('@innotrade/enapso-logger'),
+    { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
 

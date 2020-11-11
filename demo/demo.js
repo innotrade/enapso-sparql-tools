@@ -2,10 +2,13 @@
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze and Muhammad Yasir
 
+require('@innotrade/enapso-config');
+
 // requires the Enapso GraphDB Client package
-const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
-    { EnapsoLogger } = require('@innotrade/enapso-logger');
-const { EnapsoGraphDBAdmin } = require('@innotrade/enapso-graphdb-admin');
+const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
+    { EnapsoLogger } = requireEx('@innotrade/enapso-logger'),
+    { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
+
 
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
@@ -73,6 +76,7 @@ const AUTH = {
         }
         return resp;
     },
+
     update: async function (sparql, params) {
         let resp = await this.graphDBEndpoint.update(sparql, params);
         if (!resp.success) {
@@ -91,6 +95,7 @@ const AUTH = {
         }
         return resp;
     },
+
     // retrieve all classes from the graph
     getAllClasses: async function () {
         let generated = this.enSPARQL.getAllClasses();
@@ -197,6 +202,7 @@ where {
         res = await this.getIndividualsByClass(args);
         return res;
     },
+
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
@@ -210,12 +216,14 @@ where {
         //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+
     // deletes an arbitray resource via its IRI
     deleteIndividual: async function (args) {
         let generated = this.enSPARQL.deleteResource(args);
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+
     // this deletes ALL individuals of a certain class, BE CAREFUL!
     deleteAllIndividualsByClass: async function (cls) {
         // todo: check this method! it looks like this deletes also all specs for a class, not only the individuals!
@@ -234,16 +242,19 @@ filter(?s = <${cls.getIRI()}>) .
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
+
     deletePropertyOfClass(args) {
         let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+
     deleteLabelOfEachClassIndividual(args) {
         let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+
     copyLabelToDataPropertyOfEachIndividual(args) {
         let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
             args
@@ -251,6 +262,7 @@ filter(?s = <${cls.getIRI()}>) .
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+
     copyDataPropertyToLabelOfEachIndividual(args) {
         let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
             args
@@ -271,6 +283,19 @@ filter(?s = <${cls.getIRI()}>) .
         //console.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+    async demoUploadFromFile(arg) {
+        // upload a file
+        let resp = await this.graphDBEndpoint.uploadFromFile(arg);
+        //  console.log('\nUploadFromFile:\n' + JSON.stringify(resp., null, 2));
+        return resp;
+    },
+    async login(user, pass) {
+        // upload a file
+        let resp = await this.graphDBEndpoint.login(user, pass);
+        //  console.log('Login :\n' + JSON.stringify(resp, null, 2));
+        return resp;
+    },
+
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);
@@ -500,6 +525,7 @@ filter(?s = <${cls.getIRI()}>) .
         console.log(res3);
     }
 };
+
 (async () => {
     await AUTH.demo();
 })();
