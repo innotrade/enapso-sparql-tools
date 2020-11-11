@@ -11,6 +11,38 @@ const testconfig = require('./config');
 const NS_AUTH = 'http://ont.enapso.com/repo#';
 
 describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
+    it('Login to Graphdb ', (done) => {
+        testconfig.AUTH.login('Test', 'Test')
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result).to.have.property('success', true);
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+                done(err);
+            });
+    });
+
+    it('Upload Ontology in Graphdb ', (done) => {
+        let fileDetail = {
+            filename: './test/EnapsoOntologyRepository.owl',
+            format: 'application/rdf+xml',
+            baseIRI: 'http://ont.enapso.com/repo#',
+            context: 'http://ont.enapso.com/repo'
+        };
+        testconfig.AUTH.demoUploadFromFile(fileDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result).to.have.property('success', true);
+                done();
+            })
+            .catch((err) => {
+                console.log(err);
+                done(err);
+            });
+    });
+
     it('Create an Individual of a Class ', async () => {
         this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');

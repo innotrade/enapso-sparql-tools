@@ -5,6 +5,7 @@
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
     { EnapsoLogger } = require('@innotrade/enapso-logger');
+const { EnapsoGraphDBAdmin } = require('@innotrade/enapso-graphdb-admin');
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
 
@@ -281,6 +282,23 @@ filter(?s = <${cls.getIRI()}>) .
         return this.update(generated.sparql);
     },
 
+    deleteRelation: async function (master, property, child) {
+        let generated = this.enSPARQL.deleteRelation(master, property, child);
+        //console.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    async demoUploadFromFile(arg) {
+        // upload a file
+        let resp = await this.graphDBEndpoint.uploadFromFile(arg);
+        //  console.log('\nUploadFromFile:\n' + JSON.stringify(resp., null, 2));
+        return resp;
+    },
+    async login(user, pass) {
+        // upload a file
+        let resp = await this.graphDBEndpoint.login(user, pass);
+        //  console.log('Login :\n' + JSON.stringify(resp, null, 2));
+        return resp;
+    },
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);

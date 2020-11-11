@@ -5,6 +5,8 @@
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = require('@innotrade/enapso-graphdb-client'),
     { EnapsoLogger } = require('@innotrade/enapso-logger');
+const { EnapsoGraphDBAdmin } = require('@innotrade/enapso-graphdb-admin');
+
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
 
@@ -185,7 +187,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -198,20 +200,20 @@ where {
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
 
     // updates an individual by its class reference and a data object with the values
     updateIndividualByClass: async function (cls, iri, ind) {
         let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     // deletes an arbitray resource via its IRI
     deleteIndividual: async function (args) {
         let generated = this.enSPARQL.deleteResource(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     // this deletes ALL individuals of a certain class, BE CAREFUL!
@@ -290,114 +292,146 @@ filter(?s = <${cls.getIRI()}>) .
             repository: GRAPHDB_REPOSITORY,
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
+        this.graphDBEndpoint.login('Test', 'Test');
+        let resp = await this.graphDBEndpoint.uploadFromFile({
+            filename: 'EnapsoFoundation.owl',
+            format: 'application/rdf+xml',
+            baseIRI: 'http://ont.enapso.com/foundation#',
+            context: 'http://ont.enapso.com/enf'
+        });
+        console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
+
         this.classCache = await this.buildClassCache();
-        //         this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-        //         let iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
-        //         let ind1 = {
-        //             iri:iri,
-        //             name: 'Test Company',
-        //             uuid:'12345tyuiigfds',
-        //             dataId:'hgfdsdddddd',
-        //             hash:'Tqwerhvh',
-        //             rights:'rwx',
-        //             code:'function(option){console.log(option)}',
-        //             user:'jnhgtresss',
-        //             hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-        //             hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-        //             hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
-        //         };
-        // let res=await this.createIndividualByClass({
-        //     cls: this.Resource,
-        //     ind: ind1
-        // })
-        // console.log(res);
+        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        let ind1 = {
+            iri: NS_AUTH + '00a5e37f_3452_4b48',
+            name: 'Test Company',
+            hash: 'Tqwerhvh',
+            rights: 'rwx',
+            code: 'function(option){console.log(option)}',
+            user: 'jnhgtresss',
+            hasCapabilities:
+                'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+            hasAttributes:
+                'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+            hasBehavior:
+                'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
+        };
+        let res = await this.createIndividualByClass({
+            cls: this.Resource,
+            ind: ind1
+        });
+        console.log(res);
 
-        //   this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-        //          iri = "http://ont.enapso.com/foundation#00a5e37f_3452_4b48";
-        //         let ind = {
-        //             name: 'Updated Test Company',
-        //             uuid:'12345tyuiigfds',
-        //             dataId:'hgfdsdddddd',
-        //             hash:'Tqwerhvh',
-        //             rights:'rwx',
-        //             code:'function(option){console.log(option)}',
-        //             user:'jnhgtresss',
-        //             hasCapabilities: 'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-        //             hasAttributes:'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-        //             hasBehavior:'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8',
-        //         };
-        // let res1=await this.updateIndividualByClass({
-        //     cls: this.Resource,
-        //     iri: iri,
-        //     ind: ind
-        // })
-        // console.log(res1);
+        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        let iri = NS_AUTH + '00a5e37f_3452_4b48';
+        let ind = {
+            name: 'Updated Test Company',
+            hash: 'Tqwerhvh',
+            rights: 'rwx',
+            code: 'function(option){console.log(option)}',
+            user: 'jnhgtresss',
+            hasCapabilities:
+                'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+            hasAttributes:
+                'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+            hasBehavior:
+                'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
+        };
+        let res1 = await this.updateIndividualByClass({
+            cls: this.Resource,
+            iri: iri,
+            ind: ind
+        });
+        console.log(res1);
 
-        //     let cls = 'http://ont.enapso.com/foundation#Resource';
-        //     cls = this.classCache.getClassByIRI(cls);
-        //     let joins = [
-        //        {
-        //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Capability'),
-        //             master2childRelation: 'hasCapabilities',
-        //             joins :
-        //             [
-        //                 {
-        //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-        //                     master2childRelation: 'hasArgument',
-        //                 }
-        //             ]
-        //         },
-        //         {
-        //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Attribute'),
-        //             master2childRelation: 'hasAttributes',
-        //             joins :
-        //             [
-        //                 {
-        //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-        //                     master2childRelation: 'hasArgument'
-        //                 }
-        //             ]
-        //         },
-        //         {
-        //             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Behavior'),
-        //             master2childRelation: 'hasBehavior',
-        //             joins :
-        //             [
-        //                 {
-        //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventEmitter'),
-        //                     master2childRelation: 'hasEventEmitter',
-        //                     joins :
-        //                     [
-        //                         {
-        //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
-        //                             master2childRelation: 'hasEvent'
-        //                         }
-        //                     ]
-        //                 },
-        //                 {
-        //                     cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#EventListener'),
-        //                     master2childRelation: 'hasEventListener',
-        //                     joins :
-        //                     [
-        //                         {
-        //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Event'),
-        //                             master2childRelation: 'hasEvent'
-        //                         },
-        //                         {
-        //                             cls: this.classCache.getClassByIRI('http://ont.enapso.com/foundation#Argument'),
-        //                             master2childRelation: 'hasArgument'
-        //                         }
-        //                     ]
-        //                 }
-        //             ]
-        //         },
-        //     ];
-        //     let filter= [{
-        //         "key": "$sparql",
-        //         "value": "regEx(str(?ind), \"http://ont.enapso.com/foundation#Resource_124ccf70_38eb_4ca0_9f7e_380c65a5a36e\", \"i\")"
-        //     }]
-        //     let res2 = await this.showAllIndividuals({cls:cls,joins:joins,filter:filter});
-        // console.log(res2);
+        let cls = 'http://ont.enapso.com/foundation#Resource';
+        cls = this.classCache.getClassByIRI(cls);
+        let joins = [
+            {
+                cls: this.classCache.getClassByIRI(
+                    'http://ont.enapso.com/foundation#Capability'
+                ),
+                master2childRelation: 'hasCapabilities',
+                joins: [
+                    {
+                        cls: this.classCache.getClassByIRI(
+                            'http://ont.enapso.com/foundation#Argument'
+                        ),
+                        master2childRelation: 'hasArgument'
+                    }
+                ]
+            },
+            {
+                cls: this.classCache.getClassByIRI(
+                    'http://ont.enapso.com/foundation#Attribute'
+                ),
+                master2childRelation: 'hasAttributes',
+                joins: [
+                    {
+                        cls: this.classCache.getClassByIRI(
+                            'http://ont.enapso.com/foundation#Argument'
+                        ),
+                        master2childRelation: 'hasArgument'
+                    }
+                ]
+            },
+            {
+                cls: this.classCache.getClassByIRI(
+                    'http://ont.enapso.com/foundation#Behavior'
+                ),
+                master2childRelation: 'hasBehavior',
+                joins: [
+                    {
+                        cls: this.classCache.getClassByIRI(
+                            'http://ont.enapso.com/foundation#EventEmitter'
+                        ),
+                        master2childRelation: 'hasEventEmitter',
+                        joins: [
+                            {
+                                cls: this.classCache.getClassByIRI(
+                                    'http://ont.enapso.com/foundation#Event'
+                                ),
+                                master2childRelation: 'hasEvent'
+                            }
+                        ]
+                    },
+                    {
+                        cls: this.classCache.getClassByIRI(
+                            'http://ont.enapso.com/foundation#EventListener'
+                        ),
+                        master2childRelation: 'hasEventListener',
+                        joins: [
+                            {
+                                cls: this.classCache.getClassByIRI(
+                                    'http://ont.enapso.com/foundation#Event'
+                                ),
+                                master2childRelation: 'hasEvent'
+                            },
+                            {
+                                cls: this.classCache.getClassByIRI(
+                                    'http://ont.enapso.com/foundation#Argument'
+                                ),
+                                master2childRelation: 'hasArgument'
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+        let filter = [
+            {
+                key: '$sparql',
+                value:
+                    'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
+            }
+        ];
+        let res2 = await this.showAllIndividuals({
+            cls: cls,
+            joins: joins,
+            filter: filter
+        });
+        console.log(res2);
         iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
         let join = [
             {
