@@ -1,13 +1,13 @@
 // Innotrade Enapso SPARQL Toolbox - example to read a class schema
 // (C) Copyright 2019 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze, Osvaldo Aguilar Lauzurique
+require('@innotrade/enapso-config');
+const EnapsoGraphDBClient = requireEx('@innotrade/enapso-graphdb-client');
+const config = require('./examples.config');
 
-const EnapsoGraphDBClient = require('@innotrade/enapso-graphdb-client')
-const config = require('./examples.config')
-
-const { getClassSchemaMeta, buildSelectQuery } = require('../index')
-const CLASS_IRI = 'http://ont.enapso.com/test#Person'
-const NAMED_GRAPH = 'http://ont.enapso.com/test'
+const { getClassSchemaMeta, buildSelectQuery } = require('../index');
+const CLASS_IRI = 'http://ont.enapso.com/test#Person';
+const NAMED_GRAPH = 'http://ont.enapso.com/test';
 
 // the prefixes for all SPARQL queries
 const PREFIXES = [
@@ -16,31 +16,34 @@ const PREFIXES = [
     EnapsoGraphDBClient.PREFIX_RDFS,
     EnapsoGraphDBClient.PREFIX_XSD,
     {
-        prefix: "et",
-        iri: "http://ont.enapso.com/test#"
+        prefix: 'et',
+        iri: 'http://ont.enapso.com/test#'
     }
-]
+];
 
 // instantiate the GraphDB endpoint
 var graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
     baseURL: config.GRAPHDB_BASE_URL,
     repository: config.GRAPHDB_REPOSITORY,
     prefixes: PREFIXES
-})
+});
 
 async function init() {
     try {
         // build the "class schema reader" header and triples
-        const classSchemaMeta = getClassSchemaMeta(CLASS_IRI, NAMED_GRAPH)
+        const classSchemaMeta = getClassSchemaMeta(CLASS_IRI, NAMED_GRAPH);
 
         // build the class schema reader query
-        let classSchemaQuery = buildSelectQuery(classSchemaMeta.headers, classSchemaMeta.triples)
+        let classSchemaQuery = buildSelectQuery(
+            classSchemaMeta.headers,
+            classSchemaMeta.triples
+        );
 
         // log the query to the console
-        console.log('\nQuery:\n' + classSchemaQuery)
+        console.log('\nQuery:\n' + classSchemaQuery);
 
         // perform the class reader query
-        let queryResult = await graphDBEndpoint.query(classSchemaQuery)
+        let queryResult = await graphDBEndpoint.query(classSchemaQuery);
 
         // transform the class reader query results to a convenient result set
         let result = graphDBEndpoint.transformBindingsToResultSet(queryResult, {
@@ -55,4 +58,4 @@ async function init() {
     }
 }
 
-init()
+init();

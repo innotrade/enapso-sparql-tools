@@ -6,9 +6,8 @@ require('@innotrade/enapso-config');
 
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
-    { EnapsoLogger } = requireEx('@innotrade/enapso-logger'),
+    { EnapsoLogger } = require('@innotrade/enapso-logger'),
     { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
-
 
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
@@ -24,6 +23,8 @@ _.merge(
 );
 
 const GRAPHDB_BASE_URL = 'http://localhost:7200',
+    GRAPHDB_USERNAME = 'Test',
+    GRAPHDB_PASSWORD = 'Test',
     GRAPHDB_REPOSITORY = 'Test';
 const NS_AUTH = 'http://ont.enapso.com/foundation#',
     PREFIX_AUTH = 'enf';
@@ -206,14 +207,14 @@ where {
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
-        //  enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
 
     // updates an individual by its class reference and a data object with the values
     updateIndividualByClass: async function (cls, iri, ind) {
         let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
-        //  enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -317,7 +318,7 @@ filter(?s = <${cls.getIRI()}>) .
             repository: GRAPHDB_REPOSITORY,
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
-        this.graphDBEndpoint.login('Test', 'Test');
+        this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         let resp = await this.graphDBEndpoint.uploadFromFile({
             filename: 'EnapsoFoundation.owl',
             format: 'application/rdf+xml',
