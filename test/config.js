@@ -23,10 +23,16 @@ _.merge(
     require('../lib/generator')
 );
 
-const GRAPHDB_BASE_URL = 'http://localhost:7200',
-    GRAPHDB_REPOSITORY = 'Test';
-const NS_AUTH = 'http://ont.enapso.com/repo#',
-    PREFIX_AUTH = 'enrepo';
+const GRAPHDB_BASE_URL = encfg.getConfig(
+        'GraphDB.GRAPHDB_BASE_URL',
+        'http://localhost:7200'
+    ),
+    GRAPHDB_REPOSITORY = encfg.getConfig('GraphDB.GRAPHDB_REPOSITORY', 'Test');
+const NS_AUTH = encfg.getConfig(
+        'GraphDB.testIri',
+        'http://ont.enapso.com/repo#'
+    ),
+    PREFIX_AUTH = encfg.getConfig('GraphDB.testPrefix', 'enrepo');
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
     EnapsoGraphDBClient.PREFIX_OWL,
