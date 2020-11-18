@@ -11,7 +11,10 @@ const NS_AUTH = 'http://ont.enapso.com/repo#';
 
 describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
     it('Login to Graphdb ', (done) => {
-        testconfig.AUTH.login('Test', 'Test')
+        testconfig.AUTH.login(
+            encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
+            encfg.getConfig('enapsoDefaultGraphDB.password', 'Test')
+        )
             .then((result) => {
                 console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);

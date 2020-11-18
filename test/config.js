@@ -24,15 +24,18 @@ _.merge(
 );
 
 const GRAPHDB_BASE_URL = encfg.getConfig(
-        'GraphDB.GRAPHDB_BASE_URL',
+        'enapsoDefaultGraphDB.baseUrl',
         'http://localhost:7200'
     ),
-    GRAPHDB_REPOSITORY = encfg.getConfig('GraphDB.GRAPHDB_REPOSITORY', 'Test');
+    GRAPHDB_REPOSITORY = encfg.getConfig(
+        'enapsoDefaultGraphDB.repository',
+        'Test'
+    );
 const NS_AUTH = encfg.getConfig(
-        'GraphDB.testIri',
+        'enapsoDefaultGraphDB.testIri',
         'http://ont.enapso.com/repo#'
     ),
-    PREFIX_AUTH = encfg.getConfig('GraphDB.testPrefix', 'enrepo');
+    PREFIX_AUTH = encfg.getConfig('enapsoDefaultGraphDB.testPrefix', 'enrepo');
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
     EnapsoGraphDBClient.PREFIX_OWL,
