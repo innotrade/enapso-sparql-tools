@@ -2,18 +2,17 @@
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Authors: Alexander Schulze and Muhammad Yasir
 
-// requires the Enapso GraphDB Client package
 require('@innotrade/enapso-config');
 
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
-    { EnapsoLogger } = requireEx('@innotrade/enapso-logger'),
+    { EnapsoLogger } = require('@innotrade/enapso-logger'),
     { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
+
 global.enlogger = new EnapsoLogger();
 const _ = require('lodash');
 
 const EnapsoSPARQLTools = {};
-
 _.merge(
     EnapsoSPARQLTools,
     require('../lib/properties'),
@@ -30,12 +29,14 @@ const GRAPHDB_BASE_URL = encfg.getConfig(
     GRAPHDB_REPOSITORY = encfg.getConfig(
         'enapsoDefaultGraphDB.repository',
         'Test'
-    );
+    ),
+    GRAPHDB_USERNAME = encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
+    GRAPHDB_PASSWORD = encfg.getConfig('enapsoDefaultGraphDB.password', 'Test');
 const NS_AUTH = encfg.getConfig(
-        'enapsoDefaultGraphDB.testIri',
+        'enapsoDefaultGraphDB.iri',
         'http://ont.enapso.com/repo#'
     ),
-    PREFIX_AUTH = encfg.getConfig('enapsoDefaultGraphDB.testPrefix', 'enrepo');
+    PREFIX_AUTH = encfg.getConfig('enapsoDefaultGraphDB.prefix', 'enrepo');
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
     EnapsoGraphDBClient.PREFIX_OWL,
@@ -149,7 +150,7 @@ where {
     // retrieve all properties from a given class
     getClassProperties: async function (cls) {
         let generated = this.enSPARQL.getClassProperties(cls);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -201,7 +202,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -209,27 +210,27 @@ where {
     showAllIndividuals: async function (args) {
         // and retrieve all instances by the given in-memory class
         res = await this.getIndividualsByClass(args);
-
         return res;
     },
+
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
 
     // updates an individual by its class reference and a data object with the values
-    updateIndividualByClass: async function (args) {
-        let generated = this.enSPARQL.updateIndividualByClass(args);
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+    updateIndividualByClass: async function (cls, iri, ind) {
+        let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     // deletes an arbitray resource via its IRI
     deleteIndividual: async function (args) {
         let generated = this.enSPARQL.deleteResource(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -246,7 +247,6 @@ filter(?s = <${cls.getIRI()}>) .
 `
         );
     },
-
     cloneIndividual(productClass, productIRI) {
         let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
         //enlogger.log('SPARQL:\n' + generated.sparql);
@@ -255,13 +255,13 @@ filter(?s = <${cls.getIRI()}>) .
 
     deletePropertyOfClass(args) {
         let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     deleteLabelOfEachClassIndividual(args) {
         let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -269,7 +269,7 @@ filter(?s = <${cls.getIRI()}>) .
         let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
             args
         );
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -277,7 +277,7 @@ filter(?s = <${cls.getIRI()}>) .
         let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
             args
         );
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     // add a relation between two individuals
@@ -288,12 +288,6 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     // delete a relation between two individuals
-    deleteRelation: async function (master, property, child) {
-        let generated = this.enSPARQL.deleteRelation(master, property, child);
-        //console.log('SPARQL:\n' + generated.sparql);
-        return this.update(generated.sparql);
-    },
-
     deleteRelation: async function (master, property, child) {
         let generated = this.enSPARQL.deleteRelation(master, property, child);
         //console.log('SPARQL:\n' + generated.sparql);
@@ -311,6 +305,7 @@ filter(?s = <${cls.getIRI()}>) .
         //  console.log('Login :\n' + JSON.stringify(resp, null, 2));
         return resp;
     },
+
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);
@@ -332,16 +327,37 @@ filter(?s = <${cls.getIRI()}>) .
             repository: GRAPHDB_REPOSITORY,
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
+        this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
+        // let resp = await this.graphDBEndpoint.uploadFromFile({
+        //     filename: 'EnapsoFoundation.owl',
+        //     format: 'application/rdf+xml',
+        //     baseIRI: 'http://ont.enapso.com/foundation#',
+        //     context: 'http://ont.enapso.com/enf'
+        // });
+        // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
-        this.graphDBEndpoint.login('Test', 'Test');
-        classCache = await this.buildClassCache();
+        this.classCache = await this.buildClassCache();
+        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
+        let ind1 = {
+            iri: NS_AUTH + '00a5e37f_3452_4b48',
+            name: '<p><span style="color: rgb(247,218, 100);">Test</span></p>'
+        };
+        let res = await this.createIndividualByClass({
+            cls: this.Resource,
+            ind: ind1
+        });
+        console.log(res);
+        // let res3 = await this.deleteIndividual({
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48'
+        // });
+        // console.log(res3);
+        let res2 = await this.showAllIndividuals({
+            cls: this.Resource
+        });
+        console.log(res2);
     }
 };
 
 (async () => {
     await AUTH.demo();
 })();
-
-module.exports = {
-    AUTH
-};
