@@ -45,6 +45,10 @@ const AUTH_PREFIXES = [
     {
         prefix: PREFIX_AUTH,
         iri: NS_AUTH
+    },
+    {
+        prefix: 'enf',
+        iri: 'http://ont.enapso.com/foundation#'
     }
 ];
 
@@ -170,6 +174,14 @@ where {
         }
         return cls;
     },
+    splitIRI(iri, options) {
+        let separator = '#';
+        let parts = iri.split(separator);
+        return {
+            namespace: parts[0] + separator,
+            name: parts[1]
+        };
+    },
 
     // builds the class cache for all or selected classes
     buildClassCache: async function () {
@@ -183,11 +195,11 @@ where {
             let className = clsRec.class;
             // get the properties of the given class
             res = await this.getClassProperties(className);
-
+            let classId = this.splitIRI(className);
             // generate an in-memory class of the retrieved properties
             let cls = this.generateClassFromClassProperties(
-                NS_AUTH,
-                className,
+                classId.namespace,
+                classId.name,
                 res
             );
 
@@ -201,7 +213,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 

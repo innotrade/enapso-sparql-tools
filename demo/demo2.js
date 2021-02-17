@@ -10,6 +10,7 @@ const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
     { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
 
 global.enlogger = new EnapsoLogger();
+const { filter, join } = require('lodash');
 const _ = require('lodash');
 
 const EnapsoSPARQLTools = {};
@@ -46,6 +47,10 @@ const AUTH_PREFIXES = [
     {
         prefix: PREFIX_AUTH,
         iri: NS_AUTH
+    },
+    {
+        prefix: 'enf',
+        iri: 'http://ont.enapso.com/foundation#'
     }
 ];
 
@@ -55,14 +60,15 @@ const AUTH = {
     defaultBaseIRI: NS_AUTH,
     defaultPrefix: PREFIX_AUTH,
     defaultIRISeparator: '#',
-    query: async function (sparql) {
+    query: async function (sparql, dropPrefixes) {
         let query = await this.graphDBEndpoint.query(sparql);
+        dropPrefixes = dropPrefixes || false;
         let resp;
         if (query.success) {
             resp = await this.graphDBEndpoint.transformBindingsToResultSet(
                 query,
                 {
-                    dropPrefixes: true
+                    dropPrefixes: dropPrefixes
                 }
             );
         } else {
@@ -171,6 +177,14 @@ where {
         }
         return cls;
     },
+    splitIRI(iri, options) {
+        let separator = '#';
+        let parts = iri.split(separator);
+        return {
+            namespace: parts[0] + separator,
+            name: parts[1]
+        };
+    },
 
     // builds the class cache for all or selected classes
     buildClassCache: async function () {
@@ -184,11 +198,11 @@ where {
             let className = clsRec.class;
             // get the properties of the given class
             res = await this.getClassProperties(className);
-
+            let classId = this.splitIRI(className);
             // generate an in-memory class of the retrieved properties
             let cls = this.generateClassFromClassProperties(
-                NS_AUTH,
-                className,
+                classId.namespace,
+                classId.name,
                 res
             );
 
@@ -202,7 +216,12 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    getParentClass: async function (cls) {
+        let generated = this.enSPARQL.getParentClass(cls);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -216,7 +235,7 @@ where {
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
 
@@ -228,10 +247,133 @@ where {
     },
 
     // deletes an arbitray resource via its IRI
+    deleteIntegrityRelation: async function (args) {
+        let joins;
+        if (args.relation) {
+            joins = await this.traverseJoin(args.iri, args.relation);
+            for (const item of joins) {
+                if (
+                    item.constraint ==
+                    'http://ont.enapso.com/foundation#DeleteCascadeConstraint'
+                ) {
+                    let res = await this.deleteIndividual({
+                        joins: [item.joins],
+                        iri: args.iri
+                    });
+                    console.log(res);
+                } else if (
+                    item.constraint ==
+                    'http://ont.enapso.com/foundation#DeleteRestrictConstraint'
+                ) {
+                    let res = await this.deleteRestrict({
+                        joins: [item.joins],
+                        iri: args.iri,
+                        cache: args.cache
+                    });
+                    console.log(res);
+                } else if (
+                    item.constraint ==
+                    'http://ont.enapso.com/foundation#DeleteSetNullConstraint'
+                ) {
+                    await this.deleteParentRelation(args.iri);
+                    let res = await this.deleteIndividual({
+                        iri: args.iri
+                    });
+                    console.log(res);
+                } else {
+                    let res = await this.deleteIndividual({
+                        joins: [item.joins],
+                        iri: args.iri
+                    });
+                    console.log(res);
+                }
+            }
+            if (args.relation == 'parent2child') {
+                let res = await this.deleteIndividual({
+                    iri: args.iri
+                });
+                console.log(res);
+            }
+        } else {
+            let res = await this.deleteIndividual({
+                iri: args.iri
+            });
+            console.log(res);
+        }
+    },
     deleteIndividual: async function (args) {
-        let generated = this.enSPARQL.deleteResource(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        let generated = this.enSPARQL.deleteResource({
+            iri: args.iri,
+            joins: args.joins
+        });
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
+    },
+    deleteParentRelation: async function (args) {
+        let generated = this.enSPARQL.deleteParentRelation(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteRestrict: async function (args) {
+        let joins;
+        if (args.joins) {
+            joins = await this.findClassAndReplaceWithCacheClass(
+                args.joins,
+                args.cache
+            );
+            let cache = args.cache;
+            let cls = await this.getIRIClassName(args.iri);
+            if (cls.records.length) {
+                let res2 = await this.showAllIndividuals({
+                    cls: cache.getClassByIRI(cls.records[0].type),
+                    joins: joins,
+                    filter: [
+                        {
+                            key: '$sparql',
+                            value: `regEx(str(?ind),  "${args.iri}", "i")`
+                        }
+                    ]
+                });
+                const result = res2.records.filter(
+                    (item) => item.iri != args.iri
+                );
+                if (result.length > 0) {
+                    return {
+                        success: false,
+                        message: 'Child need to be deleted first',
+                        statusCode: 400
+                    };
+                } else {
+                    return await this.deleteIndividual({
+                        iri: args.iri
+                    });
+                }
+            } else {
+                return {
+                    success: false,
+                    message: 'No class found against that individual',
+                    statusCode: 400
+                };
+            }
+        } else {
+            return await this.deleteIndividual({
+                iri: args.iri
+            });
+        }
+    },
+    findClassAndReplaceWithCacheClass: async function (object, classCache) {
+        let cache = classCache;
+        for (var x in object) {
+            if (typeof object[x] == typeof {}) {
+                await this.findClassAndReplaceWithCacheClass(object[x], cache);
+            }
+            if (object['cls']) {
+                if (typeof object['cls'] != typeof {}) {
+                    object['cls'] = cache.getClassByIRI(object['cls']);
+                }
+            }
+        }
+        return object;
     },
 
     // this deletes ALL individuals of a certain class, BE CAREFUL!
@@ -255,13 +397,13 @@ filter(?s = <${cls.getIRI()}>) .
 
     deletePropertyOfClass(args) {
         let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     deleteLabelOfEachClassIndividual(args) {
         let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -293,6 +435,122 @@ filter(?s = <${cls.getIRI()}>) .
         //console.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+    // Get iri class Name
+    getIRIClassName: async function (iri) {
+        let generated = this.enSPARQL.getIRIClassName(iri);
+        // console.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    // Get Single class Object Properties
+    getSingleClassObjectProperties: async function (cls) {
+        let generated = this.enSPARQL.getSingleClassObjectProperties(cls);
+        //console.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    getObjectPropertiesAndClassName: async function (cls, prop) {
+        let generated = this.enSPARQL.getObjectPropertiesAndClassName(
+            cls,
+            prop
+        );
+        //  console.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    traverseParent2ChildJoin: async function (params, array) {
+        let join = array || [];
+        for (const key of params) {
+            let objProp = await this.getSingleClassObjectProperties(key.range);
+            let constraintFilter;
+            if (objProp) {
+                if (objProp.records.length) {
+                    constraintFilter = objProp.records.filter(
+                        (item) =>
+                            item.prop ==
+                            'http://ont.enapso.com/foundation#hasConstraints'
+                    );
+                }
+                if (constraintFilter) {
+                    if (constraintFilter.length) {
+                        constraintFilter = constraintFilter[0].range;
+                    } else {
+                        constraintFilter = constraintFilter[0];
+                    }
+                }
+            }
+            join.push({
+                joins: {
+                    cls: key.range,
+                    parent2ChildRelation: key.prop
+                },
+                constraint: constraintFilter
+            });
+        }
+        return join;
+    },
+    traverseChild2ParentJoin: async function (parentClass, array) {
+        let join = array || [];
+        const parent = parentClass.filter(
+            (item) => item.prop == 'http://ont.enapso.com/foundation#hasParent'
+        );
+        const relation = parentClass.filter(
+            (item) =>
+                item.prop == 'http://ont.enapso.com/foundation#hasRelations'
+        );
+        let constraint = await this.getSingleClassObjectProperties(
+            relation[0].range
+        );
+        const constraintFilter = constraint.records.filter(
+            (item) =>
+                item.prop == 'http://ont.enapso.com/foundation#hasConstraints'
+        );
+
+        // }
+        for (const key of parent) {
+            join.push({
+                joins: {
+                    cls: key.domain,
+                    child2ParentRelation: key.prop
+                },
+                constraint: constraintFilter[0].range
+            });
+        }
+
+        return join;
+    },
+    traverseJoin: async function (iri, relation) {
+        let val = await this.getIRIClassName(iri);
+        let join = [];
+        if (val.records.length) {
+            if (relation == 'parent2child') {
+                let res = await this.getSingleClassObjectProperties(
+                    val.records[0].type
+                );
+                return this.traverseParent2ChildJoin(res.records, join);
+            } else if (relation == 'child2parent') {
+                let relationClass, parentClass;
+                relationClass = await this.getObjectPropertiesAndClassName(
+                    val.records[0].type,
+                    'enf:hasParent'
+                );
+                if (relationClass) {
+                    if (relationClass.records.length) {
+                        parentClass = await this.getSingleClassObjectProperties(
+                            relationClass.records[0].class
+                        );
+                    }
+                }
+                if (parentClass) {
+                    if (parentClass.records.length) {
+                        return this.traverseChild2ParentJoin(
+                            parentClass.records,
+                            join
+                        );
+                    }
+                }
+            }
+        } else {
+            return join;
+        }
+    },
     async demoUploadFromFile(arg) {
         // upload a file
         let resp = await this.graphDBEndpoint.uploadFromFile(arg);
@@ -312,10 +570,8 @@ filter(?s = <${cls.getIRI()}>) .
         this.enPrefixManager = new EnapsoSPARQLTools.PrefixManager(
             AUTH_PREFIXES
         );
-
         // in case no prefix is given for a certain resource identifier use the EDO: here
         this.enPrefixManager.setDefaultPrefix(PREFIX_AUTH);
-
         // create a SPARQL generator using the prefix manager
         this.enSPARQL = new EnapsoSPARQLTools.Generator({
             prefixManager: this.enPrefixManager
@@ -328,33 +584,13 @@ filter(?s = <${cls.getIRI()}>) .
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
-        // let resp = await this.graphDBEndpoint.uploadFromFile({
-        //     filename: 'EnapsoFoundation.owl',
-        //     format: 'application/rdf+xml',
-        //     baseIRI: 'http://ont.enapso.com/foundation#',
-        //     context: 'http://ont.enapso.com/enf'
-        // });
-        // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
-
         this.classCache = await this.buildClassCache();
-        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
-        let ind1 = {
-            iri: NS_AUTH + '00a5e37f_3452_4b48',
-            name: '<p><span style="color: rgb(247,218, 100);">Test</span></p>'
-        };
-        let res = await this.createIndividualByClass({
-            cls: this.Resource,
-            ind: ind1
+        await this.deleteIntegrityRelation({
+            iri:
+                'http://ont.enapso.com/repo#Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4',
+            relation: 'child2parent',
+            cache: this.classCache
         });
-        console.log(res);
-        // let res3 = await this.deleteIndividual({
-        //     iri: NS_AUTH + '00a5e37f_3452_4b48'
-        // });
-        // console.log(res3);
-        let res2 = await this.showAllIndividuals({
-            cls: this.Resource
-        });
-        console.log(res2);
     }
 };
 

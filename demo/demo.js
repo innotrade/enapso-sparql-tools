@@ -62,7 +62,7 @@ const AUTH = {
             resp = await this.graphDBEndpoint.transformBindingsToResultSet(
                 query,
                 {
-                    dropPrefixes: true
+                    dropPrefixes: false
                 }
             );
         } else {
@@ -171,6 +171,14 @@ where {
         }
         return cls;
     },
+    splitIRI(iri, options) {
+        let separator = '#';
+        let parts = iri.split(separator);
+        return {
+            namespace: parts[0] + separator,
+            name: parts[1]
+        };
+    },
 
     // builds the class cache for all or selected classes
     buildClassCache: async function () {
@@ -184,11 +192,12 @@ where {
             let className = clsRec.class;
             // get the properties of the given class
             res = await this.getClassProperties(className);
+            let classId = this.splitIRI(className);
 
             // generate an in-memory class of the retrieved properties
             let cls = this.generateClassFromClassProperties(
-                NS_AUTH,
-                className,
+                classId.namespace,
+                classId.name,
                 res
             );
 
@@ -356,7 +365,7 @@ filter(?s = <${cls.getIRI()}>) .
             cls: this.Resource,
             ind: ind1
         });
-        console.log(res);
+        console.log('create a individual', res);
 
         this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
         let iri = NS_AUTH + '00a5e37f_3452_4b48';
@@ -378,22 +387,21 @@ filter(?s = <${cls.getIRI()}>) .
             iri: iri,
             ind: ind
         });
-        console.log(res1);
-
-        let cls = 'http://ont.enapso.com/foundation#Resource';
-        cls = this.classCache.getClassByIRI(cls);
+        console.log('update created individual', res1);
         let joins = [
             {
                 cls: this.classCache.getClassByIRI(
                     'http://ont.enapso.com/foundation#Capability'
                 ),
-                master2childRelation: 'hasCapabilities',
+                parent2ChildRelation:
+                    'http://ont.enapso.com/foundation#hasCapabilities',
                 joins: [
                     {
                         cls: this.classCache.getClassByIRI(
                             'http://ont.enapso.com/foundation#Argument'
                         ),
-                        master2childRelation: 'hasArgument'
+                        parent2ChildRelation:
+                            'http://ont.enapso.com/foundation#hasArgument'
                     }
                 ]
             },
@@ -401,13 +409,15 @@ filter(?s = <${cls.getIRI()}>) .
                 cls: this.classCache.getClassByIRI(
                     'http://ont.enapso.com/foundation#Attribute'
                 ),
-                master2childRelation: 'hasAttributes',
+                parent2ChildRelation:
+                    'http://ont.enapso.com/foundation#hasAttributes',
                 joins: [
                     {
                         cls: this.classCache.getClassByIRI(
                             'http://ont.enapso.com/foundation#Argument'
                         ),
-                        master2childRelation: 'hasArgument'
+                        parent2ChildRelation:
+                            'http://ont.enapso.com/foundation#hasArgument'
                     }
                 ]
             },
@@ -415,19 +425,22 @@ filter(?s = <${cls.getIRI()}>) .
                 cls: this.classCache.getClassByIRI(
                     'http://ont.enapso.com/foundation#Behavior'
                 ),
-                master2childRelation: 'hasBehavior',
+                parent2ChildRelation:
+                    'http://ont.enapso.com/foundation#hasBehavior',
                 joins: [
                     {
                         cls: this.classCache.getClassByIRI(
                             'http://ont.enapso.com/foundation#EventEmitter'
                         ),
-                        master2childRelation: 'hasEventEmitter',
+                        parent2ChildRelation:
+                            'http://ont.enapso.com/foundation#hasEventEmitter',
                         joins: [
                             {
                                 cls: this.classCache.getClassByIRI(
                                     'http://ont.enapso.com/foundation#Event'
                                 ),
-                                master2childRelation: 'hasEvent'
+                                parent2ChildRelation:
+                                    'http://ont.enapso.com/foundation#hasEvent'
                             }
                         ]
                     },
@@ -435,19 +448,22 @@ filter(?s = <${cls.getIRI()}>) .
                         cls: this.classCache.getClassByIRI(
                             'http://ont.enapso.com/foundation#EventListener'
                         ),
-                        master2childRelation: 'hasEventListener',
+                        parent2ChildRelation:
+                            'http://ont.enapso.com/foundation#hasEventListener',
                         joins: [
                             {
                                 cls: this.classCache.getClassByIRI(
                                     'http://ont.enapso.com/foundation#Event'
                                 ),
-                                master2childRelation: 'hasEvent'
+                                parent2ChildRelation:
+                                    'http://ont.enapso.com/foundation#hasEvent'
                             },
                             {
                                 cls: this.classCache.getClassByIRI(
                                     'http://ont.enapso.com/foundation#Argument'
                                 ),
-                                master2childRelation: 'hasArgument'
+                                parent2ChildRelation:
+                                    'http://ont.enapso.com/foundation#hasArgument'
                             }
                         ]
                     }
@@ -461,69 +477,71 @@ filter(?s = <${cls.getIRI()}>) .
                     'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
             }
         ];
+        let cls = 'http://ont.enapso.com/foundation#Resource';
+        cls = this.classCache.getClassByIRI(cls);
         let res2 = await this.showAllIndividuals({
             cls: cls,
-            joins: joins,
-            filter: filter
+            joins: joins
+            //    filter: filter
         });
-        console.log(res2);
+        console.log('read individual of a class', res2);
         iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
         let join = [
             {
                 cls: 'http://ont.enapso.com/foundation#Capability',
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/foundation#hasCapabilities',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/foundation#Argument',
-                        master2childRelation:
+                        parent2ChildRelation:
                             'http://ont.enapso.com/foundation#hasArgument'
                     }
                 ]
             },
             {
                 cls: 'http://ont.enapso.com/foundation#Attribute',
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/foundation#hasAttributes',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/foundation#Argument',
-                        master2childRelation:
+                        parent2ChildRelation:
                             'http://ont.enapso.com/foundation#hasArgument'
                     }
                 ]
             },
             {
                 cls: 'http://ont.enapso.com/foundation#Behavior',
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/foundation#hasBehavior',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/foundation#EventEmitter',
-                        master2childRelation:
+                        parent2ChildRelation:
                             'http://ont.enapso.com/foundation#hasEventEmitter',
                         joins: [
                             {
                                 cls: 'http://ont.enapso.com/foundation#Event',
-                                master2childRelation:
+                                parent2ChildRelation:
                                     'http://ont.enapso.com/foundation#hasEvent'
                             }
                         ]
                     },
                     {
                         cls: 'http://ont.enapso.com/foundation#EventListener',
-                        master2childRelation:
+                        parent2ChildRelation:
                             'http://ont.enapso.com/foundation#hasEventListener',
                         joins: [
                             {
                                 cls: 'http://ont.enapso.com/foundation#Event',
-                                master2childRelation:
+                                parent2ChildRelation:
                                     'http://ont.enapso.com/foundation#hasEvent'
                             },
                             {
                                 cls:
                                     'http://ont.enapso.com/foundation#Argument',
-                                master2childRelation:
+                                parent2ChildRelation:
                                     'http://ont.enapso.com/foundation#hasArgument'
                             }
                         ]
@@ -532,7 +550,7 @@ filter(?s = <${cls.getIRI()}>) .
             }
         ];
         let res3 = await this.deleteIndividual({ iri: iri, joins: join });
-        console.log(res3);
+        console.log('delete individual of the class', res3);
     }
 };
 
