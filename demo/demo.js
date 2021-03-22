@@ -55,14 +55,16 @@ const AUTH = {
     defaultBaseIRI: NS_AUTH,
     defaultPrefix: PREFIX_AUTH,
     defaultIRISeparator: '#',
-    query: async function (sparql) {
+    query: async function (sparql, options) {
+        options = options || {};
+        options.dropPrefixes = options.dropPrefixes || false;
         let query = await this.graphDBEndpoint.query(sparql);
         let resp;
         if (query.success) {
             resp = await this.graphDBEndpoint.transformBindingsToResultSet(
                 query,
                 {
-                    dropPrefixes: false
+                    dropPrefixes: options.dropPrefixes
                 }
             );
         } else {
@@ -159,9 +161,10 @@ where {
         let cls = new EnapsoSPARQLTools.Class(ns, name);
         for (let propRec of classProps.records) {
             // todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
+            let propParts = this.splitIRI(propRec.prop);
             let prop = new EnapsoSPARQLTools.Property(
-                ns,
-                propRec.prop,
+                propParts.namespace,
+                propParts.name,
                 propRec.type,
                 propRec.range,
                 propRec.domain
@@ -183,15 +186,21 @@ where {
     // builds the class cache for all or selected classes
     buildClassCache: async function () {
         let classCache = new EnapsoSPARQLTools.ClassCache();
-
         // get all classes of the database
-        let classes = await this.getAllClasses();
+        let generated = this.enSPARQL.getAllClasses();
+        // enLogger.log('SPARQL:\n' + generated.sparql);
+        let classes = await this.query(generated.sparql);
 
         // iterate through all returned classes
         for (let clsRec of classes.records) {
             let className = clsRec.class;
             // get the properties of the given class
-            res = await this.getClassProperties(className);
+            // get the properties of the given class
+            let generated = this.enSPARQL.getClassProperties(className);
+            // enLogger.log('SPARQL:\n' + generated.sparql);
+            let res = await this.query(generated.sparql, {
+                dropPrefixes: false // here we need the full data types and IRIs
+            });
             let classId = this.splitIRI(className);
 
             // generate an in-memory class of the retrieved properties
@@ -200,11 +209,9 @@ where {
                 classId.name,
                 res
             );
-
             // add the class to the cache
             classCache.addClass(cls);
         }
-
         return classCache;
     },
 
@@ -264,13 +271,13 @@ filter(?s = <${cls.getIRI()}>) .
 
     deletePropertyOfClass(args) {
         let generated = this.enSPARQL.deleteGivenPropertyOfClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     deleteLabelOfEachClassIndividual(args) {
         let generated = this.enSPARQL.deleteLabelOfEachClassIndividual(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -278,7 +285,7 @@ filter(?s = <${cls.getIRI()}>) .
         let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
             args
         );
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -286,7 +293,7 @@ filter(?s = <${cls.getIRI()}>) .
         let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
             args
         );
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     // add a relation between two individuals
@@ -361,13 +368,13 @@ filter(?s = <${cls.getIRI()}>) .
             hasBehavior:
                 'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
         };
+        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
         let res = await this.createIndividualByClass({
             cls: this.Resource,
             ind: ind1
         });
         console.log('create a individual', res);
 
-        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
         let iri = NS_AUTH + '00a5e37f_3452_4b48';
         let ind = {
             name: 'Updated Test Company',

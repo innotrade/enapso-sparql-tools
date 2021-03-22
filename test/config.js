@@ -161,10 +161,11 @@ where {
     generateClassFromClassProperties: function (ns, name, classProps) {
         let cls = new EnapsoSPARQLTools.Class(ns, name);
         for (let propRec of classProps.records) {
+            let propParts = this.splitIRI(propRec.prop);
             // todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
             let prop = new EnapsoSPARQLTools.Property(
-                ns,
-                propRec.prop,
+                propParts.namespace,
+                propParts.name,
                 propRec.type,
                 propRec.range,
                 propRec.domain
@@ -213,7 +214,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        //enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 

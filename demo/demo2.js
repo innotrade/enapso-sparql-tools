@@ -216,7 +216,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     getParentClass: async function (cls) {
@@ -459,20 +459,32 @@ filter(?s = <${cls.getIRI()}>) .
         let join = array || [];
         for (const key of params) {
             let objProp = await this.getSingleClassObjectProperties(key.range);
-            let constraintFilter;
+            let relation, constraint;
             if (objProp) {
                 if (objProp.records.length) {
-                    constraintFilter = objProp.records.filter(
+                    relation = objProp.records.filter(
                         (item) =>
                             item.prop ==
-                            'http://ont.enapso.com/foundation#hasConstraints'
+                            'http://ont.enapso.com/foundation#hasRelations'
                     );
                 }
-                if (constraintFilter) {
-                    if (constraintFilter.length) {
-                        constraintFilter = constraintFilter[0].range;
-                    } else {
-                        constraintFilter = constraintFilter[0];
+                if (relation) {
+                    if (relation.length) {
+                        constraint = await this.getSingleClassObjectProperties(
+                            relation[0].range
+                        );
+                        constraint = constraint.records.filter(
+                            (item) =>
+                                item.prop ==
+                                'http://ont.enapso.com/foundation#hasConstraints'
+                        );
+                        if (constraint) {
+                            if (constraint.length) {
+                                constraint = constraint[0].range;
+                            } else {
+                                constraint = constraint[0];
+                            }
+                        }
                     }
                 }
             }
@@ -481,7 +493,7 @@ filter(?s = <${cls.getIRI()}>) .
                     cls: key.range,
                     parent2ChildRelation: key.prop
                 },
-                constraint: constraintFilter
+                constraint: constraint
             });
         }
         return join;
@@ -587,8 +599,8 @@ filter(?s = <${cls.getIRI()}>) .
         this.classCache = await this.buildClassCache();
         await this.deleteIntegrityRelation({
             iri:
-                'http://ont.enapso.com/repo#Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4',
-            relation: 'child2parent',
+                'http://ont.enapso.com/foundation#Resource_22512545-bb01-447f-b674-f40c5f2f4edf',
+            relation: 'parent2child',
             cache: this.classCache
         });
     }
