@@ -45,6 +45,10 @@ const AUTH_PREFIXES = [
     {
         prefix: PREFIX_AUTH,
         iri: NS_AUTH
+    },
+    {
+        prefix: 'enf',
+        iri: 'http://ont.enapso.com/foundation#'
     }
 ];
 
@@ -157,10 +161,11 @@ where {
     generateClassFromClassProperties: function (ns, name, classProps) {
         let cls = new EnapsoSPARQLTools.Class(ns, name);
         for (let propRec of classProps.records) {
+            let propParts = this.splitIRI(propRec.prop);
             // todo: here we need to add the restrictions, domain, range, min, max, exactly etc.
             let prop = new EnapsoSPARQLTools.Property(
-                ns,
-                propRec.prop,
+                propParts.namespace,
+                propParts.name,
                 propRec.type,
                 propRec.range,
                 propRec.domain
@@ -169,6 +174,14 @@ where {
             cls.addProperty(prop);
         }
         return cls;
+    },
+    splitIRI(iri, options) {
+        let separator = '#';
+        let parts = iri.split(separator);
+        return {
+            namespace: parts[0] + separator,
+            name: parts[1]
+        };
     },
 
     // builds the class cache for all or selected classes
@@ -183,11 +196,11 @@ where {
             let className = clsRec.class;
             // get the properties of the given class
             res = await this.getClassProperties(className);
-
+            let classId = this.splitIRI(className);
             // generate an in-memory class of the retrieved properties
             let cls = this.generateClassFromClassProperties(
-                NS_AUTH,
-                className,
+                classId.namespace,
+                classId.name,
                 res
             );
 

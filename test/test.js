@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 const testconfig = require('./config');
 const NS_AUTH = 'http://ont.enapso.com/repo#';
 
-describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
+describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('Login to Graphdb ', (done) => {
         testconfig.AUTH.login(
             encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
@@ -48,7 +48,6 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
     it('Create an Individual of a Class ', async () => {
         this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
-        let baseiri = 'http://ont.enapso.com/repo#';
         let ind = {
             name: 'Test Company'
         };
@@ -64,7 +63,8 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             .catch((err) => {});
     });
 
-    it('Update Individual of a Class ', (done) => {
+    it('Update Individual of a Class ', async () => {
+        this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
         let iri =
             'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
@@ -81,15 +81,16 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             .then((result) => {
                 console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
-                done();
+                // done();
             })
             .catch((err) => {
                 console.log(`Update Individual: ${err.message}`);
-                done(err);
+                // done(err);
             });
     });
 
-    it('Get Individual of a class without join', (done) => {
+    it('Get Individual of a class without join', async () => {
+        this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
         testconfig.AUTH.showAllIndividuals({
             cls: this.Tenant
@@ -97,15 +98,15 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             .then((result) => {
                 console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
-                done();
+                // done();
             })
             .catch((err) => {
                 console.log(`Get Individual: ${err.message}`);
-                done(err);
+                //  done(err);
             });
     });
 
-    it('Get Individual of a class with single join have master2childRelation', async () => {
+    it('Get Individual of a class with single join have parent2ChildRelation', async () => {
         this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
         this.Environment = this.classCache.getClassByIRI(
@@ -115,7 +116,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.Environment,
-                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant'
+                child2ParentRelation: 'http://ont.enapso.com/repo#hasTenant'
             }
         ];
 
@@ -131,7 +132,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
                 console.log(
                     `Get Individual of a class with join: ${err.message}`
                 );
-                done(err);
+                //     done(err);
             });
     });
 
@@ -148,12 +149,12 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.DatabaseSystem,
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
                 cls: this.Environment,
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
@@ -170,11 +171,11 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
                 console.log(
                     `Get Individual of a class with join: ${err.message}`
                 );
-                done(err);
+                //     done(err);
             });
     });
 
-    it('Get Individual of a class with nested joins have master2childRelation', async () => {
+    it('Get Individual of a class with nested joins have parent2ChildRelation', async () => {
         this.classCache = await testconfig.AUTH.buildClassCache();
         this.Tenant = this.classCache.getClassByIRI(NS_AUTH + 'Tenant');
         this.Environment = this.classCache.getClassByIRI(
@@ -190,26 +191,26 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             // first join (for tenants) on level 1
             {
                 cls: this.Environment,
-                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant',
+                child2ParentRelation: 'http://ont.enapso.com/repo#hasTenant',
                 joins: [
                     {
                         cls: this.Host,
-                        child2MasterRelation:
+                        child2ParentRelation:
                             'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
                                 cls: this.DatabaseInstance,
-                                child2MasterRelation:
+                                child2ParentRelation:
                                     'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
                                         cls: this.Repository,
-                                        child2MasterRelation:
+                                        child2ParentRelation:
                                             'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
                                                 cls: this.Graph,
-                                                child2MasterRelation:
+                                                child2ParentRelation:
                                                     'http://ont.enapso.com/repo#hasRepository'
                                             }
                                         ]
@@ -233,7 +234,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
                 console.log(
                     `Get Individual of a class with nested join: ${err.message}`
                 );
-                done(err);
+                //  done(err);
             });
     });
 
@@ -250,18 +251,18 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
                 done(err);
             });
     });
-    it('A object with single nested joins only delete an individual of DatabaseInstance has child2MasterRelation', (done) => {
+    it('A object with single nested joins only delete an individual of DatabaseInstance has child2ParentRelation', (done) => {
         let iri =
             'enrepo:DatabaseInstance_41710204_2620_4483_a31d_963e2075767f';
         let joins = [
             {
                 cls: 'http://ont.enapso.com/repo#Repository',
-                child2MasterRelation:
+                child2ParentRelation:
                     'http://ont.enapso.com/repo#hasDatabaseInstance',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/repo#Graph',
-                        child2MasterRelation:
+                        child2ParentRelation:
                             'http://ont.enapso.com/repo#hasRepository'
                     }
                 ]
@@ -280,18 +281,18 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
                 done(err);
             });
     });
-    it('A object with only one joins delete an individual of Host has master2childRelation', (done) => {
+    it('A object with only one joins delete an individual of Host has parent2ChildRelation', (done) => {
         let iri = 'enrepo:Host_01141633_0716_4ae3_b38b_aa12b2197c4a';
         let joins = [
             // first join (for tenants) on level 1
             {
                 cls: 'http://ont.enapso.com/repo#DatabaseSystem',
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/repo#hasDatabaseSystem'
             },
             {
                 cls: 'http://ont.enapso.com/repo#Environment',
-                master2childRelation:
+                parent2ChildRelation:
                     'http://ont.enapso.com/repo#hasEnvironment'
             }
         ];
@@ -309,35 +310,35 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             });
     });
 
-    it('A object with combined joins nesting only delete an individual of Tenant has child2MasterRelation', (done) => {
+    it('A object with combined joins nesting only delete an individual of Tenant has child2ParentRelation', (done) => {
         let iri = 'enrepo:Tenant_0143e7ee_fbdd_45b3_879f_fedc78e42ab4';
         let joins = [
             // first join (for tenants) on level 1
             {
                 cls: 'http://ont.enapso.com/repo#Environment',
-                child2MasterRelation: 'http://ont.enapso.com/repo#hasTenant',
+                child2ParentRelation: 'http://ont.enapso.com/repo#hasTenant',
                 joins: [
                     {
                         cls: 'http://ont.enapso.com/repo#Host',
-                        child2MasterRelation:
+                        child2ParentRelation:
                             'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
                                 cls:
                                     'http://ont.enapso.com/repo#DatabaseInstance',
-                                child2MasterRelation:
+                                child2ParentRelation:
                                     'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
                                         cls:
                                             'http://ont.enapso.com/repo#Repository',
-                                        child2MasterRelation:
+                                        child2ParentRelation:
                                             'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
                                                 cls:
                                                     'http://ont.enapso.com/repo#Graph',
-                                                child2MasterRelation:
+                                                child2ParentRelation:
                                                     'http://ont.enapso.com/repo#hasRepository'
                                             }
                                         ]
@@ -363,7 +364,8 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             });
     });
 
-    it('Clone Individual of a Class ', (done) => {
+    it('Clone Individual of a Class ', async () => {
+        this.classCache = await testconfig.AUTH.buildClassCache();
         this.Environment = this.classCache.getClassByIRI(
             NS_AUTH + 'Environment'
         );
@@ -373,11 +375,9 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', () => {
             .then((result) => {
                 console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
-                done();
             })
             .catch((err) => {
                 console.log(`Clone Individual of a class: ${err.message}`);
-                done(err);
             });
     });
 
