@@ -414,7 +414,6 @@ filter(?s = <${cls.getIRI()}>) .
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
-
     copyDataPropertyToLabelOfEachIndividual(args) {
         let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
             args
@@ -514,7 +513,6 @@ filter(?s = <${cls.getIRI()}>) .
             (item) =>
                 item.prop == 'http://ont.enapso.com/foundation#hasConstraints'
         );
-
         // }
         for (const key of parent) {
             join.push({
@@ -525,7 +523,6 @@ filter(?s = <${cls.getIRI()}>) .
                 constraint: constraintFilter[0].range
             });
         }
-
         return join;
     },
     traverseJoin: async function (iri, relation) {
