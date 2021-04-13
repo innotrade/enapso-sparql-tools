@@ -51,6 +51,10 @@ const AUTH_PREFIXES = [
     {
         prefix: 'enf',
         iri: 'http://ont.enapso.com/foundation#'
+    },
+    {
+        prefix: 'enauth',
+        iri: 'http://ont.enapso.com/auth#'
     }
 ];
 
@@ -406,7 +410,92 @@ filter(?s = <${cls.getIRI()}>) .
         //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+    createClassAndAddRestriction(args) {
+        let generated = this.enSPARQL.createClassAndAddRestriction(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    addRestrictionToClass(args) {
+        let generated = this.enSPARQL.createClassAndAddRestriction(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
 
+    addLabel(args) {
+        let generated = this.enSPARQL.addLabel(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    changeLabel(args) {
+        let generated = this.enSPARQL.changeLabel(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteLabel(args) {
+        let generated = this.enSPARQL.deleteLabel(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteComment(args) {
+        let generated = this.enSPARQL.deleteComment(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    addComment(args) {
+        let generated = this.enSPARQL.addComment(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    changeComment(args) {
+        let generated = this.enSPARQL.changeComment(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceModel(args) {
+        let generated = this.enSPARQL.deleteClassReferenceModel(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceData(args) {
+        let generated = this.enSPARQL.deleteClassReferenceData(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassModel(args) {
+        let generated = this.enSPARQL.deleteClassModel(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClass(args) {
+        let generated = this.enSPARQL.deleteClass(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassData(args) {
+        let generated = this.enSPARQL.deleteClassData(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassModelAndData(args) {
+        let generated = this.enSPARQL.deleteClassModelAndData(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceModelAndData(args) {
+        let generated = this.enSPARQL.deleteClassReferenceModelAndData(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassSpecificRestriction(args) {
+        let generated = this.enSPARQL.deleteClassSpecificRestriction(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    updateClassRestriction(args) {
+        let generated = this.enSPARQL.updateClassRestriction(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
     copyLabelToDataPropertyOfEachIndividual(args) {
         let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
             args
@@ -594,11 +683,113 @@ filter(?s = <${cls.getIRI()}>) .
         });
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         this.classCache = await this.buildClassCache();
-        await this.deleteIntegrityRelation({
-            iri:
-                'http://ont.enapso.com/foundation#Resource_22512545-bb01-447f-b674-f40c5f2f4edf',
-            relation: 'parent2child',
-            cache: this.classCache
+
+        let args = {
+            cls: 'http://ont.enapso.com/auth#Activities',
+            parent: 'http://ont.enapso.com/auth#Activity',
+            label: 'Activities CXlas',
+            comment: 'Activities Class Comment',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/auth#name',
+                    only: 'xsd:string'
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#email',
+                    min: 'xsd:string',
+                    cardinality: 1
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#hasRole',
+                    exactly: 'http://ont.enapso.com/auth#Role',
+                    cardinality: 1
+                }
+            ]
+        };
+        let delArgs = {
+            cls: 'http://ont.enapso.com/auth#User',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/auth#name',
+                    instanceDeletion: true
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#email',
+                    exactly: 'xsd:string',
+                    cardinality: 1
+                }
+            ]
+        };
+        let updateArgs = {
+            cls: 'http://ont.enapso.com/auth#User',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/auth#name',
+                    previousRestriction: {
+                        exactly: 'xsd:string',
+                        cardinality: 1
+                    },
+                    updateRestriction: {
+                        max: 'xsd:string',
+                        cardinality: 2
+                    }
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#email',
+                    updateRestriction: {
+                        min: 'xsd:string',
+                        cardinality: 1
+                    }
+                }
+            ]
+        };
+        await this.createClassAndAddRestriction(args);
+        await this.addRestrictionToClass(Addargs);
+        await this.deleteClassSpecificRestriction(delArgs);
+        await this.updateClassRestriction(updateArgs);
+        await this.deleteLabel({
+            cls: 'http://ont.enapso.com/auth#User'
+        });
+        await this.addLabel({
+            cls: 'http://ont.enapso.com/auth#User',
+            label: 'Activites'
+        });
+        await this.changeLabel({
+            cls: 'http://ont.enapso.com/auth#User',
+            label: 'Change Activites'
+        });
+        await this.deleteComment({
+            cls: 'http://ont.enapso.com/auth#User',
+            comment: 'Activites'
+        });
+        await this.addComment({
+            cls: 'http://ont.enapso.com/auth#User',
+            comment: 'Activites'
+        });
+        await this.changeComment({
+            cls: 'http://ont.enapso.com/auth#User',
+            comment: 'Activites Comment'
+        });
+        await this.deleteClassModel({
+            cls: 'http://ont.enapso.com/auth#User'
+        });
+        await this.deleteClassData({
+            cls: 'http://ont.enapso.com/auth#User'
+        });
+        await this.deleteClassModelAndData({
+            cls: 'http://ont.enapso.com/auth#Role'
+        });
+        await this.deleteClassReferenceModel({
+            cls: 'http://ont.enapso.com/auth#Role'
+        });
+        await this.deleteClassReferenceData({
+            cls: 'http://ont.enapso.com/auth#User'
+        });
+        await this.deleteClassReferenceModelAndData({
+            cls: 'http://ont.enapso.com/auth#Role'
+        });
+        await this.deleteClass({
+            cls: 'http://ont.enapso.com/auth#User'
         });
     }
 };
