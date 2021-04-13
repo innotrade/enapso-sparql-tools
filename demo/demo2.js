@@ -706,6 +706,25 @@ filter(?s = <${cls.getIRI()}>) .
                 }
             ]
         };
+        let Addargs = {
+            cls: 'http://ont.enapso.com/auth#Activities',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/auth#name',
+                    only: 'xsd:string'
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#email',
+                    min: 'xsd:string',
+                    cardinality: 1
+                },
+                {
+                    prop: 'http://ont.enapso.com/auth#hasRole',
+                    exactly: 'http://ont.enapso.com/auth#Role',
+                    cardinality: 1
+                }
+            ]
+        };
         let delArgs = {
             cls: 'http://ont.enapso.com/auth#User',
             restriction: [
