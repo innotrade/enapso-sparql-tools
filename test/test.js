@@ -498,4 +498,310 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
                 done(err);
             });
     });
+    it('it create new class and add restriction', (done) => {
+        //it for making an test case
+        let crateClass = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            parent: 'http://ont.enapso.com/repo#Tenant',
+            label: 'Test Class',
+            comment: 'Test Class',
+            restriction: [
+                {
+                    prop: ' http://ont.enapso.com/repo#name',
+                    value: 'Test'
+                }
+            ]
+        };
+        testconfig.AUTH.createClassAndAddRestriction(crateClass)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it add restriction to exisiting class', (done) => {
+        //it for making an test case
+        let addRestriction = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/repo#prefix',
+                    exactly: 'xsd:string',
+                    cardinality: 1
+                }
+            ]
+        };
+        testconfig.AUTH.addRestrictionToClass(addRestriction)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it update restriction to exisiting class', (done) => {
+        //it for making an test case
+        let updateRestriction = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/repo#prefix',
+                    updateRestriction: {
+                        exactly: 'xsd:string',
+                        cardinality: 1
+                    }
+                }
+            ]
+        };
+        testconfig.AUTH.updateClassRestriction(updateRestriction)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete restriction of a exisiting class', (done) => {
+        //it for making an test case
+        let deleteRestriction = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            restriction: [
+                {
+                    prop: 'http://ont.enapso.com/repo#prefix'
+                }
+            ]
+        };
+        testconfig.AUTH.deleteClassSpecificRestriction(deleteRestriction)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete label of a class', (done) => {
+        //it for making an test case
+        let deleteLabel = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteLabel(deleteLabel)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it add new label to a class', (done) => {
+        //it for making an test case
+        let addLabel = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            label: 'TestClass New Label'
+        };
+        testconfig.AUTH.addLabel(addLabel)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it change label of a class', (done) => {
+        //it for making an test case
+        let changeLabel = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            label: 'TestClass change Label'
+        };
+        testconfig.AUTH.changeLabel(changeLabel)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete comment of a class', (done) => {
+        //it for making an test case
+        let deleteComment = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteComment(deleteComment)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it add new comment to a class', (done) => {
+        //it for making an test case
+        let addComment = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            comment: 'TestClass New Label'
+        };
+        testconfig.AUTH.addComment(addComment)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it change comment of a class', (done) => {
+        //it for making an test case
+        let changeComment = {
+            cls: 'http://ont.enapso.com/repo#TestClass',
+            comment: 'TestClass change Label'
+        };
+        testconfig.AUTH.changeComment(changeComment)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete model of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassModel(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete data of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassData(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete data and model of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassModelAndData(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete Reference model of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassReferenceModel(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete reference data of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassReferenceData(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete reference data and model of a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClassReferenceModelAndData(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it delete a class', (done) => {
+        //it for making an test case
+        let cls = {
+            cls: 'http://ont.enapso.com/repo#TestClass'
+        };
+        testconfig.AUTH.deleteClass(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
 });
