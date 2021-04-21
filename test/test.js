@@ -804,4 +804,54 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
                 done(err);
             });
     });
+    it('it get all classes', (done) => {
+        //it for making an test case
+        let prefix = {
+            prefix: 'http://ont.enapso.com/repo#'
+        };
+        testconfig.AUTH.getClasses(prefix)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                //expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.message);
+                done(err);
+            });
+    });
+    it('it get all subclasses of a parent class', (done) => {
+        //it for making an test case
+        let cls = {
+            parent: 'http://ont.enapso.com/repo#Tenant',
+            prefix: 'http://ont.enapso.com/repo#'
+        };
+        testconfig.AUTH.getAllSubClasses(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it change IRI of a class', (done) => {
+        //it for making an test case
+        let clsDetail = {
+            cls: 'http://ont.enapso.com/repo#Tenant',
+            newIRI: 'http://ont.enapso.com/repo#TenantNew'
+        };
+        testconfig.AUTH.changeClassIRI(clsDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
 });

@@ -110,10 +110,20 @@ const AUTH = {
     },
 
     // retrieve all classes from the graph
-    getAllClasses: async function () {
-        let generated = this.enSPARQL.getAllClasses();
+    getClasses: async function (args) {
+        let generated = this.enSPARQL.getClasses(args);
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
+    },
+    getAllSubClasses: async function (args) {
+        let generated = this.enSPARQL.getAllSubClasses(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    changeClassIRI: async function (args) {
+        let generated = this.enSPARQL.changeClassIRI(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
     },
 
     // retrieve all data and object properties from the graph
@@ -174,6 +184,11 @@ where {
             cls.addProperty(prop);
         }
         return cls;
+    },
+    getAllClasses: async function () {
+        let generated = this.enSPARQL.getAllClasses();
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
     },
     splitIRI(iri, options) {
         let separator = '#';

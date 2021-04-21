@@ -117,12 +117,27 @@ const AUTH = {
     },
 
     // retrieve all classes from the graph
+    getClasses: async function (args) {
+        let generated = this.enSPARQL.getClasses(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     getAllClasses: async function () {
         let generated = this.enSPARQL.getAllClasses();
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
+    getAllSubClasses: async function (args) {
+        let generated = this.enSPARQL.getAllSubClasses(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    changeClassIRI: async function (args) {
+        let generated = this.enSPARQL.changeClassIRI(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
     // retrieve all data and object properties from the graph
     getProperties: async function () {
         return this.query(`
@@ -762,54 +777,70 @@ filter(?s = <${cls.getIRI()}>) .
                 }
             ]
         };
-        await this.createClassAndAddRestriction(args);
-        await this.addRestrictionToClass(Addargs);
-        await this.deleteClassSpecificRestriction(delArgs);
-        await this.updateClassRestriction(updateArgs);
-        await this.deleteLabel({
-            cls: 'http://ont.enapso.com/auth#User'
-        });
-        await this.addLabel({
-            cls: 'http://ont.enapso.com/auth#User',
-            label: 'Activites'
-        });
-        await this.changeLabel({
-            cls: 'http://ont.enapso.com/auth#User',
-            label: 'Change Activites'
-        });
-        await this.deleteComment({
-            cls: 'http://ont.enapso.com/auth#User',
-            comment: 'Activites'
-        });
-        await this.addComment({
-            cls: 'http://ont.enapso.com/auth#User',
-            comment: 'Activites'
-        });
-        await this.changeComment({
-            cls: 'http://ont.enapso.com/auth#User',
-            comment: 'Activites Comment'
-        });
-        await this.deleteClassModel({
-            cls: 'http://ont.enapso.com/auth#User'
-        });
-        await this.deleteClassData({
-            cls: 'http://ont.enapso.com/auth#User'
-        });
-        await this.deleteClassModelAndData({
-            cls: 'http://ont.enapso.com/auth#Role'
-        });
-        await this.deleteClassReferenceModel({
-            cls: 'http://ont.enapso.com/auth#Role'
-        });
-        await this.deleteClassReferenceData({
-            cls: 'http://ont.enapso.com/auth#User'
-        });
-        await this.deleteClassReferenceModelAndData({
-            cls: 'http://ont.enapso.com/auth#Role'
-        });
-        await this.deleteClass({
-            cls: 'http://ont.enapso.com/auth#User'
-        });
+        // await this.createClassAndAddRestriction(args);
+        // await this.addRestrictionToClass(Addargs);
+        // await this.deleteClassSpecificRestriction(delArgs);
+        // await this.updateClassRestriction(updateArgs);
+        // await this.deleteLabel({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // await this.addLabel({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     label: 'Activites'
+        // });
+        // await this.changeLabel({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     label: 'Change'
+        // });
+        // await this.deleteComment({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     comment: 'Activites'
+        // });
+        // await this.addComment({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     comment: 'Activites'
+        // });
+        // await this.changeComment({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     comment: 'Activites Comment'
+        // });
+        // await this.deleteClassModel({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // await this.deleteClassData({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // await this.deleteClassModelAndData({
+        //     cls: 'http://ont.enapso.com/auth#Role'
+        // });
+        // await this.deleteClassReferenceModel({
+        //     cls: 'http://ont.enapso.com/auth#Role'
+        // });
+        // await this.deleteClassReferenceData({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // await this.deleteClassReferenceModelAndData({
+        //     cls: 'http://ont.enapso.com/auth#Role'
+        // });
+        // await this.deleteClass({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // let res = await this.getClasses({
+        //     prefix: 'http://ont.enapso.com/foundation#'
+        // });
+        // let res = await this.getAllSubClasses({
+        //     // prefix: 'http://ont.enapso.com/foundation#',
+        //     parent: 'http://ont.enapso.com/foundation#Attribute'
+        // });
+        // console.log(res);
+        // await this.deleteClass({
+        //     cls: 'http://ont.enapso.com/auth#User'
+        // });
+        // let res = await this.changeClassIRI({
+        //     newIRI: 'http://ont.enapso.com/foundation#AttributeClass',
+        //     cls: 'http://ont.enapso.com/foundation#Attribute'
+        // });
+        // console.log(res);
     }
 };
 
