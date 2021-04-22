@@ -781,29 +781,35 @@ filter(?s = <${cls.getIRI()}>) .
         // await this.addRestrictionToClass(Addargs);
         // await this.deleteClassSpecificRestriction(delArgs);
         // await this.updateClassRestriction(updateArgs);
-        // await this.deleteLabel({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
         // await this.addLabel({
         //     cls: 'http://ont.enapso.com/auth#User',
         //     label: 'Activites'
         // });
+        // await this.deleteLabel({
+        //     cls: 'http://ont.enapso.com/auth#User',  // optioanl to delete specific label
+        //     label: 'User'
+        // });
         // await this.changeLabel({
         //     cls: 'http://ont.enapso.com/auth#User',
-        //     label: 'Change'
-        // });
-        // await this.deleteComment({
-        //     cls: 'http://ont.enapso.com/auth#User',
-        //     comment: 'Activites'
+        //     label: 'Activites',
+        //     oldLabel: 'User',  // optioanl to change specific label
+        //     lang: 'en' //optional if we not specify it by default use en
         // });
         // await this.addComment({
         //     cls: 'http://ont.enapso.com/auth#User',
+        //     comment: 'Activites',
+        //     lang: 'en' //optional if we not specify it by default use en
+        // });
+        // await this.deleteComment({
+        //     cls: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
         //     comment: 'Activites'
         // });
-        // await this.changeComment({
-        //     cls: 'http://ont.enapso.com/auth#User',
-        //     comment: 'Activites Comment'
-        // });
+        await this.changeComment({
+            cls: 'http://ont.enapso.com/auth#User',
+            oldComment: 'A user has more than one role', // optioanl to change specific comment
+            comment: 'Activites Comment',
+            lang: 'en' //optional if we not specify it by default use en
+        });
         // await this.deleteClassModel({
         //     cls: 'http://ont.enapso.com/auth#User'
         // });
