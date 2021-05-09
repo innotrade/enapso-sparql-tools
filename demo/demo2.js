@@ -53,8 +53,16 @@ const AUTH_PREFIXES = [
         iri: 'http://ont.enapso.com/foundation#'
     },
     {
+        prefix: 'xsd',
+        iri: 'http://www.w3.org/2001/XMLSchema#'
+    },
+    {
         prefix: 'enauth',
         iri: 'http://ont.enapso.com/auth#'
+    },
+    {
+        prefix: 'dnp',
+        iri: 'http://ont.enapso.com/dotnetpro#'
     }
 ];
 
@@ -137,6 +145,11 @@ const AUTH = {
         let generated = this.enSPARQL.changeClassIRI(args);
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
+    },
+    getSpecificClassDetail: async function (args) {
+        let generated = this.enSPARQL.getSpecificClassDetail(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
     },
     // retrieve all data and object properties from the graph
     getProperties: async function () {
@@ -427,78 +440,78 @@ filter(?s = <${cls.getIRI()}>) .
     },
     createClassAndAddRestriction(args) {
         let generated = this.enSPARQL.createClassAndAddRestriction(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     addRestrictionToClass(args) {
         let generated = this.enSPARQL.createClassAndAddRestriction(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     addLabel(args) {
         let generated = this.enSPARQL.addLabel(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     changeLabel(args) {
         let generated = this.enSPARQL.changeLabel(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteLabel(args) {
         let generated = this.enSPARQL.deleteLabel(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteComment(args) {
         let generated = this.enSPARQL.deleteComment(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     addComment(args) {
         let generated = this.enSPARQL.addComment(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     changeComment(args) {
         let generated = this.enSPARQL.changeComment(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassReferenceModel(args) {
         let generated = this.enSPARQL.deleteClassReferenceModel(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassReferenceData(args) {
         let generated = this.enSPARQL.deleteClassReferenceData(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassModel(args) {
         let generated = this.enSPARQL.deleteClassModel(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClass(args) {
         let generated = this.enSPARQL.deleteClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassData(args) {
         let generated = this.enSPARQL.deleteClassData(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassModelAndData(args) {
         let generated = this.enSPARQL.deleteClassModelAndData(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassReferenceModelAndData(args) {
         let generated = this.enSPARQL.deleteClassReferenceModelAndData(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deleteClassSpecificRestriction(args) {
@@ -508,21 +521,21 @@ filter(?s = <${cls.getIRI()}>) .
     },
     updateClassRestriction(args) {
         let generated = this.enSPARQL.updateClassRestriction(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     copyLabelToDataPropertyOfEachIndividual(args) {
         let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
             args
         );
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     copyDataPropertyToLabelOfEachIndividual(args) {
         let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
             args
         );
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     // add a relation between two individuals
@@ -741,15 +754,11 @@ filter(?s = <${cls.getIRI()}>) .
             ]
         };
         let delArgs = {
-            cls: 'http://ont.enapso.com/auth#User',
+            cls: 'dnp:Classgnfgrh',
             restriction: [
                 {
-                    prop: 'http://ont.enapso.com/auth#name',
-                    instanceDeletion: true
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#email',
-                    exactly: 'xsd:string',
+                    prop: 'http://ont.enapso.com/foundation#canBeExcluded',
+                    some: 'xsd:string',
                     cardinality: 1
                 }
             ]
@@ -779,10 +788,10 @@ filter(?s = <${cls.getIRI()}>) .
         };
         // await this.createClassAndAddRestriction(args);
         // await this.addRestrictionToClass(Addargs);
-        // await this.deleteClassSpecificRestriction(delArgs);
+        await this.deleteClassSpecificRestriction(delArgs);
         // await this.updateClassRestriction(updateArgs);
         // await this.addLabel({
-        //     cls: 'http://ont.enapso.com/auth#User',
+        //     cls: 'http://ont.enapso.com/foundation#Attribute',
         //     label: 'Activites'
         // });
         // await this.deleteLabel({
@@ -796,7 +805,7 @@ filter(?s = <${cls.getIRI()}>) .
         //     lang: 'en' //optional if we not specify it by default use en
         // });
         // await this.addComment({
-        //     cls: 'http://ont.enapso.com/auth#User',
+        //     cls: 'http://ont.enapso.com/foundation#Attribute',
         //     comment: 'Activites',
         //     lang: 'en' //optional if we not specify it by default use en
         // });
@@ -804,12 +813,12 @@ filter(?s = <${cls.getIRI()}>) .
         //     cls: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
         //     comment: 'Activites'
         // });
-        await this.changeComment({
-            cls: 'http://ont.enapso.com/auth#User',
-            oldComment: 'A user has more than one role', // optioanl to change specific comment
-            comment: 'Activites Comment',
-            lang: 'en' //optional if we not specify it by default use en
-        });
+        // await this.changeComment({
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     oldComment: 'A user has more than one role', // optioanl to change specific comment
+        //     comment: 'Activites Comment',
+        //     lang: 'en' //optional if we not specify it by default use en
+        // });
         // await this.deleteClassModel({
         //     cls: 'http://ont.enapso.com/auth#User'
         // });
@@ -844,6 +853,10 @@ filter(?s = <${cls.getIRI()}>) .
         // });
         // let res = await this.changeClassIRI({
         //     newIRI: 'http://ont.enapso.com/foundation#AttributeClass',
+        //     cls: 'http://ont.enapso.com/foundation#Attribute'
+        // });
+        // console.log(res);
+        // let res = await this.getSpecificClassDetail({
         //     cls: 'http://ont.enapso.com/foundation#Attribute'
         // });
         // console.log(res);
