@@ -276,6 +276,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     cloneIndividual(productClass, productIRI) {
+        console.log(productClass);
         let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
@@ -294,17 +295,15 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     copyLabelToDataPropertyOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     copyDataPropertyToLabelOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
