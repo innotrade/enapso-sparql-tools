@@ -110,10 +110,20 @@ const AUTH = {
     },
 
     // retrieve all classes from the graph
-    getAllClasses: async function () {
-        let generated = this.enSPARQL.getAllClasses();
+    getClasses: async function (args) {
+        let generated = this.enSPARQL.getClasses(args);
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
+    },
+    getAllSubClasses: async function (args) {
+        let generated = this.enSPARQL.getAllSubClasses(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    changeClassIRI: async function (args) {
+        let generated = this.enSPARQL.changeClassIRI(args);
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
     },
 
     // retrieve all data and object properties from the graph
@@ -174,6 +184,11 @@ where {
             cls.addProperty(prop);
         }
         return cls;
+    },
+    getAllClasses: async function () {
+        let generated = this.enSPARQL.getAllClasses();
+        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
     },
     splitIRI(iri, options) {
         let separator = '#';
@@ -261,6 +276,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     cloneIndividual(productClass, productIRI) {
+        console.log(productClass);
         let generated = this.enSPARQL.cloneIndividual(productClass, productIRI);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
@@ -279,17 +295,15 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     copyLabelToDataPropertyOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     copyDataPropertyToLabelOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
@@ -323,6 +337,92 @@ filter(?s = <${cls.getIRI()}>) .
         let resp = await this.graphDBEndpoint.login(user, pass);
         //  console.log('Login :\n' + JSON.stringify(resp, null, 2));
         return resp;
+    },
+    createClassAndAddRestriction(args) {
+        let generated = this.enSPARQL.createClassAndAddRestriction(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    addRestrictionToClass(args) {
+        let generated = this.enSPARQL.createClassAndAddRestriction(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+
+    addLabel(args) {
+        let generated = this.enSPARQL.addLabel(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    changeLabel(args) {
+        let generated = this.enSPARQL.changeLabel(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteLabel(args) {
+        let generated = this.enSPARQL.deleteLabel(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteComment(args) {
+        let generated = this.enSPARQL.deleteComment(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    addComment(args) {
+        let generated = this.enSPARQL.addComment(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    changeComment(args) {
+        let generated = this.enSPARQL.changeComment(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceModel(args) {
+        let generated = this.enSPARQL.deleteClassReferenceModel(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceData(args) {
+        let generated = this.enSPARQL.deleteClassReferenceData(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassModel(args) {
+        let generated = this.enSPARQL.deleteClassModel(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClass(args) {
+        let generated = this.enSPARQL.deleteClass(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassData(args) {
+        let generated = this.enSPARQL.deleteClassData(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassModelAndData(args) {
+        let generated = this.enSPARQL.deleteClassModelAndData(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassReferenceModelAndData(args) {
+        let generated = this.enSPARQL.deleteClassReferenceModelAndData(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteClassSpecificRestriction(args) {
+        let generated = this.enSPARQL.deleteClassSpecificRestriction(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    updateClassRestriction(args) {
+        let generated = this.enSPARQL.updateClassRestriction(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
     },
     demo: async function () {
         // instantiate a prefix manager
