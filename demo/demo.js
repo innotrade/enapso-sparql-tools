@@ -6,7 +6,7 @@ require('@innotrade/enapso-config');
 
 // requires the Enapso GraphDB Client package
 const { EnapsoGraphDBClient } = requireEx('@innotrade/enapso-graphdb-client'),
-    { EnapsoLogger } = require('@innotrade/enapso-logger'),
+    { EnapsoLogger } = requireEx('@innotrade/enapso-logger'),
     { EnapsoGraphDBAdmin } = requireEx('@innotrade/enapso-graphdb-admin');
 
 global.enlogger = new EnapsoLogger();
@@ -282,17 +282,15 @@ filter(?s = <${cls.getIRI()}>) .
     },
 
     copyLabelToDataPropertyOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyLabelToDataPropertyOfEachIndividual(args);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     copyDataPropertyToLabelOfEachIndividual(args) {
-        let generated = this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(
-            args
-        );
+        let generated =
+            this.enSPARQL.copyDataPropertyToLabelOfEachIndividual(args);
         //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
@@ -480,8 +478,7 @@ filter(?s = <${cls.getIRI()}>) .
         let filter = [
             {
                 key: '$sparql',
-                value:
-                    'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
+                value: 'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
             }
         ];
         let cls = 'http://ont.enapso.com/foundation#Resource';
@@ -546,8 +543,7 @@ filter(?s = <${cls.getIRI()}>) .
                                     'http://ont.enapso.com/foundation#hasEvent'
                             },
                             {
-                                cls:
-                                    'http://ont.enapso.com/foundation#Argument',
+                                cls: 'http://ont.enapso.com/foundation#Argument',
                                 parent2ChildRelation:
                                     'http://ont.enapso.com/foundation#hasArgument'
                             }
