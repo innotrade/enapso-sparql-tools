@@ -8,7 +8,8 @@ const { ClassCache } = require('./lib/classCache'),
     { Class } = require('./lib/classes'),
     { Generator } = require('./lib/generator'),
     { Property } = require('./lib/properties'),
-    { Prefix, PrefixManager } = require('./lib/prefixManager');
+    { Prefix, PrefixManager } = require('./lib/prefixManager'),
+    { SparqlBeautifier } = require('./lib/sparqlBeautifier');
 
 const ensptools = {
     ClassCache,
@@ -17,7 +18,8 @@ const ensptools = {
     Generator,
     Property,
     Prefix,
-    PrefixManager
+    PrefixManager,
+    SparqlBeautifier
 };
 
 module.exports = {
@@ -28,5 +30,6 @@ module.exports = {
     Generator,
     Property,
     Prefix,
-    PrefixManager
+    PrefixManager,
+    SparqlBeautifier
 };

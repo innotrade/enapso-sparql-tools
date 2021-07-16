@@ -22,5 +22,11 @@
             "name": "Demo",
             "program": "${workspaceFolder}/demo/demo.js"
         }
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Beautify Demo",
+            "program": "${workspaceFolder}/demo/beautifierDemo.js"
+        }
     ]
 }
