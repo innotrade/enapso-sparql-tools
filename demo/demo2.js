@@ -63,6 +63,10 @@ const AUTH_PREFIXES = [
     {
         prefix: 'dnp',
         iri: 'http://ont.enapso.com/dotnetpro#'
+    },
+    {
+        prefix: 'ensr',
+        iri: 'http://ont.enapso.com/rdfstar#'
     }
 ];
 
@@ -143,7 +147,7 @@ const AUTH = {
     },
     changeClassIRI: async function (args) {
         let generated = this.enSPARQL.changeClassIRI(args);
-        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     getSpecificClassDetail: async function (args) {
@@ -164,26 +168,26 @@ where {
     },
 
     // retrieve all data properties from the graph
-    getDataProperties: async function () {
-        return this.query(`
-select *
-where {
-	?prop a owl:DatatypeProperty .
-	optional { ?prop rdfs:domain ?domain } .
-	optional { ?prop rdfs:range ?range } .
-}`);
-    },
+    //     getDataProperties: async function () {
+    //         return this.query(`
+    // select *
+    // where {
+    // 	?prop a owl:DatatypeProperty .
+    // 	optional { ?prop rdfs:domain ?domain } .
+    // 	optional { ?prop rdfs:range ?range } .
+    // }`);
+    //     },
 
     // retrieve all object properties from the graph
-    getObjectProperties: async function () {
-        return this.query(`
-select *
-where {
-	?prop a owl:ObjectProperty .
-	optional { ?prop rdfs:domain ?domain } .
-	optional { ?prop rdfs:range ?range } .
-}`);
-    },
+    //     getObjectProperties: async function () {
+    //         return this.query(`
+    // select *
+    // where {
+    // 	?prop a owl:ObjectProperty .
+    // 	optional { ?prop rdfs:domain ?domain } .
+    // 	optional { ?prop rdfs:range ?range } .
+    // }`);
+    //     },
 
     // retrieve all properties from a given class
     getClassProperties: async function (cls) {
@@ -687,7 +691,41 @@ filter(?s = <${cls.getIRI()}>) .
         //  console.log('Login :\n' + JSON.stringify(resp, null, 2));
         return resp;
     },
-
+    createProperty(args) {
+        let generated = this.enSPARQL.createProperty(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteProperty(args) {
+        let generated = this.enSPARQL.deleteProperty(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deletePropertyFromIndividuals(args) {
+        let generated = this.enSPARQL.deletePropertyFromIndividuals(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deletePropertyFromClassRestrictions(args) {
+        let generated = this.enSPARQL.deletePropertyFromClassRestrictions(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    getObjectProperties(args) {
+        let generated = this.enSPARQL.getObjectProperties(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    changePropertyIRI(args) {
+        let generated = this.enSPARQL.changePropertyIRI(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    getDataProperties(args) {
+        let generated = this.enSPARQL.getDataProperties(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);
@@ -786,33 +824,33 @@ filter(?s = <${cls.getIRI()}>) .
         };
         // await this.createClassAndAddRestriction(args);
         // await this.addRestrictionToClass(Addargs);
-        await this.deleteClassSpecificRestriction(delArgs);
+        //  await this.deleteClassSpecificRestriction(delArgs);
         // await this.updateClassRestriction(updateArgs);
         // await this.addLabel({
-        //     cls: 'http://ont.enapso.com/foundation#Attribute',
+        //     name: 'http://ont.enapso.com/foundation#Attribute',
         //     label: 'Activites'
         // });
         // await this.deleteLabel({
-        //     cls: 'http://ont.enapso.com/auth#User',  // optioanl to delete specific label
+        //     name: 'http://ont.enapso.com/auth#User',  // optioanl to delete specific label
         //     label: 'User'
         // });
         // await this.changeLabel({
-        //     cls: 'http://ont.enapso.com/auth#User',
+        //     name: 'http://ont.enapso.com/auth#User',
         //     label: 'Activites',
         //     oldLabel: 'User',  // optioanl to change specific label
         //     lang: 'en' //optional if we not specify it by default use en
         // });
         // await this.addComment({
-        //     cls: 'http://ont.enapso.com/foundation#Attribute',
+        //     name: 'http://ont.enapso.com/foundation#Attribute',
         //     comment: 'Activites',
         //     lang: 'en' //optional if we not specify it by default use en
         // });
         // await this.deleteComment({
-        //     cls: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
+        //     name: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
         //     comment: 'Activites'
         // });
         // await this.changeComment({
-        //     cls: 'http://ont.enapso.com/auth#User',
+        //     name: 'http://ont.enapso.com/auth#User',
         //     oldComment: 'A user has more than one role', // optioanl to change specific comment
         //     comment: 'Activites Comment',
         //     lang: 'en' //optional if we not specify it by default use en
@@ -849,15 +887,37 @@ filter(?s = <${cls.getIRI()}>) .
         // await this.deleteClass({
         //     cls: 'http://ont.enapso.com/auth#User'
         // });
-        // let res = await this.changeClassIRI({
-        //     newIRI: 'http://ont.enapso.com/foundation#AttributeClass',
-        //     cls: 'http://ont.enapso.com/foundation#Attribute'
-        // });
+        let res = await this.changeClassIRI({
+            newIRI: 'http://ont.enapso.com/rdfstar#newCompany',
+            cls: 'http://ont.enapso.com/rdfstar#Company'
+        });
         // console.log(res);
         // let res = await this.getSpecificClassDetail({
         //     cls: 'http://ont.enapso.com/foundation#Attribute'
         // });
         // console.log(res);
+        let propArgs = {
+            prop: 'http://ont.enapso.com/rdfstar#surName',
+            parent: 'http://ont.enapso.com/rdfstar#name',
+            label: 'Sur Name',
+            comment: 'Family name of a person',
+            propertyType: 'DataProperty' //ObjectProperty for object property
+        };
+        // await this.createProperty(propArgs);
+        let delPropArgs = {
+            prop: 'http://ont.enapso.com/rdfstar#hasEmplyoeeBy'
+        };
+        // await this.deleteProperty(delPropArgs);
+        await this.deletePropertyFromIndividuals(delPropArgs);
+        await this.deletePropertyFromClassRestrictions(delPropArgs);
+        // let res = await this.getObjectProperties();
+        // console.log(res);
+        // let res = await this.getDataProperties();
+        // console.log(res);
+        // await this.changePropertyIRI({
+        //     prop: 'http://ont.enapso.com/rdfstar#name',
+        //     newIRI: 'http://ont.enapso.com/rdfstar#newName'
+        // });
     }
 };
 
