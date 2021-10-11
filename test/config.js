@@ -424,6 +424,41 @@ filter(?s = <${cls.getIRI()}>) .
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+    createProperty(args) {
+        let generated = this.enSPARQL.createProperty(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deleteProperty(args) {
+        let generated = this.enSPARQL.deleteProperty(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deletePropertyFromIndividuals(args) {
+        let generated = this.enSPARQL.deletePropertyFromIndividuals(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    deletePropertyFromClassRestrictions(args) {
+        let generated = this.enSPARQL.deletePropertyFromClassRestrictions(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    getObjectProperties(args) {
+        let generated = this.enSPARQL.getObjectProperties(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    changePropertyIRI(args) {
+        let generated = this.enSPARQL.changePropertyIRI(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    getDataProperties(args) {
+        let generated = this.enSPARQL.getDataProperties(args);
+        //enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);

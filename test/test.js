@@ -324,20 +324,17 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
                             'http://ont.enapso.com/repo#hasEnvironment',
                         joins: [
                             {
-                                cls:
-                                    'http://ont.enapso.com/repo#DatabaseInstance',
+                                cls: 'http://ont.enapso.com/repo#DatabaseInstance',
                                 child2ParentRelation:
                                     'http://ont.enapso.com/repo#hasHost',
                                 joins: [
                                     {
-                                        cls:
-                                            'http://ont.enapso.com/repo#Repository',
+                                        cls: 'http://ont.enapso.com/repo#Repository',
                                         child2ParentRelation:
                                             'http://ont.enapso.com/repo#hasDatabaseInstance',
                                         joins: [
                                             {
-                                                cls:
-                                                    'http://ont.enapso.com/repo#Graph',
+                                                cls: 'http://ont.enapso.com/repo#Graph',
                                                 child2ParentRelation:
                                                     'http://ont.enapso.com/repo#hasRepository'
                                             }
@@ -595,7 +592,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it delete label of a class', (done) => {
         //it for making an test case
         let deleteLabel = {
-            cls: 'http://ont.enapso.com/repo#TestClass'
+            name: 'http://ont.enapso.com/repo#TestClass'
         };
         testconfig.AUTH.deleteLabel(deleteLabel)
             .then((result) => {
@@ -611,7 +608,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it add new label to a class', (done) => {
         //it for making an test case
         let addLabel = {
-            cls: 'http://ont.enapso.com/repo#TestClass',
+            name: 'http://ont.enapso.com/repo#TestClass',
             label: 'TestClass New Label'
         };
         testconfig.AUTH.addLabel(addLabel)
@@ -628,7 +625,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it change label of a class', (done) => {
         //it for making an test case
         let changeLabel = {
-            cls: 'http://ont.enapso.com/repo#TestClass',
+            name: 'http://ont.enapso.com/repo#TestClass',
             label: 'TestClass change Label'
         };
         testconfig.AUTH.changeLabel(changeLabel)
@@ -645,7 +642,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it delete comment of a class', (done) => {
         //it for making an test case
         let deleteComment = {
-            cls: 'http://ont.enapso.com/repo#TestClass'
+            name: 'http://ont.enapso.com/repo#TestClass'
         };
         testconfig.AUTH.deleteComment(deleteComment)
             .then((result) => {
@@ -661,7 +658,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it add new comment to a class', (done) => {
         //it for making an test case
         let addComment = {
-            cls: 'http://ont.enapso.com/repo#TestClass',
+            name: 'http://ont.enapso.com/repo#TestClass',
             comment: 'TestClass New Label'
         };
         testconfig.AUTH.addComment(addComment)
@@ -678,7 +675,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it change comment of a class', (done) => {
         //it for making an test case
         let changeComment = {
-            cls: 'http://ont.enapso.com/repo#TestClass',
+            name: 'http://ont.enapso.com/repo#TestClass',
             comment: 'TestClass change Label'
         };
         testconfig.AUTH.changeComment(changeComment)
@@ -844,6 +841,115 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             newIRI: 'http://ont.enapso.com/repo#TenantNew'
         };
         testconfig.AUTH.changeClassIRI(clsDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it create new Property', (done) => {
+        //it for making an test case
+        let propDetail = {
+            prop: 'http://ont.enapso.com/repo#surName',
+            parent: 'http://ont.enapso.com/repo#name',
+            label: 'Sur Name',
+            comment: 'Family name of a person',
+            propertyType: 'DataProperty' //ObjectProperty for object property
+        };
+        testconfig.AUTH.createProperty(propDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it get all data Property', (done) => {
+        testconfig.AUTH.getDataProperties()
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it get all object Property', (done) => {
+        testconfig.AUTH.getObjectProperties()
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it update existing Property', (done) => {
+        //it for making an test case
+        let propDetail = {
+            prop: 'http://ont.enapso.com/repo#surName',
+            newIRI: 'http://ont.enapso.com/repo#familyName'
+        };
+        testconfig.AUTH.changePropertyIRI(propDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it delete Property from restriction', (done) => {
+        //it for making an test case
+        let propDetail = {
+            prop: 'http://ont.enapso.com/repo#familyName'
+        };
+        testconfig.AUTH.deletePropertyFromClassRestrictions(propDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it delete Property from individuals', (done) => {
+        //it for making an test case
+        let propDetail = {
+            prop: 'http://ont.enapso.com/repo#familyName'
+        };
+        testconfig.AUTH.deletePropertyFromIndividuals(propDetail)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it delete Property', (done) => {
+        //it for making an test case
+        let propDetail = {
+            prop: 'http://ont.enapso.com/repo#familyName'
+        };
+        testconfig.AUTH.deleteProperty(propDetail)
             .then((result) => {
                 console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
