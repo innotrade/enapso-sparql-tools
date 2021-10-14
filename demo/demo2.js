@@ -67,6 +67,14 @@ const AUTH_PREFIXES = [
     {
         prefix: 'ensr',
         iri: 'http://ont.enapso.com/rdfstar#'
+    },
+    {
+        prefix: 'mmm',
+        iri: 'urn:bamm:io.openmanufacturing:meta-meta-model:2.0.0#'
+    },
+    {
+        prefix: 'bamm',
+        iri: 'urn:bamm:io.openmanufacturing:characteristic:2.0.0#'
     }
 ];
 
@@ -192,7 +200,7 @@ where {
     // retrieve all properties from a given class
     getClassProperties: async function (cls) {
         let generated = this.enSPARQL.getClassProperties(cls);
-        //  enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -444,7 +452,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
     createClassAndAddRestriction(args) {
         let generated = this.enSPARQL.createClassAndAddRestriction(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     addRestrictionToClass(args) {
@@ -721,6 +729,16 @@ filter(?s = <${cls.getIRI()}>) .
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
+    bampRDFToOWL(args) {
+        let generated = this.enSPARQL.bampRDFToOWL(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
+    bampOWLToRDF(args) {
+        let generated = this.enSPARQL.bampOWLToRDF(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.update(generated.sparql);
+    },
     getDataProperties(args) {
         let generated = this.enSPARQL.getDataProperties(args);
         enlogger.log('SPARQL:\n' + generated.sparql);
@@ -736,7 +754,8 @@ filter(?s = <${cls.getIRI()}>) .
         this.enPrefixManager.setDefaultPrefix(PREFIX_AUTH);
         // create a SPARQL generator using the prefix manager
         this.enSPARQL = new EnapsoSPARQLTools.Generator({
-            prefixManager: this.enPrefixManager
+            prefixManager: this.enPrefixManager,
+            GraphDB_URL_Repo: `${GRAPHDB_BASE_URL}/repositories/${GRAPHDB_REPOSITORY}`
         });
 
         // instantiate a GraphDB connector and connect to GraphDB
@@ -748,176 +767,190 @@ filter(?s = <${cls.getIRI()}>) .
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         this.classCache = await this.buildClassCache();
 
-        let args = {
-            cls: 'http://ont.enapso.com/auth#Activities',
-            parent: 'http://ont.enapso.com/auth#Activity',
-            label: 'Activities CXlas',
-            comment: 'Activities Class Comment',
-            restriction: [
-                {
-                    prop: 'http://ont.enapso.com/auth#name',
-                    only: 'xsd:string'
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#email',
-                    min: 'xsd:string',
-                    cardinality: 1
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#hasRole',
-                    exactly: 'http://ont.enapso.com/auth#Role',
-                    cardinality: 1
-                }
-            ]
-        };
-        let Addargs = {
-            cls: 'http://ont.enapso.com/auth#Activities',
-            restriction: [
-                {
-                    prop: 'http://ont.enapso.com/auth#name',
-                    only: 'xsd:string'
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#email',
-                    min: 'xsd:string',
-                    cardinality: 1
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#hasRole',
-                    exactly: 'http://ont.enapso.com/auth#Role',
-                    cardinality: 1
-                }
-            ]
-        };
-        let delArgs = {
-            cls: 'dnp:Classgnfgrh',
-            restriction: [
-                {
-                    prop: 'http://ont.enapso.com/foundation#canBeExcluded',
-                    some: 'xsd:string',
-                    cardinality: 1
-                }
-            ]
-        };
-        let updateArgs = {
-            cls: 'http://ont.enapso.com/auth#User',
-            restriction: [
-                {
-                    prop: 'http://ont.enapso.com/auth#name',
-                    previousRestriction: {
-                        exactly: 'xsd:string',
-                        cardinality: 1
-                    },
-                    updateRestriction: {
-                        max: 'xsd:string',
-                        cardinality: 2
-                    }
-                },
-                {
-                    prop: 'http://ont.enapso.com/auth#email',
-                    updateRestriction: {
-                        min: 'xsd:string',
-                        cardinality: 1
-                    }
-                }
-            ]
-        };
+        // let args = {
+        //     cls: 'http://ont.enapso.com/auth#Activities',
+        //     parent: 'http://ont.enapso.com/auth#Activity',
+        //     label: 'Activities CXlas',
+        //     comment: 'Activities Class Comment',
+        //     restriction: [
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#name',
+        //             only: 'yasir'
+        //         },
+        //         // {
+        //         //     prop: 'http://ont.enapso.com/auth#email',
+        //         //     min: 'xsd:string',
+        //         //     cardinality: 1
+        //         // },
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#hasRole',
+        //             exactly: 'http://ont.enapso.com/auth#Role',
+        //             cardinality: 1
+        //         }
+        //     ]
+        // };
+        // let Addargs = {
+        //     cls: 'http://ont.enapso.com/auth#Activities',
+        //     restriction: [
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#name',
+        //             only: 'xsd:string'
+        //         },
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#email',
+        //             min: 'xsd:string',
+        //             cardinality: 1
+        //         },
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#hasRole',
+        //             exactly: 'http://ont.enapso.com/auth#Role',
+        //             cardinality: 1
+        //         }
+        //     ]
+        // };
+        // let delArgs = {
+        //     cls: 'dnp:Classgnfgrh',
+        //     restriction: [
+        //         {
+        //             prop: 'http://ont.enapso.com/foundation#canBeExcluded',
+        //             some: 'xsd:string',
+        //             cardinality: 1
+        //         }
+        //     ]
+        // };
+        // let updateArgs = {
+        //     cls: 'http://ont.enapso.com/auth#User',
+        //     restriction: [
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#name',
+        //             previousRestriction: {
+        //                 exactly: 'xsd:string',
+        //                 cardinality: 1
+        //             },
+        //             updateRestriction: {
+        //                 max: 'xsd:string',
+        //                 cardinality: 2
+        //             }
+        //         },
+        //         {
+        //             prop: 'http://ont.enapso.com/auth#email',
+        //             updateRestriction: {
+        //                 min: 'xsd:string',
+        //                 cardinality: 1
+        //             }
+        //         }
+        //     ]
+        // };
         // await this.createClassAndAddRestriction(args);
-        // await this.addRestrictionToClass(Addargs);
-        //  await this.deleteClassSpecificRestriction(delArgs);
-        // await this.updateClassRestriction(updateArgs);
-        // await this.addLabel({
-        //     name: 'http://ont.enapso.com/foundation#Attribute',
-        //     label: 'Activites'
-        // });
-        // await this.deleteLabel({
-        //     name: 'http://ont.enapso.com/auth#User',  // optioanl to delete specific label
-        //     label: 'User'
-        // });
-        // await this.changeLabel({
-        //     name: 'http://ont.enapso.com/auth#User',
-        //     label: 'Activites',
-        //     oldLabel: 'User',  // optioanl to change specific label
-        //     lang: 'en' //optional if we not specify it by default use en
-        // });
-        // await this.addComment({
-        //     name: 'http://ont.enapso.com/foundation#Attribute',
-        //     comment: 'Activites',
-        //     lang: 'en' //optional if we not specify it by default use en
-        // });
-        // await this.deleteComment({
-        //     name: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
-        //     comment: 'Activites'
-        // });
-        // await this.changeComment({
-        //     name: 'http://ont.enapso.com/auth#User',
-        //     oldComment: 'A user has more than one role', // optioanl to change specific comment
-        //     comment: 'Activites Comment',
-        //     lang: 'en' //optional if we not specify it by default use en
-        // });
-        // await this.deleteClassModel({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
-        // await this.deleteClassData({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
-        // await this.deleteClassModelAndData({
-        //     cls: 'http://ont.enapso.com/auth#Role'
-        // });
-        // await this.deleteClassReferenceModel({
-        //     cls: 'http://ont.enapso.com/auth#Role'
-        // });
-        // await this.deleteClassReferenceData({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
-        // await this.deleteClassReferenceModelAndData({
-        //     cls: 'http://ont.enapso.com/auth#Role'
-        // });
-        // await this.deleteClass({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
-        // let res = await this.getClasses({
-        //     prefix: 'http://ont.enapso.com/foundation#'
-        // });
-        // let res = await this.getAllSubClasses({
-        //     // prefix: 'http://ont.enapso.com/foundation#',
-        //     parent: 'http://ont.enapso.com/foundation#Attribute'
-        // });
-        // console.log(res);
-        // await this.deleteClass({
-        //     cls: 'http://ont.enapso.com/auth#User'
-        // });
-        let res = await this.changeClassIRI({
-            newIRI: 'http://ont.enapso.com/rdfstar#newCompany',
-            cls: 'http://ont.enapso.com/rdfstar#Company'
-        });
-        // console.log(res);
-        // let res = await this.getSpecificClassDetail({
-        //     cls: 'http://ont.enapso.com/foundation#Attribute'
-        // });
-        // console.log(res);
-        let propArgs = {
-            prop: 'http://ont.enapso.com/rdfstar#surName',
-            parent: 'http://ont.enapso.com/rdfstar#name',
-            label: 'Sur Name',
-            comment: 'Family name of a person',
-            propertyType: 'DataProperty' //ObjectProperty for object property
-        };
-        // await this.createProperty(propArgs);
-        let delPropArgs = {
-            prop: 'http://ont.enapso.com/rdfstar#hasEmplyoeeBy'
-        };
-        // await this.deleteProperty(delPropArgs);
-        await this.deletePropertyFromIndividuals(delPropArgs);
-        await this.deletePropertyFromClassRestrictions(delPropArgs);
-        // let res = await this.getObjectProperties();
-        // console.log(res);
-        // let res = await this.getDataProperties();
-        // console.log(res);
-        // await this.changePropertyIRI({
-        //     prop: 'http://ont.enapso.com/rdfstar#name',
-        //     newIRI: 'http://ont.enapso.com/rdfstar#newName'
-        // });
+        // // await this.addRestrictionToClass(Addargs);
+        // //  await this.deleteClassSpecificRestriction(delArgs);
+        // // await this.updateClassRestriction(updateArgs);
+        // // await this.addLabel({
+        // //     name: 'http://ont.enapso.com/foundation#Attribute',
+        // //     label: 'Activites'
+        // // });
+        // // await this.deleteLabel({
+        // //     name: 'http://ont.enapso.com/auth#User',  // optioanl to delete specific label
+        // //     label: 'User'
+        // // });
+        // // await this.changeLabel({
+        // //     name: 'http://ont.enapso.com/auth#User',
+        // //     label: 'Activites',
+        // //     oldLabel: 'User',  // optioanl to change specific label
+        // //     lang: 'en' //optional if we not specify it by default use en
+        // // });
+        // // await this.addComment({
+        // //     name: 'http://ont.enapso.com/foundation#Attribute',
+        // //     comment: 'Activites',
+        // //     lang: 'en' //optional if we not specify it by default use en
+        // // });
+        // // await this.deleteComment({
+        // //     name: 'http://ont.enapso.com/auth#User',// optioanl to delete specific comment
+        // //     comment: 'Activites'
+        // // });
+        // // await this.changeComment({
+        // //     name: 'http://ont.enapso.com/auth#User',
+        // //     oldComment: 'A user has more than one role', // optioanl to change specific comment
+        // //     comment: 'Activites Comment',
+        // //     lang: 'en' //optional if we not specify it by default use en
+        // // });
+        // // await this.deleteClassModel({
+        // //     cls: 'http://ont.enapso.com/auth#User'
+        // // });
+        // // await this.deleteClassData({
+        // //     cls: 'http://ont.enapso.com/auth#User'
+        // // });
+        // // await this.deleteClassModelAndData({
+        // //     cls: 'http://ont.enapso.com/auth#Role'
+        // // });
+        // // await this.deleteClassReferenceModel({
+        // //     cls: 'http://ont.enapso.com/auth#Role'
+        // // });
+        // // await this.deleteClassReferenceData({
+        // //     cls: 'http://ont.enapso.com/auth#User'
+        // // });
+        // // await this.deleteClassReferenceModelAndData({
+        // //     cls: 'http://ont.enapso.com/auth#Role'
+        // // });
+        // // await this.deleteClass({
+        // //     cls: 'http://ont.enapso.com/auth#User'
+        // // });
+        // // let res = await this.getClasses({
+        // //     prefix: 'http://ont.enapso.com/foundation#'
+        // // });
+        // // let res = await this.getAllSubClasses({
+        // //     // prefix: 'http://ont.enapso.com/foundation#',
+        // //     parent: 'http://ont.enapso.com/foundation#Attribute'
+        // // });
+        // // console.log(res);
+        // // await this.deleteClass({
+        // //     cls: 'http://ont.enapso.com/auth#User'
+        // // });
+        // // let res = await this.changeClassIRI({
+        // //     newIRI: 'http://ont.enapso.com/rdfstar#newCompany',
+        // //     cls: 'http://ont.enapso.com/rdfstar#Company'
+        // // });
+        // // // console.log(res);
+        // // // let res = await this.getSpecificClassDetail({
+        // // //     cls: 'http://ont.enapso.com/foundation#Attribute'
+        // // // });
+        // // // console.log(res);
+        // // let propArgs = {
+        // //     prop: 'http://ont.enapso.com/rdfstar#surName',
+        // //     parent: 'http://ont.enapso.com/rdfstar#name',
+        // //     label: 'Sur Name',
+        // //     comment: 'Family name of a person',
+        // //     propertyType: 'DataProperty' //ObjectProperty for object property
+        // // };
+        // // // await this.createProperty(propArgs);
+        // // let delPropArgs = {
+        // //     prop: 'http://ont.enapso.com/rdfstar#hasEmplyoeeBy'
+        // // };
+        // // // await this.deleteProperty(delPropArgs);
+        // // await this.deletePropertyFromIndividuals(delPropArgs);
+        // // await this.deletePropertyFromClassRestrictions(delPropArgs);
+        // // let res = await this.getObjectProperties();
+        // // console.log(res);
+        // // let res = await this.getDataProperties();
+        // // console.log(res);
+        // // await this.changePropertyIRI({
+        // //     prop: 'http://ont.enapso.com/rdfstar#name',
+        // //     newIRI: 'http://ont.enapso.com/rdfstar#newName'
+        // // });
+        // let RDFargs = {
+        //     sourceGraph: 'urn:bamm:io.openmanufacturing:meta-meta-model:2.0.0',
+        //     destinationGraph:
+        //         'urn:bamm:io.openmanufacturing:meta-meta-model:3.0.0',
+        //     sourceReposiotry: 'http://localhost:7200/repositories/RDF'
+        // };
+        // await this.bampRDFToOWL(RDFargs);
+        // let RDFargs = {
+        //     sourceGraph: 'urn:bamm:io.openmanufacturing:meta-meta-model:3.0.0',
+        //     destinationGraph:
+        //         'urn:bamm:io.openmanufacturing:meta-meta-model:4.0.0',
+        //     sourceReposiotry: 'http://localhost:7200/repositories/Test'
+        // };
+        // await this.bampOWLToRDF(RDFargs);
     }
 };
 
