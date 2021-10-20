@@ -166,7 +166,11 @@ where {
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
-
+    getClassPropertiesByDomain: async function (cls) {
+        let generated = this.enSPARQL.getClassPropertiesByDomain(cls);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     // generates an in-memory class from a SPARQL result set
     generateClassFromClassProperties: function (ns, name, classProps) {
         let cls = new EnapsoSPARQLTools.Class(ns, name);

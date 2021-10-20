@@ -46,6 +46,10 @@ const AUTH_PREFIXES = [
     {
         prefix: PREFIX_AUTH,
         iri: NS_AUTH
+    },
+    {
+        prefix: 'ensr',
+        iri: 'http://ont.enapso.com/rdfstar#'
     }
 ];
 
@@ -155,7 +159,18 @@ where {
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
-
+    // retrieve all properties from a given class
+    getClassPropertiesByDomain: async function (cls) {
+        let generated = this.enSPARQL.getClassPropertiesByDomain(cls);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    getClassPropertiesByDomainAndRestrictions: async function (cls) {
+        let generated =
+            this.enSPARQL.getClassPropertiesByDomainAndRestrictions(cls);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     // generates an in-memory class from a SPARQL result set
     generateClassFromClassProperties: function (ns, name, classProps) {
         let cls = new EnapsoSPARQLTools.Class(ns, name);
@@ -342,218 +357,226 @@ filter(?s = <${cls.getIRI()}>) .
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
-        let resp = await this.graphDBEndpoint.uploadFromFile({
-            filename: 'EnapsoFoundation.owl',
-            format: 'application/rdf+xml',
-            baseIRI: 'http://ont.enapso.com/foundation#',
-            context: 'http://ont.enapso.com/enf'
-        });
-        console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
+        // let resp = await this.graphDBEndpoint.uploadFromFile({
+        //     filename: 'EnapsoFoundation.owl',
+        //     format: 'application/rdf+xml',
+        //     baseIRI: 'http://ont.enapso.com/foundation#',
+        //     context: 'http://ont.enapso.com/enf'
+        // });
+        // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
-        this.classCache = await this.buildClassCache();
-        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-        let ind1 = {
-            iri: NS_AUTH + '00a5e37f_3452_4b48',
-            name: 'Test Company',
-            hash: 'Tqwerhvh',
-            rights: 'rwx',
-            code: 'function(option){console.log(option)}',
-            user: 'jnhgtresss',
-            hasCapabilities:
-                'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-            hasAttributes:
-                'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-            hasBehavior:
-                'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
-        };
-        this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
-        let res = await this.createIndividualByClass({
-            cls: this.Resource,
-            ind: ind1
-        });
-        console.log('create a individual', res);
+        // this.classCache = await this.buildClassCache();
+        // this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        // let ind1 = {
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48',
+        //     name: 'Test Company',
+        //     hash: 'Tqwerhvh',
+        //     rights: 'rwx',
+        //     code: 'function(option){console.log(option)}',
+        //     user: 'jnhgtresss',
+        //     hasCapabilities:
+        //         'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+        //     hasAttributes:
+        //         'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+        //     hasBehavior:
+        //         'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
+        // };
+        // this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        // let res = await this.createIndividualByClass({
+        //     cls: this.Resource,
+        //     ind: ind1
+        // });
+        // console.log('create a individual', res);
 
-        let iri = NS_AUTH + '00a5e37f_3452_4b48';
-        let ind = {
-            name: 'Updated Test Company',
-            hash: 'Tqwerhvh',
-            rights: 'rwx',
-            code: 'function(option){console.log(option)}',
-            user: 'jnhgtresss',
-            hasCapabilities:
-                'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-            hasAttributes:
-                'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-            hasBehavior:
-                'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
-        };
-        let res1 = await this.updateIndividualByClass({
-            cls: this.Resource,
-            iri: iri,
-            ind: ind
-        });
-        console.log('update created individual', res1);
-        let joins = [
-            {
-                cls: this.classCache.getClassByIRI(
-                    'http://ont.enapso.com/foundation#Capability'
-                ),
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasCapabilities',
-                joins: [
-                    {
-                        cls: this.classCache.getClassByIRI(
-                            'http://ont.enapso.com/foundation#Argument'
-                        ),
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasArgument'
-                    }
-                ]
-            },
-            {
-                cls: this.classCache.getClassByIRI(
-                    'http://ont.enapso.com/foundation#Attribute'
-                ),
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasAttributes',
-                joins: [
-                    {
-                        cls: this.classCache.getClassByIRI(
-                            'http://ont.enapso.com/foundation#Argument'
-                        ),
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasArgument'
-                    }
-                ]
-            },
-            {
-                cls: this.classCache.getClassByIRI(
-                    'http://ont.enapso.com/foundation#Behavior'
-                ),
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasBehavior',
-                joins: [
-                    {
-                        cls: this.classCache.getClassByIRI(
-                            'http://ont.enapso.com/foundation#EventEmitter'
-                        ),
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasEventEmitter',
-                        joins: [
-                            {
-                                cls: this.classCache.getClassByIRI(
-                                    'http://ont.enapso.com/foundation#Event'
-                                ),
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasEvent'
-                            }
-                        ]
-                    },
-                    {
-                        cls: this.classCache.getClassByIRI(
-                            'http://ont.enapso.com/foundation#EventListener'
-                        ),
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasEventListener',
-                        joins: [
-                            {
-                                cls: this.classCache.getClassByIRI(
-                                    'http://ont.enapso.com/foundation#Event'
-                                ),
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasEvent'
-                            },
-                            {
-                                cls: this.classCache.getClassByIRI(
-                                    'http://ont.enapso.com/foundation#Argument'
-                                ),
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasArgument'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-        let filter = [
-            {
-                key: '$sparql',
-                value: 'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
-            }
-        ];
-        let cls = 'http://ont.enapso.com/foundation#Resource';
-        cls = this.classCache.getClassByIRI(cls);
-        let res2 = await this.showAllIndividuals({
-            cls: cls,
-            joins: joins
-            //    filter: filter
-        });
-        console.log('read individual of a class', res2);
-        iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
-        let join = [
-            {
-                cls: 'http://ont.enapso.com/foundation#Capability',
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasCapabilities',
-                joins: [
-                    {
-                        cls: 'http://ont.enapso.com/foundation#Argument',
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasArgument'
-                    }
-                ]
-            },
-            {
-                cls: 'http://ont.enapso.com/foundation#Attribute',
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasAttributes',
-                joins: [
-                    {
-                        cls: 'http://ont.enapso.com/foundation#Argument',
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasArgument'
-                    }
-                ]
-            },
-            {
-                cls: 'http://ont.enapso.com/foundation#Behavior',
-                parent2ChildRelation:
-                    'http://ont.enapso.com/foundation#hasBehavior',
-                joins: [
-                    {
-                        cls: 'http://ont.enapso.com/foundation#EventEmitter',
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasEventEmitter',
-                        joins: [
-                            {
-                                cls: 'http://ont.enapso.com/foundation#Event',
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasEvent'
-                            }
-                        ]
-                    },
-                    {
-                        cls: 'http://ont.enapso.com/foundation#EventListener',
-                        parent2ChildRelation:
-                            'http://ont.enapso.com/foundation#hasEventListener',
-                        joins: [
-                            {
-                                cls: 'http://ont.enapso.com/foundation#Event',
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasEvent'
-                            },
-                            {
-                                cls: 'http://ont.enapso.com/foundation#Argument',
-                                parent2ChildRelation:
-                                    'http://ont.enapso.com/foundation#hasArgument'
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-        let res3 = await this.deleteIndividual({ iri: iri, joins: join });
-        console.log('delete individual of the class', res3);
+        // let iri = NS_AUTH + '00a5e37f_3452_4b48';
+        // let ind = {
+        //     name: 'Updated Test Company',
+        //     hash: 'Tqwerhvh',
+        //     rights: 'rwx',
+        //     code: 'function(option){console.log(option)}',
+        //     user: 'jnhgtresss',
+        //     hasCapabilities:
+        //         'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
+        //     hasAttributes:
+        //         'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
+        //     hasBehavior:
+        //         'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
+        // };
+        // let res1 = await this.updateIndividualByClass({
+        //     cls: this.Resource,
+        //     iri: iri,
+        //     ind: ind
+        // });
+        // console.log('update created individual', res1);
+        // let joins = [
+        //     {
+        //         cls: this.classCache.getClassByIRI(
+        //             'http://ont.enapso.com/foundation#Capability'
+        //         ),
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasCapabilities',
+        //         joins: [
+        //             {
+        //                 cls: this.classCache.getClassByIRI(
+        //                     'http://ont.enapso.com/foundation#Argument'
+        //                 ),
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasArgument'
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         cls: this.classCache.getClassByIRI(
+        //             'http://ont.enapso.com/foundation#Attribute'
+        //         ),
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasAttributes',
+        //         joins: [
+        //             {
+        //                 cls: this.classCache.getClassByIRI(
+        //                     'http://ont.enapso.com/foundation#Argument'
+        //                 ),
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasArgument'
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         cls: this.classCache.getClassByIRI(
+        //             'http://ont.enapso.com/foundation#Behavior'
+        //         ),
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasBehavior',
+        //         joins: [
+        //             {
+        //                 cls: this.classCache.getClassByIRI(
+        //                     'http://ont.enapso.com/foundation#EventEmitter'
+        //                 ),
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasEventEmitter',
+        //                 joins: [
+        //                     {
+        //                         cls: this.classCache.getClassByIRI(
+        //                             'http://ont.enapso.com/foundation#Event'
+        //                         ),
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasEvent'
+        //                     }
+        //                 ]
+        //             },
+        //             {
+        //                 cls: this.classCache.getClassByIRI(
+        //                     'http://ont.enapso.com/foundation#EventListener'
+        //                 ),
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasEventListener',
+        //                 joins: [
+        //                     {
+        //                         cls: this.classCache.getClassByIRI(
+        //                             'http://ont.enapso.com/foundation#Event'
+        //                         ),
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasEvent'
+        //                     },
+        //                     {
+        //                         cls: this.classCache.getClassByIRI(
+        //                             'http://ont.enapso.com/foundation#Argument'
+        //                         ),
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasArgument'
+        //                     }
+        //                 ]
+        //             }
+        //         ]
+        //     }
+        // ];
+        // let filter = [
+        //     {
+        //         key: '$sparql',
+        //         value: 'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
+        //     }
+        // ];
+        // let cls = 'http://ont.enapso.com/foundation#Resource';
+        // cls = this.classCache.getClassByIRI(cls);
+        // let res2 = await this.showAllIndividuals({
+        //     cls: cls,
+        //     joins: joins
+        //     //    filter: filter
+        // });
+        // console.log('read individual of a class', res2);
+        // iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
+        // let join = [
+        //     {
+        //         cls: 'http://ont.enapso.com/foundation#Capability',
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasCapabilities',
+        //         joins: [
+        //             {
+        //                 cls: 'http://ont.enapso.com/foundation#Argument',
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasArgument'
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         cls: 'http://ont.enapso.com/foundation#Attribute',
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasAttributes',
+        //         joins: [
+        //             {
+        //                 cls: 'http://ont.enapso.com/foundation#Argument',
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasArgument'
+        //             }
+        //         ]
+        //     },
+        //     {
+        //         cls: 'http://ont.enapso.com/foundation#Behavior',
+        //         parent2ChildRelation:
+        //             'http://ont.enapso.com/foundation#hasBehavior',
+        //         joins: [
+        //             {
+        //                 cls: 'http://ont.enapso.com/foundation#EventEmitter',
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasEventEmitter',
+        //                 joins: [
+        //                     {
+        //                         cls: 'http://ont.enapso.com/foundation#Event',
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasEvent'
+        //                     }
+        //                 ]
+        //             },
+        //             {
+        //                 cls: 'http://ont.enapso.com/foundation#EventListener',
+        //                 parent2ChildRelation:
+        //                     'http://ont.enapso.com/foundation#hasEventListener',
+        //                 joins: [
+        //                     {
+        //                         cls: 'http://ont.enapso.com/foundation#Event',
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasEvent'
+        //                     },
+        //                     {
+        //                         cls: 'http://ont.enapso.com/foundation#Argument',
+        //                         parent2ChildRelation:
+        //                             'http://ont.enapso.com/foundation#hasArgument'
+        //                     }
+        //                 ]
+        //             }
+        //         ]
+        //     }
+        // ];
+        // let res3 = await this.deleteIndividual({ iri: iri, joins: join });
+        // console.log('delete individual of the class', res3);
+        // let res4 = await this.getClassPropertiesByDomain(
+        //     'http://ont.enapso.com/rdfstar#DomainClass'
+        // );
+        // console.log('Class Properties by Domain', res4);
+        let res4 = await this.getClassPropertiesByDomainAndRestrictions(
+            'http://ont.enapso.com/rdfstar#DomainClass'
+        );
+        console.log('Class Properties by Domain', res4);
     }
 };
 

@@ -960,4 +960,32 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
                 done(err);
             });
     });
+    it('it get class properties from restriction', (done) => {
+        //it for making an test case
+        let cls = 'http://ont.enapso.com/repo#Tenant';
+        testconfig.AUTH.getClassProperties(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
+    it('it get class properties by domain', (done) => {
+        //it for making an test case
+        let cls = 'http://ont.enapso.com/repo#Tenant';
+        testconfig.AUTH.getClassPropertiesByDomain(cls)
+            .then((result) => {
+                console.log('Success: ' + result.success);
+                expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
+                done();
+            })
+            .catch((err) => {
+                console.log(err.success);
+                done(err);
+            });
+    });
 });
