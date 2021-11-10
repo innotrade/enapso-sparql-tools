@@ -381,7 +381,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('Create Relation between two Individual', (done) => {
         let master =
             'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
-        let relation = 'hasTenant';
+        let relation = 'http://ont.enapso.com/repo#hasTenant';
         let child =
             'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
         testconfig.AUTH.createRelation(master, relation, child)
@@ -399,7 +399,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('Delete Relation between two Individual', (done) => {
         let master =
             'http://ont.enapso.com/repo#Tenant_e7e124a2_3a7b_4333_8f51_5f70d48f0bfe';
-        let relation = 'hasTenant';
+        let relation = 'http://ont.enapso.com/repo#hasTenant';
         let child =
             'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
         testconfig.AUTH.deleteRelation(master, relation, child)

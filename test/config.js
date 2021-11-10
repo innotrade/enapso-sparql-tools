@@ -49,6 +49,10 @@ const AUTH_PREFIXES = [
     {
         prefix: 'enf',
         iri: 'http://ont.enapso.com/foundation#'
+    },
+    {
+        prefix: 'enrepo',
+        iri: 'http://ont.enapso.com/repo#'
     }
 ];
 
@@ -65,7 +69,7 @@ const AUTH = {
             resp = await this.graphDBEndpoint.transformBindingsToResultSet(
                 query,
                 {
-                    dropPrefixes: true
+                    dropPrefixes: false
                 }
             );
         } else {
@@ -314,7 +318,7 @@ filter(?s = <${cls.getIRI()}>) .
     // add a relation between two individuals
     createRelation: async function (master, property, child) {
         let generated = this.enSPARQL.createRelation(master, property, child);
-        //console.log('SPARQL:\n' + generated.sparql);
+        console.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
