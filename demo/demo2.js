@@ -155,12 +155,12 @@ const AUTH = {
     },
     changeClassIRI: async function (args) {
         let generated = this.enSPARQL.changeClassIRI(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //    enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     getSpecificClassDetail: async function (args) {
         let generated = this.enSPARQL.getSpecificClassDetail(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //    enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     // retrieve all data and object properties from the graph
@@ -200,7 +200,7 @@ where {
     // retrieve all properties from a given class
     getClassProperties: async function (cls) {
         let generated = this.enSPARQL.getClassProperties(cls);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //    enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -260,7 +260,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     getParentClass: async function (cls) {
@@ -452,7 +452,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
     createClassAndAddRestriction(args) {
         let generated = this.enSPARQL.createClassAndAddRestriction(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     addRestrictionToClass(args) {
@@ -528,7 +528,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
     deleteClassSpecificRestriction(args) {
         let generated = this.enSPARQL.deleteClassSpecificRestriction(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     updateClassRestriction(args) {
@@ -706,42 +706,42 @@ filter(?s = <${cls.getIRI()}>) .
     },
     deleteProperty(args) {
         let generated = this.enSPARQL.deleteProperty(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deletePropertyFromIndividuals(args) {
         let generated = this.enSPARQL.deletePropertyFromIndividuals(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //  enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     deletePropertyFromClassRestrictions(args) {
         let generated = this.enSPARQL.deletePropertyFromClassRestrictions(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     getObjectProperties(args) {
         let generated = this.enSPARQL.getObjectProperties(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //   enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     changePropertyIRI(args) {
         let generated = this.enSPARQL.changePropertyIRI(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //     enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     bampRDFToOWL(args) {
         let generated = this.enSPARQL.bampRDFToOWL(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //     enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     bampOWLToRDF(args) {
         let generated = this.enSPARQL.bampOWLToRDF(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //    enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     getDataProperties(args) {
         let generated = this.enSPARQL.getDataProperties(args);
-        enlogger.log('SPARQL:\n' + generated.sparql);
+        //      enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     demo: async function () {
