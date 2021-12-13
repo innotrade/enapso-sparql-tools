@@ -20,7 +20,7 @@
             "type": "node",
             "request": "launch",
             "name": "Demo",
-            "program": "${workspaceFolder}/demo/demo2.js"
+            "program": "${workspaceFolder}/demo/demo.js"
         },
         {
             "type": "node",
