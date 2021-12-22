@@ -150,7 +150,7 @@ const AUTH = {
 
     getAllSubClasses: async function (args) {
         let generated = this.enSPARQL.getAllSubClasses(args);
-        //	enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     changeClassIRI: async function (args) {
@@ -263,8 +263,8 @@ where {
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
-    getParentClass: async function (cls) {
-        let generated = this.enSPARQL.getParentClass(cls);
+    getParentClass: async function (cls, graph) {
+        let generated = this.enSPARQL.getParentClass(cls, graph);
         //enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
@@ -721,7 +721,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
     getObjectProperties(args) {
         let generated = this.enSPARQL.getObjectProperties(args);
-        //   enlogger.log('SPARQL:\n' + generated.sparql);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     changePropertyIRI(args) {
@@ -895,14 +895,16 @@ filter(?s = <${cls.getIRI()}>) .
         // // await this.deleteClass({
         // //     cls: 'http://ont.enapso.com/auth#User'
         // // });
-        // // let res = await this.getClasses({
-        // //     prefix: 'http://ont.enapso.com/foundation#'
-        // // });
-        // // let res = await this.getAllSubClasses({
-        // //     // prefix: 'http://ont.enapso.com/foundation#',
-        // //     parent: 'http://ont.enapso.com/foundation#Attribute'
-        // // });
-        // // console.log(res);
+        // let res = await this.getClasses({
+        //     prefix: 'http://ont.enapso.com/truck#',
+        //     graph: 'http://ont.enapso.com/truck'
+        // });
+        // let res = await this.getAllSubClasses({
+        //     // prefix: 'http://ont.enapso.com/foundation#',
+        //     parent: 'http://ont.enapso.com/truck#Location',
+        //     graph: 'http://ont.enapso.com/truk'
+        // });
+        // console.log(res);
         // // await this.deleteClass({
         // //     cls: 'http://ont.enapso.com/auth#User'
         // // });
@@ -911,10 +913,11 @@ filter(?s = <${cls.getIRI()}>) .
         // //     cls: 'http://ont.enapso.com/rdfstar#Company'
         // // });
         // // // console.log(res);
-        // // // let res = await this.getSpecificClassDetail({
-        // // //     cls: 'http://ont.enapso.com/foundation#Attribute'
-        // // // });
-        // // // console.log(res);
+        // let res = await this.getSpecificClassDetail({
+        //     cls: 'http://ont.enapso.com/truck#Truck',
+        //     graph: 'http://ont.enapso.com/truck'
+        // });
+        // console.log(res);
         // // let propArgs = {
         // //     prop: 'http://ont.enapso.com/rdfstar#surName',
         // //     parent: 'http://ont.enapso.com/rdfstar#name',
@@ -929,10 +932,19 @@ filter(?s = <${cls.getIRI()}>) .
         // // // await this.deleteProperty(delPropArgs);
         // // await this.deletePropertyFromIndividuals(delPropArgs);
         // // await this.deletePropertyFromClassRestrictions(delPropArgs);
-        // // let res = await this.getObjectProperties();
-        // // console.log(res);
-        // // let res = await this.getDataProperties();
-        // // console.log(res);
+        // let res = await this.getObjectProperties({
+        //     graph: 'http://ont.enapso.com/TRUCKW'
+        // });
+        // console.log(res);
+        // let res = await this.getDataProperties({
+        //     graph: 'http://ont.enapso.com/truck'
+        // });
+        // console.log(res);
+        let res = await this.getParentClass(
+            'http://ont.enapso.com/truck#GeoLocation',
+            'http://ont.enapso.com/truwck'
+        );
+        console.log(res);
         // // await this.changePropertyIRI({
         // //     prop: 'http://ont.enapso.com/rdfstar#name',
         // //     newIRI: 'http://ont.enapso.com/rdfstar#newName'

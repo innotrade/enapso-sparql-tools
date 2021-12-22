@@ -117,8 +117,8 @@ const AUTH = {
     },
 
     // retrieve all classes from the graph
-    getAllClasses: async function () {
-        let generated = this.enSPARQL.getAllClasses();
+    getAllClasses: async function (graph) {
+        let generated = this.enSPARQL.getAllClasses(graph);
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
@@ -158,20 +158,28 @@ where {
     },
 
     // retrieve all properties from a given class
-    getClassProperties: async function (cls) {
-        let generated = this.enSPARQL.getClassProperties(cls);
+    getClassProperties: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassProperties(cls, graph);
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     // retrieve all properties from a given class
-    getClassPropertiesByDomain: async function (cls) {
-        let generated = this.enSPARQL.getClassPropertiesByDomain(cls);
+    getSingleClassProperties: async function (cls, graph) {
+        let generated = this.enSPARQL.getSingleClassProperties(cls, graph);
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
-    getClassPropertiesByDomainAndRestrictions: async function (cls) {
-        let generated =
-            this.enSPARQL.getClassPropertiesByDomainAndRestrictions(cls);
+    // retrieve all properties from a given class
+    getClassPropertiesByDomain: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassPropertiesByDomain(cls, graph);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    getClassPropertiesByDomainAndRestrictions: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassPropertiesByDomainAndRestrictions(
+            cls,
+            graph
+        );
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
@@ -383,10 +391,10 @@ filter(?s = <${cls.getIRI()}>) .
         this.Resource = this.classCache.getClassByIRI(
             'http://ont.enapso.com/truck#Truck'
         );
-        let ind1 = {
-            iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245',
-            licenceNumber: 'Tested'
-        };
+        // let ind1 = {
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245',
+        //     licenceNumber: 'Tested'
+        // };
         // let ind = {
         //     //    iri: NS_AUTH + '00a5e37f_3452_4b4812121234687124545',
         //     licenceNumber: 'Helllo Tested'
@@ -580,15 +588,26 @@ filter(?s = <${cls.getIRI()}>) .
         //         ]
         //     }
         // ];
-        let res3 = await this.deleteIndividual({
-            graph: 'http://ont.enapso.com/truck',
-            iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245'
-        });
-        console.log('delete individual of the class', res3);
+        // let res3 = await this.deleteIndividual({
+        //     graph: 'http://ont.enapso.com/truck',
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245'
+        // });
+        // console.log('delete individual of the class', res3);
         // let res4 = await this.getClassPropertiesByDomain(
         //     'http://ont.enapso.com/rdfstar#DomainClass'
         // );
+        // let res4 = await this.getClassProperties(
+        //     'http://ont.enapso.com/truck#Truck',
+        //     'http://ont.enapso.com/truck12'
+        // );
         // console.log('Class Properties by Domain', res4);
+        // let res4 = await this.getSingleClassProperties(
+        //     'http://ont.enapso.com/truck#Truck'
+        //     //'http://ont.enapso.com/truck'
+        // );
+        // console.log('getSingleClassProperties', res4);
+        // let res5 = await this.getAllClasses('http://ont.enapso.com/truck');
+        // console.log('getAllClasses', res5);
         // let res4 = await this.getClassPropertiesByDomainAndRestrictions(
         //     'http://ont.enapso.com/rdfstar#DomainClass'
         // );
