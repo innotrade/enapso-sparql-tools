@@ -50,6 +50,10 @@ const AUTH_PREFIXES = [
     {
         prefix: 'ensr',
         iri: 'http://ont.enapso.com/rdfstar#'
+    },
+    {
+        prefix: 'enturk',
+        iri: 'http://ont.enapso.com/truck#'
     }
 ];
 
@@ -113,8 +117,8 @@ const AUTH = {
     },
 
     // retrieve all classes from the graph
-    getAllClasses: async function () {
-        let generated = this.enSPARQL.getAllClasses();
+    getAllClasses: async function (graph) {
+        let generated = this.enSPARQL.getAllClasses(graph);
         //	enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
@@ -154,20 +158,28 @@ where {
     },
 
     // retrieve all properties from a given class
-    getClassProperties: async function (cls) {
-        let generated = this.enSPARQL.getClassProperties(cls);
+    getClassProperties: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassProperties(cls, graph);
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     // retrieve all properties from a given class
-    getClassPropertiesByDomain: async function (cls) {
-        let generated = this.enSPARQL.getClassPropertiesByDomain(cls);
+    getSingleClassProperties: async function (cls, graph) {
+        let generated = this.enSPARQL.getSingleClassProperties(cls, graph);
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
-    getClassPropertiesByDomainAndRestrictions: async function (cls) {
-        let generated =
-            this.enSPARQL.getClassPropertiesByDomainAndRestrictions(cls);
+    // retrieve all properties from a given class
+    getClassPropertiesByDomain: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassPropertiesByDomain(cls, graph);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
+    getClassPropertiesByDomainAndRestrictions: async function (cls, graph) {
+        let generated = this.enSPARQL.getClassPropertiesByDomainAndRestrictions(
+            cls,
+            graph
+        );
         // enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
@@ -233,7 +245,7 @@ where {
     // get all instances of a certain class from the graph
     getIndividualsByClass: async function (args) {
         let generated = this.enSPARQL.getIndividualsByClass(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
 
@@ -247,21 +259,21 @@ where {
     // create a new instance of a certain class in the graph
     createIndividualByClass: async function (args) {
         let generated = this.enSPARQL.createIndividualByClass(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql, { iri: generated.iri });
     },
 
     // updates an individual by its class reference and a data object with the values
     updateIndividualByClass: async function (cls, iri, ind) {
         let generated = this.enSPARQL.updateIndividualByClass(cls, iri, ind);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     // deletes an arbitray resource via its IRI
     deleteIndividual: async function (args) {
         let generated = this.enSPARQL.deleteResource(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
@@ -310,15 +322,25 @@ filter(?s = <${cls.getIRI()}>) .
         return this.update(generated.sparql);
     },
     // add a relation between two individuals
-    createRelation: async function (master, property, child) {
-        let generated = this.enSPARQL.createRelation(master, property, child);
+    createRelation: async function (master, property, child, graph) {
+        let generated = this.enSPARQL.createRelation(
+            master,
+            property,
+            child,
+            graph
+        );
         //console.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
 
     // delete a relation between two individuals
-    deleteRelation: async function (master, property, child) {
-        let generated = this.enSPARQL.deleteRelation(master, property, child);
+    deleteRelation: async function (master, property, child, graph) {
+        let generated = this.enSPARQL.deleteRelation(
+            master,
+            property,
+            child,
+            graph
+        );
         //console.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
@@ -356,7 +378,7 @@ filter(?s = <${cls.getIRI()}>) .
             repository: GRAPHDB_REPOSITORY,
             prefixes: this.enPrefixManager.getPrefixesForConnector()
         });
-        this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
+        // this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         // let resp = await this.graphDBEndpoint.uploadFromFile({
         //     filename: 'EnapsoFoundation.owl',
         //     format: 'application/rdf+xml',
@@ -365,24 +387,21 @@ filter(?s = <${cls.getIRI()}>) .
         // });
         // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
-        // this.classCache = await this.buildClassCache();
-        // this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        this.classCache = await this.buildClassCache();
+        this.Resource = this.classCache.getClassByIRI(
+            'http://ont.enapso.com/truck#Truck'
+        );
         // let ind1 = {
-        //     iri: NS_AUTH + '00a5e37f_3452_4b48',
-        //     name: 'Test Company',
-        //     hash: 'Tqwerhvh',
-        //     rights: 'rwx',
-        //     code: 'function(option){console.log(option)}',
-        //     user: 'jnhgtresss',
-        //     hasCapabilities:
-        //         'enf:Capability_00a5e37f_3452_4b48_8a0a_3089dc41ef47',
-        //     hasAttributes:
-        //         'http://ont.enapso.com/foundation#Attribute_5ed0a3d9_a801_4c4b_a072_578090f60353',
-        //     hasBehavior:
-        //         'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245',
+        //     licenceNumber: 'Tested'
         // };
-        // this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Resource');
+        // let ind = {
+        //     //    iri: NS_AUTH + '00a5e37f_3452_4b4812121234687124545',
+        //     licenceNumber: 'Helllo Tested'
+        // };
+        // // //  this.Resource = this.classCache.getClassByIRI(NS_AUTH + 'Truck');
         // let res = await this.createIndividualByClass({
+        //     graph: 'http://ont.enapso.com/truck',
         //     cls: this.Resource,
         //     ind: ind1
         // });
@@ -403,8 +422,9 @@ filter(?s = <${cls.getIRI()}>) .
         //         'http://ont.enapso.com/foundation#Behavior_03e35a1d_5dd2_44fd_a596_908a1474dec8'
         // };
         // let res1 = await this.updateIndividualByClass({
+        //     //   graph: 'http://ont.enapso.com/truck',
         //     cls: this.Resource,
-        //     iri: iri,
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245',
         //     ind: ind
         // });
         // console.log('update created individual', res1);
@@ -496,12 +516,13 @@ filter(?s = <${cls.getIRI()}>) .
         //         value: 'regEx(str(?ind), "http://ont.enapso.com/foundation#00a5e37f_3452_4b48", "i")'
         //     }
         // ];
-        // let cls = 'http://ont.enapso.com/foundation#Resource';
+        // let cls = 'http://ont.enapso.com/truck#Truck';
         // cls = this.classCache.getClassByIRI(cls);
         // let res2 = await this.showAllIndividuals({
-        //     cls: cls,
-        //     joins: joins
-        //     //    filter: filter
+        //     graph: 'http://ont.enapso.com/truck',
+        //     cls: cls
+        //      joins: joins
+        //        filter: filter
         // });
         // console.log('read individual of a class', res2);
         // iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
@@ -567,16 +588,30 @@ filter(?s = <${cls.getIRI()}>) .
         //         ]
         //     }
         // ];
-        // let res3 = await this.deleteIndividual({ iri: iri, joins: join });
+        // let res3 = await this.deleteIndividual({
+        //     graph: 'http://ont.enapso.com/truck',
+        //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245'
+        // });
         // console.log('delete individual of the class', res3);
         // let res4 = await this.getClassPropertiesByDomain(
         //     'http://ont.enapso.com/rdfstar#DomainClass'
         // );
+        // let res4 = await this.getClassProperties(
+        //     'http://ont.enapso.com/truck#Truck',
+        //     'http://ont.enapso.com/truck12'
+        // );
         // console.log('Class Properties by Domain', res4);
-        let res4 = await this.getClassPropertiesByDomainAndRestrictions(
-            'http://ont.enapso.com/rdfstar#DomainClass'
-        );
-        console.log('Class Properties by Domain', res4);
+        // let res4 = await this.getSingleClassProperties(
+        //     'http://ont.enapso.com/truck#Truck'
+        //     //'http://ont.enapso.com/truck'
+        // );
+        // console.log('getSingleClassProperties', res4);
+        // let res5 = await this.getAllClasses('http://ont.enapso.com/truck');
+        // console.log('getAllClasses', res5);
+        // let res4 = await this.getClassPropertiesByDomainAndRestrictions(
+        //     'http://ont.enapso.com/rdfstar#DomainClass'
+        // );
+        // console.log('Class Properties by Domain', res4);
     }
 };
 
