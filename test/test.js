@@ -512,7 +512,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.createClassAndAddRestriction(crateClass)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -535,7 +535,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.addRestrictionToClass(addRestriction)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -560,7 +560,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.updateClassRestriction(updateRestriction)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -581,7 +581,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassSpecificRestriction(deleteRestriction)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -597,7 +597,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteLabel(deleteLabel)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -614,7 +614,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.addLabel(addLabel)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -631,7 +631,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.changeLabel(changeLabel)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -647,7 +647,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteComment(deleteComment)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -664,7 +664,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.addComment(addComment)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -681,7 +681,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.changeComment(changeComment)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -697,7 +697,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassModel(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -713,7 +713,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassData(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -729,7 +729,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassModelAndData(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -745,7 +745,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassReferenceModel(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -761,7 +761,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassReferenceData(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -777,7 +777,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClassReferenceModelAndData(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {
@@ -793,7 +793,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         testconfig.AUTH.deleteClass(cls)
             .then((result) => {
                 console.log('Success: ' + result.success);
-                expect(result.statusCode).to.equal(200); // To pass the test case status code need to be equal to 200
+                expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
             .catch((err) => {

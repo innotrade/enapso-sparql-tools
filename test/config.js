@@ -348,7 +348,7 @@ filter(?s = <${cls.getIRI()}>) .
     },
     createClassAndAddRestriction(args) {
         let generated = this.enSPARQL.createClassAndAddRestriction(args);
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.update(generated.sparql);
     },
     addRestrictionToClass(args) {
