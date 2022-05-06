@@ -20,6 +20,7 @@ _.merge(
     require('../lib/classes'),
     require('../lib/classCache'),
     require('../lib/prefixManager'),
+    require('../lib/viewGenerator'),
     require('../lib/generator')
 );
 
@@ -744,6 +745,11 @@ filter(?s = <${cls.getIRI()}>) .
         //      enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
+    getEntityCustomView(args) {
+        let generated = this.enCustomViewSPARQL.getEntityCustomView(args);
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        //return this.query(generated.sparql);
+    },
     demo: async function () {
         // instantiate a prefix manager
         enlogger.setLevel(EnapsoLogger.ALL);
@@ -757,6 +763,9 @@ filter(?s = <${cls.getIRI()}>) .
             prefixManager: this.enPrefixManager,
             GraphDB_URL_Repo: `${GRAPHDB_BASE_URL}/repositories/${GRAPHDB_REPOSITORY}`
         });
+        this.enCustomViewSPARQL = new EnapsoSPARQLTools.ViewGenerator({
+            prefixManager: this.enPrefixManager
+        });
 
         // instantiate a GraphDB connector and connect to GraphDB
         this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
@@ -766,6 +775,20 @@ filter(?s = <${cls.getIRI()}>) .
         });
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         this.classCache = await this.buildClassCache();
+        let args = {
+            entity: 'http://www.w3.org/2002/07/owl#Class',
+            properties: [
+                //'http://www.w3.org/2000/01/rdf-schema#label',
+                'http://purl.org/dc/terms/description'
+            ],
+            filter: [
+                {
+                    key: '$sparql',
+                    value: `(lang(?description)="en")`
+                }
+            ]
+        };
+        await this.getEntityCustomView(args);
 
         // let args = {
         //     cls: 'http://ont.enapso.com/auth#Activities',
@@ -940,11 +963,11 @@ filter(?s = <${cls.getIRI()}>) .
         //     graph: 'http://ont.enapso.com/truck'
         // });
         // console.log(res);
-        let res = await this.getParentClass(
-            'http://ont.enapso.com/truck#GeoLocation',
-            'http://ont.enapso.com/truwck'
-        );
-        console.log(res);
+        // let res = await this.getParentClass(
+        //     'http://ont.enapso.com/truck#GeoLocation',
+        //     'http://ont.enapso.com/truwck'
+        // );
+        // console.log(res);
         // // await this.changePropertyIRI({
         // //     prop: 'http://ont.enapso.com/rdfstar#name',
         // //     newIRI: 'http://ont.enapso.com/rdfstar#newName'

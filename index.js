@@ -9,6 +9,7 @@ const { ClassCache } = require('./lib/classCache'),
     { Generator } = require('./lib/generator'),
     { Property } = require('./lib/properties'),
     { Prefix, PrefixManager } = require('./lib/prefixManager'),
+    { ViewGenerator } = require('./lib/viewGenerator'),
     { SparqlBeautifier } = require('./lib/sparqlBeautifier');
 
 const ensptools = {
