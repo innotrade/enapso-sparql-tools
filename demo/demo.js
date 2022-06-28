@@ -28,7 +28,7 @@ const GRAPHDB_BASE_URL = encfg.getConfig(
     ),
     GRAPHDB_REPOSITORY = encfg.getConfig(
         'enapsoDefaultGraphDB.repository',
-        'Test'
+        'SE-DOE-QA'
     ),
     GRAPHDB_USERNAME = encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
     GRAPHDB_PASSWORD = encfg.getConfig('enapsoDefaultGraphDB.password', 'Test');
@@ -54,6 +54,14 @@ const AUTH_PREFIXES = [
     {
         prefix: 'enturk',
         iri: 'http://ont.enapso.com/truck#'
+    },
+    {
+        prefix: 'productprocessconceptmodel',
+        iri: 'http://semantic.bosch.com/ProductProcessConceptModel/'
+    },
+    {
+        prefix: 'sh',
+        iri: 'http://www.w3.org/ns/shacl#'
     }
 ];
 
@@ -180,7 +188,7 @@ where {
             cls,
             graph
         );
-        // enlogger.log('SPARQL:\n' + generated.sparql);
+        enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
     // generates an in-memory class from a SPARQL result set
@@ -388,9 +396,9 @@ filter(?s = <${cls.getIRI()}>) .
         // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
         this.classCache = await this.buildClassCache();
-        this.Resource = this.classCache.getClassByIRI(
-            'http://ont.enapso.com/truck#Truck'
-        );
+        // this.Resource = this.classCache.getClassByIRI(
+        //     'http://ont.enapso.com/truck#Truck'
+        // );
         // let ind1 = {
         //     iri: NS_AUTH + '00a5e37f_3452_4b48121212346871245',
         //     licenceNumber: 'Tested'
@@ -608,10 +616,10 @@ filter(?s = <${cls.getIRI()}>) .
         // console.log('getSingleClassProperties', res4);
         // let res5 = await this.getAllClasses('http://ont.enapso.com/truck');
         // console.log('getAllClasses', res5);
-        // let res4 = await this.getClassPropertiesByDomainAndRestrictions(
-        //     'http://ont.enapso.com/rdfstar#DomainClass'
-        // );
-        // console.log('Class Properties by Domain', res4);
+        let res4 = await this.getClassPropertiesByDomainAndRestrictions(
+            'http://semantic.bosch.com/ProductProcessConceptModel/CLASSProductProcessConceptProduct'
+        );
+        console.log('Class Properties by Domain', res4);
     }
 };
 
