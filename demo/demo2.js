@@ -154,6 +154,12 @@ const AUTH = {
         enlogger.log('SPARQL:\n' + generated.sparql);
         return this.query(generated.sparql);
     },
+
+    getEquivalentClasses: async function (args) {
+        let generated = this.enSPARQL.getEquivalentClasses(args);
+        // enlogger.log('SPARQL:\n' + generated.sparql);
+        return this.query(generated.sparql);
+    },
     changeClassIRI: async function (args) {
         let generated = this.enSPARQL.changeClassIRI(args);
         //    enlogger.log('SPARQL:\n' + generated.sparql);
@@ -775,20 +781,20 @@ filter(?s = <${cls.getIRI()}>) .
         });
         this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         this.classCache = await this.buildClassCache();
-        let args = {
-            entity: 'http://www.w3.org/2002/07/owl#Class',
-            properties: [
-                //'http://www.w3.org/2000/01/rdf-schema#label',
-                'http://purl.org/dc/terms/description'
-            ],
-            filter: [
-                {
-                    key: '$sparql',
-                    value: `(lang(?description)="en")`
-                }
-            ]
-        };
-        await this.getEntityCustomView(args);
+        // let args = {
+        //     entity: 'http://www.w3.org/2002/07/owl#Class',
+        //     properties: [
+        //         //'http://www.w3.org/2000/01/rdf-schema#label',
+        //         'http://purl.org/dc/terms/description'
+        //     ],
+        //     filter: [
+        //         {
+        //             key: '$sparql',
+        //             value: `(lang(?description)="en")`
+        //         }
+        //     ]
+        // };
+        // await this.getEntityCustomView(args);
 
         // let args = {
         //     cls: 'http://ont.enapso.com/auth#Activities',
@@ -986,6 +992,12 @@ filter(?s = <${cls.getIRI()}>) .
         //     sourceReposiotry: 'http://localhost:7200/repositories/Test'
         // };
         // await this.bampOWLToRDF(RDFargs);
+        let res = await this.getEquivalentClasses({
+            // prefix: 'http://ont.enapso.com/software#',
+            cls: 'http://ont.enapso.com/foundation#Attribute'
+            // graph: 'http://ont.enapso.com/truk'
+        });
+        console.log(res);
     }
 };
 
