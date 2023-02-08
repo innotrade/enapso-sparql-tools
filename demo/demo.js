@@ -217,6 +217,15 @@ where {
             name: parts[1]
         };
     },
+    updateMultipleRelation: async function (iri, prop, newValues) {
+        let generated = this.enSPARQL.updateMultipleRelation(
+            iri,
+            prop,
+            newValues
+        );
+        enlogger.log('SPARQL:\n' + generated.sparql);
+        // return this.query(generated.sparql);
+    },
 
     // builds the class cache for all or selected classes
     buildClassCache: async function () {
@@ -381,11 +390,11 @@ filter(?s = <${cls.getIRI()}>) .
         });
 
         // instantiate a GraphDB connector and connect to GraphDB
-        this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
-            baseURL: GRAPHDB_BASE_URL,
-            repository: GRAPHDB_REPOSITORY,
-            prefixes: this.enPrefixManager.getPrefixesForConnector()
-        });
+        // this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
+        //     baseURL: GRAPHDB_BASE_URL,
+        //     repository: GRAPHDB_REPOSITORY,
+        //     prefixes: this.enPrefixManager.getPrefixesForConnector()
+        // });
         // this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         // let resp = await this.graphDBEndpoint.uploadFromFile({
         //     filename: 'EnapsoFoundation.owl',
@@ -395,7 +404,7 @@ filter(?s = <${cls.getIRI()}>) .
         // });
         // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
-        this.classCache = await this.buildClassCache();
+        // this.classCache = await this.buildClassCache();
         // this.Resource = this.classCache.getClassByIRI(
         //     'http://ont.enapso.com/truck#Truck'
         // );
@@ -616,10 +625,18 @@ filter(?s = <${cls.getIRI()}>) .
         // console.log('getSingleClassProperties', res4);
         // let res5 = await this.getAllClasses('http://ont.enapso.com/truck');
         // console.log('getAllClasses', res5);
-        let res4 = await this.getClassPropertiesByDomainAndRestrictions(
-            'http://semantic.bosch.com/ProductProcessConceptModel/CLASSProductProcessConceptProduct'
+        // let res4 = await this.getClassPropertiesByDomainAndRestrictions(
+        //     'http://semantic.bosch.com/ProductProcessConceptModel/CLASSProductProcessConceptProduct'
+        // );
+        // console.log('Class Properties by Domain', res4);
+        await this.updateMultipleRelation(
+            'http://ont.telekom.de/cia/recommendation/data#CriteriaSpecification_593d011e_ce03_4463_9069_61ae9745e953',
+            'http://ont.enapso.com/recommendation#hasContext',
+            [
+                'http://ont.telekom.de/cia/recommendation/data#Tariff_a5a2139e_1450_47ab_b600_f1990d36f80d',
+                'http://ont.telekom.de/cia/recommendation/data#Context_68efc906_e7ef_45ad_a1bd_47b283ca9099'
+            ]
         );
-        console.log('Class Properties by Domain', res4);
     }
 };
 
