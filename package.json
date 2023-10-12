@@ -1,6 +1,6 @@
 {
     "name": "@innotrade/enapso-sparql-tools",
-    "version": "1.4.24",
+    "version": "1.4.25",
     "description": "ENAPSO Platform Independent SPARQL Tools",
     "main": "index.js",
     "scripts": {
@@ -38,8 +38,8 @@
     "dependencies": {
         "@innotrade/enapso-args": "^1.0.1",
         "@innotrade/enapso-config": "^1.3.3",
-        "@innotrade/enapso-graphdb-admin": "^1.5.2",
-        "@innotrade/enapso-graphdb-client": "^1.9.1",
+        "@innotrade/enapso-graphdb-admin": "^1.5.3",
+        "@innotrade/enapso-graphdb-client": "^1.9.2",
         "@innotrade/enapso-logger": "1.1.0",
         "chai": "^4.3.10",
         "cross-env": "^7.0.3",
