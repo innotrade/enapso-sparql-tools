@@ -23,9 +23,9 @@ _.merge(
 );
 
 const GRAPHDB_BASE_URL = encfg.getConfig(
-        'enapsoDefaultGraphDB.baseUrl',
-        'http://localhost:7200'
-    ),
+    'enapsoDefaultGraphDB.baseUrl',
+    'http://localhost:7200'
+),
     GRAPHDB_REPOSITORY = encfg.getConfig(
         'enapsoDefaultGraphDB.repository',
         'SE-DOE-QA'
@@ -33,9 +33,9 @@ const GRAPHDB_BASE_URL = encfg.getConfig(
     GRAPHDB_USERNAME = encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
     GRAPHDB_PASSWORD = encfg.getConfig('enapsoDefaultGraphDB.password', 'Test');
 const NS_AUTH = encfg.getConfig(
-        'enapsoDefaultGraphDB.iri',
-        'http://ont.enapso.com/foundation#'
-    ),
+    'enapsoDefaultGraphDB.iri',
+    'http://ont.enapso.com/foundation#'
+),
     PREFIX_AUTH = encfg.getConfig('enapsoDefaultGraphDB.prefix', 'enf');
 // the default prefixes for all SPARQL queries
 const AUTH_PREFIXES = [
@@ -50,6 +50,10 @@ const AUTH_PREFIXES = [
     {
         prefix: 'ensr',
         iri: 'http://ont.enapso.com/rdfstar#'
+    },
+    {
+        prefix: 'material',
+        iri: 'http://ont.lego.com/material#'
     },
     {
         prefix: 'enturk',
@@ -390,11 +394,11 @@ filter(?s = <${cls.getIRI()}>) .
         });
 
         // instantiate a GraphDB connector and connect to GraphDB
-        // this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
-        //     baseURL: GRAPHDB_BASE_URL,
-        //     repository: GRAPHDB_REPOSITORY,
-        //     prefixes: this.enPrefixManager.getPrefixesForConnector()
-        // });
+        this.graphDBEndpoint = new EnapsoGraphDBClient.Endpoint({
+            baseURL: GRAPHDB_BASE_URL,
+            repository: "Test",
+            prefixes: this.enPrefixManager.getPrefixesForConnector()
+        });
         // this.graphDBEndpoint.login(GRAPHDB_USERNAME, GRAPHDB_PASSWORD);
         // let resp = await this.graphDBEndpoint.uploadFromFile({
         //     filename: 'EnapsoFoundation.owl',
@@ -404,7 +408,7 @@ filter(?s = <${cls.getIRI()}>) .
         // });
         // console.log('UploadFromFile:' + JSON.stringify(resp.success, null, 2));
 
-        // this.classCache = await this.buildClassCache();
+         this.classCache = await this.buildClassCache();
         // this.Resource = this.classCache.getClassByIRI(
         //     'http://ont.enapso.com/truck#Truck'
         // );
@@ -541,6 +545,11 @@ filter(?s = <${cls.getIRI()}>) .
         //      joins: joins
         //        filter: filter
         // });
+        let cls = 'http://ont.lego.com/material#Z100';
+        cls = this.classCache.getClassByIRI(cls);
+        let res2 = await this.showAllIndividuals({
+            cls: cls
+        });
         // console.log('read individual of a class', res2);
         // iri = 'http://ont.enapso.com/foundation#00a5e37f_3452_4b48';
         // let join = [
@@ -629,14 +638,14 @@ filter(?s = <${cls.getIRI()}>) .
         //     'http://semantic.bosch.com/ProductProcessConceptModel/CLASSProductProcessConceptProduct'
         // );
         // console.log('Class Properties by Domain', res4);
-        await this.updateMultipleRelation(
-            'http://ont.telekom.de/cia/recommendation/data#CriteriaSpecification_593d011e_ce03_4463_9069_61ae9745e953',
-            'http://ont.enapso.com/recommendation#hasContext',
-            [
-                'http://ont.telekom.de/cia/recommendation/data#Tariff_a5a2139e_1450_47ab_b600_f1990d36f80d',
-                'http://ont.telekom.de/cia/recommendation/data#Context_68efc906_e7ef_45ad_a1bd_47b283ca9099'
-            ]
-        );
+        // await this.updateMultipleRelation(
+        //     'http://ont.telekom.de/cia/recommendation/data#CriteriaSpecification_593d011e_ce03_4463_9069_61ae9745e953',
+        //     'http://ont.enapso.com/recommendation#hasContext',
+        //     [
+        //         'http://ont.telekom.de/cia/recommendation/data#Tariff_a5a2139e_1450_47ab_b600_f1990d36f80d',
+        //         'http://ont.telekom.de/cia/recommendation/data#Context_68efc906_e7ef_45ad_a1bd_47b283ca9099'
+        //     ]
+        // );
     }
 };
 

@@ -1,20 +1,25 @@
 // Innotrade Enapso GraphDB Client - Automated Test Suite
 // (C) Copyright 2019-2020 Innotrade GmbH, Herzogenrath, NRW, Germany
 // Author: Alexander Schulze and Muhammad Yasir
-const chai = require('chai');
-const should = require('chai').should;
-const expect = require('chai').expect;
 const testconfig = require('./config');
 const NS_AUTH = 'http://ont.enapso.com/repo#';
 
 describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
+    let chai, expect,should;
+
+    // Setup - load chai using dynamic import before tests run
+    before(async function () {
+        chai = await import('chai');
+        expect = chai.expect;
+        should = chai.should;
+    });
     it('Login to Graphdb ', (done) => {
         testconfig.AUTH.login(
-            encfg.getConfig('enapsoDefaultGraphDB.userName', 'Test'),
-            encfg.getConfig('enapsoDefaultGraphDB.password', 'Test')
+            encfg.getConfig('enapsoDefaultGraphDB.userName', 'admin'),
+            encfg.getConfig('enapsoDefaultGraphDB.password', 'root')
         )
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -33,7 +38,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.demoUploadFromFile(fileDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -55,7 +60,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             ind: ind
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
             })
             .catch((err) => {});
@@ -77,7 +82,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             ind: ind
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 // done();
             })
@@ -94,7 +99,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             cls: this.Tenant
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 // done();
             })
@@ -123,7 +128,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             joins: joins
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
             })
             .catch((err) => {
@@ -162,7 +167,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             joins: joins
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
             })
             .catch((err) => {
@@ -225,7 +230,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             joins: joins
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
             })
             .catch((err) => {
@@ -240,7 +245,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         let iri = 'enrepo:Graph_0ea87735_977d_461b_88c5_749d1a5bf909';
         testconfig.AUTH.deleteIndividual({ iri: iri })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -268,7 +273,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         ];
         testconfig.AUTH.deleteIndividual({ iri: iri, joins: joins })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -296,7 +301,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         ];
         testconfig.AUTH.deleteIndividual({ iri: iri, joins: joins })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -347,7 +352,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         ];
         testconfig.AUTH.deleteIndividual({ iri: iri, joins: joins })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -368,7 +373,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             'http://ont.enapso.com/repo#Environment_14eaf5b6_1704_4f8d_b315_8a8728640b66';
         testconfig.AUTH.cloneIndividual(this.Environment, iri)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
             })
             .catch((err) => {
@@ -384,7 +389,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
         testconfig.AUTH.createRelation(master, relation, child)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -402,7 +407,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             'http://ont.enapso.com/repo#Environment_833a44cc_ec58_4202_b44d_27460ae94e2d';
         testconfig.AUTH.deleteRelation(master, relation, child)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -422,7 +427,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             dataProperty: property
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -440,7 +445,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             dataProperty: property
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -462,7 +467,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             dataProperty: property
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -482,7 +487,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
             labelLanguage: language
         })
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result).to.have.property('success', true);
                 done();
             })
@@ -509,7 +514,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.createClassAndAddRestriction(crateClass)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -532,7 +537,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.addRestrictionToClass(addRestriction)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -557,7 +562,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.updateClassRestriction(updateRestriction)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -578,7 +583,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassSpecificRestriction(deleteRestriction)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -594,7 +599,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteLabel(deleteLabel)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -611,7 +616,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.addLabel(addLabel)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -628,7 +633,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.changeLabel(changeLabel)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -644,7 +649,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteComment(deleteComment)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -661,7 +666,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.addComment(addComment)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -678,7 +683,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.changeComment(changeComment)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -694,7 +699,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassModel(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -710,7 +715,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassData(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -726,7 +731,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassModelAndData(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -742,7 +747,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassReferenceModel(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -758,7 +763,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassReferenceData(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -774,7 +779,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClassReferenceModelAndData(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -790,7 +795,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteClass(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.status).to.equal(200); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -806,7 +811,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.getClasses(prefix)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 //expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -823,7 +828,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.getAllSubClasses(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -840,7 +845,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.changeClassIRI(clsDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -860,7 +865,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.createProperty(propDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -872,7 +877,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it get all data Property', (done) => {
         testconfig.AUTH.getDataProperties()
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -884,7 +889,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
     it('it get all object Property', (done) => {
         testconfig.AUTH.getObjectProperties()
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -901,7 +906,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.changePropertyIRI(propDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -917,7 +922,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deletePropertyFromClassRestrictions(propDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -933,7 +938,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deletePropertyFromIndividuals(propDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -949,7 +954,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         };
         testconfig.AUTH.deleteProperty(propDetail)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -963,7 +968,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         let cls = 'http://ont.enapso.com/repo#Tenant';
         testconfig.AUTH.getClassProperties(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
@@ -977,7 +982,7 @@ describe('ENAPSO SPARQL Tool Automated Test Suite', async () => {
         let cls = 'http://ont.enapso.com/repo#Tenant';
         testconfig.AUTH.getClassPropertiesByDomain(cls)
             .then((result) => {
-                console.log('Success: ' + result.success);
+                // console.log('Success: ' + result.success);
                 expect(result.success).to.equal(true); // To pass the test case status code need to be equal to 200
                 done();
             })
